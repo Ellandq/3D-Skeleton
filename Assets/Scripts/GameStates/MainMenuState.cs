@@ -1,4 +1,6 @@
-﻿namespace GameStates
+﻿using Utils.Enum;
+
+namespace GameStates
 {
     public class MainMenuState : IGameState
     {

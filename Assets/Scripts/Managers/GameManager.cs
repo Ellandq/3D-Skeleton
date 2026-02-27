@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GameStates;
 using UnityEngine;
+using Utils.Enum;
 
 namespace Managers
 {
@@ -21,6 +22,8 @@ namespace Managers
             
             if (_stateStack.Count == 0)
                 PushState(NamedState.MainMenu);
+            else if (_stateStack.TryPeek(out var state))
+                state.Enter();
         }
 
         #endregion
