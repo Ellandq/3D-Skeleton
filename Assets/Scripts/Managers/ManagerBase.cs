@@ -28,12 +28,23 @@ namespace Managers
 
         protected virtual void Awake()
         {
-            _instance = this as T;
+            if (!_instance)
+            {
+                _instance = this as T;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void OnDestroy()
         {
-            _instance = null;
+            if (_instance == this)
+            {
+                _instance = null;
+            }
         }
     }
 }
