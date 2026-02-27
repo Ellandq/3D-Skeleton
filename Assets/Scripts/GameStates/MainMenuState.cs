@@ -6,22 +6,23 @@
         
         public void Enter()
         {
-            throw new System.NotImplementedException();
+            /* TODO:
+              - Open loading screen
+              - 
+
+             */
         }
 
-        public void Pause()
-        {
-            throw new System.NotImplementedException();
-        }
+        public void Pause() { }
 
-        public void Resume()
-        {
-            throw new System.NotImplementedException();
-        }
+        public void Resume() { }
 
         public void Exit()
         {
-            throw new System.NotImplementedException();
+            /* TODO:
+             - Deload 
+             
+            */
         }
     }
 }

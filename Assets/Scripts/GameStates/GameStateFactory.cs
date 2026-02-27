@@ -2,7 +2,7 @@
 
 namespace GameStates
 {
-    public class GameStateFactory
+    public static class GameStateFactory
     {
         public static IGameState Create(NamedState state)
         {
