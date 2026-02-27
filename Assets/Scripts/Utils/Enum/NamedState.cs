@@ -1,4 +1,4 @@
-﻿namespace GameStates
+﻿namespace Utils.Enum
 {
     public enum NamedState
     {
