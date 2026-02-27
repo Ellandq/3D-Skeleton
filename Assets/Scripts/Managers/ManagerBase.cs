@@ -32,7 +32,7 @@ namespace Managers
             if (!_instance)
             {
                 _instance = this as T;
-                DontDestroyOnLoad(gameObject);
+                DontDestroyOnLoad(!transform.parent ? gameObject : transform.parent.gameObject);
             }
             else
             {

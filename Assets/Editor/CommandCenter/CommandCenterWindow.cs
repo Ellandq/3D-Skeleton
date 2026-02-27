@@ -12,6 +12,8 @@ namespace Editor.CommandCenter
     public class CommandCenterWindow : EditorWindow, ICommandCenterLogger
     {
         private readonly List<IEditorModule> _modules = new();
+        private readonly Dictionary<IEditorModule, Label> _statusIndicators = new();
+        
         private ScrollView _moduleScroll;
         private ScrollView _consoleScroll;
 
@@ -193,6 +195,7 @@ namespace Editor.CommandCenter
                 statusDot.style.color = GetStatusColor(module.Status);
             }
 
+            _statusIndicators[module] = statusDot;
             UpdateIndicator();
 
             header.Add(label);
@@ -266,7 +269,10 @@ namespace Editor.CommandCenter
                 
         private void RefreshStatuses()
         {
-            Repaint();
+            foreach (var pair in _statusIndicators)
+            {
+                pair.Value.style.color = GetStatusColor(pair.Key.Status);
+            }
         }
 
         private Color GetStatusColor(ModuleStatus status)

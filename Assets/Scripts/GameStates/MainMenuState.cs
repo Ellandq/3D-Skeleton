@@ -8,11 +8,7 @@ namespace GameStates
         
         public void Enter()
         {
-            /* TODO:
-              - Open loading screen
-              - 
-
-             */
+            
         }
 
         public void Pause() { }
@@ -21,10 +17,7 @@ namespace GameStates
 
         public void Exit()
         {
-            /* TODO:
-             - Deload 
-             
-            */
+            
         }
     }
 }
