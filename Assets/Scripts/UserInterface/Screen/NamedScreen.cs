@@ -2,10 +2,10 @@
 // This file is auto-generated. Do not edit manually.
 // </auto-generated>
 
-namespace Utils.Enum
+namespace UserInterface.Screen
 {
-    public enum NamedScene
+    public enum NamedScreen
     {
-        Bootstrap
+        Loading
     }
 }

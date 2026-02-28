@@ -2,10 +2,9 @@
 // This file is auto-generated. Do not edit manually.
 // </auto-generated>
 
-namespace Utils.Enum
+namespace UserInterface.HUD
 {
-    public enum NamedScene
+    public enum NamedHUD
     {
-        Bootstrap
     }
 }
