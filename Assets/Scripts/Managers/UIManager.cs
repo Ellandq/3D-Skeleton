@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UserInterface.HUD;
 using UserInterface.Overlay;
 using UserInterface.Screen;
+using Utils.Collections;
+using Utils.Contract;
 using Utils.Enum;
+using Utils.SO;
 
 namespace Managers
 {
-    public class UIManager : ManagerBase<UIManager>
+    public class UIManager : ManagerBase<UIManager>, IAsyncInitializable
     {
         [Header("UI Components")]
         // HUDs
@@ -47,10 +52,7 @@ namespace Managers
             );
         }
 
-        public void InitializeForScene(NamedScene scene)
-        {
-            
-        }
+        #region COMPONENT CONTROL
 
         public void ActivateComponent<T>(T type, bool instant = false) where T : Enum
         {
@@ -90,5 +92,71 @@ namespace Managers
                 throw new ArgumentException("Unsupported enum type: " + typeof(T));
             }
         }
+
+        #endregion
+
+        #region ASYNC INITIALIZATION
+        
+        public async Task InitializeForScene(
+            SceneProfile sceneProfile, 
+            Action<int> declareSubprocessesCount,
+            Action<int> declareStepsCallBack,
+            Action<string> declareStep
+        ) {
+            declareSubprocessesCount.Invoke(3);
+            await AddComponents(
+                sceneProfile,
+                declareStepsCallBack,
+                declareStep
+            );
+        }
+
+        private async Task AddComponents(
+            SceneProfile profile, 
+            Action<int> declareStepsCallBack,
+            Action<string> declareStep
+        )
+        {
+            await AddComponents(profile.hudKeys, _huds, hudParent, declareStepsCallBack, declareStep);
+            await AddComponents(profile.overlayKeys, _overlays, overlayParent, declareStepsCallBack, declareStep);
+            await AddComponents(profile.screenKeys, _screens, screenParent, declareStepsCallBack, declareStep);
+        }
+        
+        private static async Task AddComponents<TEnum, TComp>(
+            List<TEnum> desiredKeys,
+            Dictionary<TEnum, TComp> currentDict,
+            Transform parent,
+            Action<int> declareStepsCallBack,
+            Action<string> declareStep
+        ) where TEnum : Enum where TComp : Component
+        {
+            CollectionUtils.CompareListAndDictionary(
+                currentDict,
+                desiredKeys,
+                out var onlyInList,
+                out var onlyInDict
+            );
+
+            declareStepsCallBack.Invoke(onlyInDict.Count + onlyInList.Count);
+
+            var assetManager = AssetManager.Instance;
+
+            foreach (var key in onlyInDict)
+            {
+                declareStep.Invoke($"Removing {typeof(TComp).Name}: {key}");
+                var obj = currentDict[key].gameObject;
+                assetManager.ReleaseInstance(obj);
+                currentDict.Remove(key);
+            }
+
+            foreach (var key in onlyInList)
+            {
+                declareStep.Invoke($"Adding {typeof(TComp).Name}: {key}");
+                var obj = await assetManager.InstantiatePrefabAsync(key, parent);
+                currentDict.Add(key, obj.GetComponent<TComp>());
+            }
+        }
+
+        #endregion
     }
 }

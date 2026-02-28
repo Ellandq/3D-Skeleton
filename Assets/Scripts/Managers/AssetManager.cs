@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Utils.SO;
-using Object = UnityEngine.Object;
 
 namespace Managers
 {
@@ -13,63 +11,68 @@ namespace Managers
     {
         private class AssetEntry
         {
-            public AsyncOperationHandle Handle;
+            public AsyncOperationHandle<GameObject> Handle;
             public int ReferenceCount;
         }
 
-        private readonly Dictionary<string, AssetEntry> _loadAssets = new();
+        private readonly Dictionary<string, AssetEntry> _loadedAssets = new();
+        private readonly Dictionary<GameObject, string> _instances = new();
 
-        public async Task PreloadSceneAsync(SceneProfile profile)
+        public async Task<GameObject> InstantiatePrefabAsync<TEnum>(TEnum enumValue, Transform parent, bool enable = true) where TEnum : Enum
         {
-            foreach (var key in profile.preloadKeys)
+            var key = enumValue.ToString();
+
+            if (!_loadedAssets.TryGetValue(key, out var entry))
             {
-                await LoadAsync<Object>(key);
+                var handle = Addressables.LoadAssetAsync<GameObject>(key);
+                await handle.Task;
+
+                if (handle.Status != AsyncOperationStatus.Succeeded)
+                    throw new Exception($"Failed to load asset: {key}");
+
+                entry = new AssetEntry
+                {
+                    Handle = handle,
+                    ReferenceCount = 0
+                };
+                _loadedAssets[key] = entry;
             }
-        }
 
-        public async Task<T> LoadAsync<T>(string key) where T : Object
-        {
-            if (_loadAssets.TryGetValue(key, out var existing))
-            {
-                existing.ReferenceCount++;
-                return (T)existing.Handle.Result;
-            }
+            entry.ReferenceCount++;
 
-            var handle = Addressables.LoadAssetAsync<T>(key);
+            var prefab = entry.Handle.Result;
+            var instance = Instantiate(prefab, parent);
+            instance.SetActive(enable);
+            _instances[instance] = key;
 
-            await handle.Task;
-
-            if (handle.Status != AsyncOperationStatus.Succeeded)
-                throw new Exception($"Failed to load asset: {key}");
-
-            _loadAssets[key] = new AssetEntry
-            {
-                Handle = handle,
-                ReferenceCount = 1
-            };
-
-            return handle.Result;
-        }
-
-        public void Release(string key)
-        {
-            if (!_loadAssets.TryGetValue(key, out var entry))
-                return;
-
-            entry.ReferenceCount--;
-
-            if (entry.ReferenceCount > 0)
-                return;
-            
-            Addressables.Release(entry.Handle);
-            _loadAssets.Remove(key);
+            return instance;
         }
 
         public void ReleaseInstance(GameObject instance)
         {
-            Addressables.ReleaseInstance(instance);
+            if (!_instances.TryGetValue(instance, out var key))
+                return;
+
+            if (!_loadedAssets.TryGetValue(key, out var entry))
+            {
+                _instances.Remove(instance);
+                Destroy(instance);
+                return;
+            }
+
+            Destroy(instance);
+            _instances.Remove(instance);
+
+            entry.ReferenceCount--;
+
+            if (entry.ReferenceCount > 0) return;
+            Addressables.Release(entry.Handle);
+            _loadedAssets.Remove(key);
         }
 
-        public bool IsLoaded(string key) => _loadAssets.ContainsKey(key);
+        public bool IsLoaded<TEnum>(TEnum enumValue) where TEnum : Enum
+        {
+            return _loadedAssets.ContainsKey(enumValue.ToString());
+        }
     }
 }
