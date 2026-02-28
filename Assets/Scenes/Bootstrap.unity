@@ -1446,9 +1446,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86079181dc5f4456ae06f0480bb26898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Screen.LoadingScreen
-  loadingBar: {fileID: 0}
-  loadingIcon: {fileID: 0}
-  messageDisplay: {fileID: 0}
+  loadingBar: {fileID: 976555285}
+  loadingIcon: {fileID: 994603276}
+  messageDisplay: {fileID: 701822375}
   minWidth: 0
   rotationSpeed: 90
 --- !u!1 &1638362681
