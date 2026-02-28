@@ -2,8 +2,8 @@
 
 namespace UserInterface.HUD
 {
-    public abstract class HUDBase : MonoBehaviour, IHUD, IUIComponent
+    public abstract class HUDBase : UIComponentBase, IHUD
     {
-        
+        public virtual NamedHUD Name { get; }
     }
 }

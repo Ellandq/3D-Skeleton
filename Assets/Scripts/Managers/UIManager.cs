@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UserInterface.HUD;
 using UserInterface.Overlay;
@@ -11,42 +12,69 @@ namespace Managers
     {
         [Header("UI Components")] 
         // HUDs
-        private Dictionary<NamedHUD, IHUD> _huds;
+        private Dictionary<NamedHUD, HUDBase> _huds = new();
         [SerializeField] private List<HUDBase> huds; 
         
         // Overlays
-        private Dictionary<NamedOverlay, IOverlay> _overlays;
+        private Dictionary<NamedOverlay, OverlayBase> _overlays = new();
         [SerializeField] private List<OverlayBase> overlays;
         
         // Screens
-        private Dictionary<NamedScreen, IScreen> _screens;
+        private Dictionary<NamedScreen, ScreenBase> _screens = new();
         [SerializeField] private List<ScreenBase> screens;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            
+            _huds = huds.ToDictionary(
+                hud => hud.Name,
+                hud => hud
+            );
+            
+            _overlays = overlays.ToDictionary(
+                overlay => overlay.Name,
+                overlay => overlay
+            );
+            
+            _screens = screens.ToDictionary(
+                screen => screen.Name,
+                screen => screen
+            );
+        }
+
         public void ActivateComponent<T>(T type, bool instant = false) where T : Enum
+        {
+            ChangeComponentState(type, true, instant);
+        }
+
+        public void DeactivateComponent<T>(T type, bool instant = false) where T : Enum
+        {
+            ChangeComponentState(type, false, instant);
+        }
+
+        private void ChangeComponentState<T>(T type, bool active, bool instant = false) where T : Enum
         {
             if (typeof(T) == typeof(NamedHUD))
             {
                 var key = (NamedHUD)(object)type;
-                if (_huds.TryGetValue(key, out var hud))
-                {
-                    // TODO
-                }
+                if (!_huds.TryGetValue(key, out var hud)) return;
+                if (active) hud.Activate(instant);
+                else hud.Deactivate(instant);
             }
             else if (typeof(T) == typeof(NamedOverlay))
             {
                 var key = (NamedOverlay)(object)type;
-                if (_overlays.TryGetValue(key, out var overlay))
-                {
-                    // TODO
-                }
+                if (!_overlays.TryGetValue(key, out var overlay)) return;
+                if (active) overlay.Activate(instant);
+                else overlay.Deactivate(instant);
             }
             else if (typeof(T) == typeof(NamedScreen))
             {
                 var key = (NamedScreen)(object)type;
-                if (_screens.TryGetValue(key, out var screen))
-                {
-                    // TODO
-                }
+                if (!_screens.TryGetValue(key, out var screen)) return;
+                if (active) screen.Activate(instant);
+                else screen.Deactivate(instant);
             }
             else
             {

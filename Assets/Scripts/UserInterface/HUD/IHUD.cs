@@ -2,6 +2,6 @@
 {
     public interface IHUD
     {
-        
+        NamedHUD Name { get; }
     }
 }

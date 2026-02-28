@@ -2,8 +2,9 @@
 
 namespace UserInterface.Screen
 {
-    public abstract class ScreenBase : MonoBehaviour, IScreen, IUIComponent
+    public abstract class ScreenBase : UIComponentBase, IScreen
     {
+        public virtual NamedScreen Name { get; }
         
     }
 }

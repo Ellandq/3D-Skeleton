@@ -2,12 +2,15 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utils.Contract;
 
 namespace UserInterface.Screen
 {
     public class LoadingScreen : ScreenBase
     {
+        public override NamedScreen Name => NamedScreen.Loading;
+        
         [Header("Components")] 
         [SerializeField] private RectTransform loadingBar;
         [SerializeField] private RectTransform loadingIcon;
@@ -15,7 +18,7 @@ namespace UserInterface.Screen
 
         [Header("Settings")] 
         [SerializeField] private float minWidth;
-        private float _maxWidth;
+        [SerializeField] private float maxWidth;
         [SerializeField] private float rotationSpeed = 90f;
 
         [Header("Loader")]
@@ -26,7 +29,7 @@ namespace UserInterface.Screen
 
         protected void Awake()
         {
-            _maxWidth = ((RectTransform)loadingBar.GetChild(0)).rect.width;
+            maxWidth = ((RectTransform)loadingBar.GetChild(0)).rect.width;
             Initialize();
         }
         
@@ -82,7 +85,7 @@ namespace UserInterface.Screen
             {
                 var time = Time.unscaledDeltaTime;
                 
-                var target = new Vector2(_maxWidth * _targetProgress, y);
+                var target = new Vector2(maxWidth * _targetProgress, y);
                 var moveTo = Vector2.Lerp(bar, target, time);
                 loadingBar.sizeDelta = moveTo;
 

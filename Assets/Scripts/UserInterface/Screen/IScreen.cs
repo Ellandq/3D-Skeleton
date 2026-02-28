@@ -2,6 +2,6 @@
 {
     public interface IScreen
     {
-        
+        NamedScreen Name { get; }
     }
 }
