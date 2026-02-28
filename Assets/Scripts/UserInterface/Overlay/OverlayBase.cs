@@ -2,7 +2,7 @@
 
 namespace UserInterface.Overlay
 {
-    public abstract class OverlayBase : MonoBehaviour, IOverlay
+    public abstract class OverlayBase : MonoBehaviour, IOverlay, IUIComponent
     {
         
     }
