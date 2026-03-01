@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace UserInterface.Screen
+﻿namespace UserInterface.Screen
 {
     public abstract class ScreenBase : UIComponentBase, IScreen
     {

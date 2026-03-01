@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
+using UserInterface;
 using UserInterface.HUD;
 using UserInterface.Overlay;
 using UserInterface.Screen;
 using Utils.Collections;
 using Utils.Contract;
-using Utils.Enum;
 using Utils.SO;
 
 namespace Managers
@@ -54,23 +53,44 @@ namespace Managers
 
         #region COMPONENT CONTROL
 
-        public void ActivateComponent<T>(T type, bool instant = false) where T : Enum
+        public IUIComponent GetComponent<T>(T type) where T : Enum
+        {
+            if (typeof(T) == typeof(NamedHUD))
+            {
+                var key = (NamedHUD)(object)type;
+                return _huds.GetValueOrDefault(key);
+            }
+
+            if (typeof(T) == typeof(NamedOverlay))
+            {
+                var key = (NamedOverlay)(object)type;
+                return _overlays.GetValueOrDefault(key);
+            }
+
+            if (typeof(T) != typeof(NamedScreen)) throw new ArgumentException("Unsupported enum type: " + typeof(T));
+            {
+                var key = (NamedScreen)(object)type;
+                return _screens.GetValueOrDefault(key);
+            }
+        }
+
+        public void ActivateComponent<T>(T type, bool instant = false, Action onActivate = null) where T : Enum
         {
             ChangeComponentState(type, true, instant);
         }
 
-        public void DeactivateComponent<T>(T type, bool instant = false) where T : Enum
+        public void DeactivateComponent<T>(T type, bool instant = false, Action onDeactivate = null) where T : Enum
         {
             ChangeComponentState(type, false, instant);
         }
 
-        private void ChangeComponentState<T>(T type, bool active, bool instant = false) where T : Enum
+        private void ChangeComponentState<T>(T type, bool active, bool instant = false, Action onFinish = null) where T : Enum
         {
             if (typeof(T) == typeof(NamedHUD))
             {
                 var key = (NamedHUD)(object)type;
                 if (!_huds.TryGetValue(key, out var hud)) return;
-                if (active) hud.Activate(instant);
+                if (active) hud.Activate(instant, onFinish);
                 else hud.Deactivate(instant);
             }
             else if (typeof(T) == typeof(NamedOverlay))
@@ -96,7 +116,9 @@ namespace Managers
         #endregion
 
         #region ASYNC INITIALIZATION
-        
+
+        public string ProcessName => "UI";
+
         public async Task InitializeForScene(
             SceneProfile sceneProfile, 
             Action<int> declareSubprocessesCount,

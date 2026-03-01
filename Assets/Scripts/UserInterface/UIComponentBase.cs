@@ -10,7 +10,7 @@ namespace UserInterface
         [Header("Components")]
         [SerializeField] private CanvasGroup canvasGroup;
         
-        public virtual void Activate(bool instant)
+        public virtual void Activate(bool instant, Action onActivate = null)
         {
             StopAllCoroutines();
             if (instant)
@@ -19,32 +19,34 @@ namespace UserInterface
                 gameObject.SetActive(true);
                 return;
             }
-            StartCoroutine(OpenAnimation());
+            gameObject.SetActive(true);
+            StartCoroutine(OpenAnimation(onActivate));
         }
 
-        public virtual void Deactivate(bool instant)
+        public virtual void Deactivate(bool instant, Action onDeactivate = null)
         {
             StopAllCoroutines();
             if (instant)
             {
                 canvasGroup.alpha = 0f;
                 gameObject.SetActive(false);
+                onDeactivate?.Invoke();
                 return;
             }
-            StartCoroutine(CloseAnimation());
+            StartCoroutine(CloseAnimation(onDeactivate));
         }
 
-        protected virtual IEnumerator OpenAnimation()
+        protected virtual IEnumerator OpenAnimation(Action onActivate = null)
         {
-            return FadeRoutine(1f);
+            return FadeRoutine(1f, onActivate);
         }
 
-        protected virtual IEnumerator CloseAnimation()
+        protected virtual IEnumerator CloseAnimation(Action onDeactivate = null)
         {
-            return FadeRoutine(0f);
+            return FadeRoutine(0f, onDeactivate);
         }
         
-        private IEnumerator FadeRoutine(float targetAlpha)
+        private IEnumerator FadeRoutine(float targetAlpha, Action onFinish = null)
         {
             var startAlpha = canvasGroup.alpha;
             var time = 0f;
@@ -60,6 +62,8 @@ namespace UserInterface
             canvasGroup.alpha = targetAlpha;
             canvasGroup.interactable = targetAlpha > 0;
             canvasGroup.blocksRaycasts = targetAlpha > 0;
+            
+            onFinish?.Invoke();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace UserInterface.HUD
+﻿namespace UserInterface.HUD
 {
     public abstract class HUDBase : UIComponentBase, IHUD
     {

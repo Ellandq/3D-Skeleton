@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace UserInterface.Overlay
+﻿namespace UserInterface.Overlay
 {
     public abstract class OverlayBase : UIComponentBase, IOverlay
     {

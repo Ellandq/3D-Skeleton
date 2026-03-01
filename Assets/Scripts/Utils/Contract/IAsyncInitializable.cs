@@ -6,6 +6,8 @@ namespace Utils.Contract
 {
     public interface IAsyncInitializable
     {
+        string ProcessName { get; }
+        
         Task InitializeForScene(
             SceneProfile sceneProfile, 
             Action<int> declareSubprocessesCount,

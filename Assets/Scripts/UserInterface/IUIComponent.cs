@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using System;
 
 namespace UserInterface
 {
     public interface IUIComponent
     {
-        void Activate(bool instant);
-        void Deactivate(bool instant);
+        void Activate(bool instant, Action onActivate = null);
+        void Deactivate(bool instant, Action onDeactivate = null);
     }
 }
