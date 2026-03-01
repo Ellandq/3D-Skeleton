@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Editor.CommandCenter.Modules;
+using Editor.CommandCenter.Utils;
 
 namespace Editor.CommandCenter
 {
@@ -48,6 +49,7 @@ namespace Editor.CommandCenter
         [InitializeOnLoadMethod]
         private static void OnDomainReload()
         {
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
             EditorApplication.delayCall += () =>
             {
                 var window = GetWindow<CommandCenterWindow>();
@@ -57,6 +59,7 @@ namespace Editor.CommandCenter
         
         private void RunAutoValidation()
         {
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
             foreach (var module in _modules)
                 module.Validate();
 
@@ -102,11 +105,13 @@ namespace Editor.CommandCenter
 
             var enforceAll = new Button(() =>
             {
-                foreach (var m in _modules)
-                    m.Enforce();
+                HierarchyStateHelper.PreserveHierarchy(() =>
+                {
+                    foreach (var m in _modules)
+                        m.Enforce();
+                });
                 RefreshStatuses();
-            })
-            { text = "Enforce All" };
+            }) { text = "Enforce All" };
 
             validateAll.style.marginRight = 6;
 
@@ -265,7 +270,7 @@ namespace Editor.CommandCenter
 
             var enforce = new Button(() =>
             {
-                module.Enforce();
+                HierarchyStateHelper.PreserveHierarchy(module.Enforce);
                 UpdateIndicator();
             }) { text = "Enforce" };
 
