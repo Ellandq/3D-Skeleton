@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using Utils.Collections;
+using Utils.Contract;
 using Utils.Enum;
+using Utils.SO;
 
 namespace Managers
 {
-    public class SceneManager : ManagerBase<SceneManager>
+    public class SceneManager : ManagerBase<SceneManager>, IAsyncInitializable
     {
         private readonly HashSet<NamedScene> _loadedScenes = new();
         private bool _isLoading;
@@ -90,6 +93,54 @@ namespace Managers
             await LoadSceneAdditiveAsync(sceneName);
 
             _isLoading = false;
+        }
+
+        public string ProcessName => "Scenes";
+
+        public async Task InitializeForScene(
+            SceneProfile sceneProfile,
+            Action<int> declareSubprocessesCount,
+            Action<int> declareStepsCallBack,
+            Action<string> declareStep
+        )
+        {
+            if (!sceneProfile)
+                throw new ArgumentNullException(nameof(sceneProfile));
+
+            var targetScenes = new List<NamedScene>(sceneProfile.subScenes);
+            targetScenes.Insert(0, sceneProfile.sceneName);
+
+            CollectionUtils.CompareCollections(
+                _loadedScenes,
+                targetScenes,
+                out var scenesToUnload,
+                out var scenesToLoad
+            );
+
+            var totalOperations = scenesToUnload.Count + scenesToLoad.Count;
+
+            if (totalOperations == 0)
+                return;
+
+            declareSubprocessesCount(totalOperations);
+
+            foreach (var scene in scenesToUnload)
+            {
+                declareStepsCallBack(1);
+
+                await UnloadSceneAsync(scene);
+
+                declareStep($"Unloaded {scene}");
+            }
+
+            foreach (var scene in scenesToLoad)
+            {
+                declareStepsCallBack(1);
+
+                await LoadSceneAdditiveAsync(scene);
+
+                declareStep($"Loaded {scene}");
+            }
         }
     }
 }

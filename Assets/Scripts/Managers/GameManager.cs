@@ -1,25 +1,32 @@
-using System;
 using System.Collections.Generic;
 using GameStates;
+using SaveAndLoad;
 using UnityEngine;
 using Utils.Enum;
 
 namespace Managers
 {
+    [RequireComponent(typeof(GameLoader))]
     public class GameManager : ManagerBase<GameManager>
     {
         [Header("State Management")]
         private Stack<IGameState> _stateStack = new();
         private bool _isTransitioning;
 
+        [Header("Save and Load Management")] 
+        [SerializeField] public GameLoader gameLoader;
+        public static GameLoader LoadHandle => Instance.gameLoader;
+
         #region INITIALIZATION
 
         protected override void Awake()
         {
             base.Awake();
-            if (Instance != this) 
-                return;
-            
+            Time.timeScale = 0f;
+        }
+
+        protected void Start()
+        {
             if (_stateStack.Count == 0)
                 PushState(NamedState.MainMenu);
             else if (_stateStack.TryPeek(out var state))
@@ -59,10 +66,6 @@ namespace Managers
             if (_stateStack.TryPeek(out var lastState))
             {
                 lastState.Resume();
-            }
-            else
-            {
-                throw new InvalidOperationException("Cannot exit state when no states remain on the stack.");
             }
         }
 

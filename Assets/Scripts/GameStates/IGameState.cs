@@ -1,5 +1,4 @@
-﻿using System;
-using Utils.Enum;
+﻿using Utils.Enum;
 
 namespace GameStates
 {

@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 73902191}
   - component: {fileID: 73902192}
+  - component: {fileID: 73902193}
   m_Layer: 0
   m_Name: GAME-MANAGER
   m_TagString: Untagged
@@ -163,6 +164,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c616b06d9b9c4b544a4786ed5f0c3945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.GameManager
+  gameLoader: {fileID: 73902193}
+--- !u!114 &73902193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73902190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e98764ffcbbd40fd88b338e1fafe6ae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SaveAndLoad.GameLoader
+  sceneProfiles:
+  - {fileID: 11400000, guid: 320e29131604ec74c8e14a902bde6c49, type: 2}
 --- !u!1 &438275676
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,12 +224,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b5ac889bf4c45f090fbc9c3c8f98fde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.UIManager
-  hudParent: {fileID: 0}
+  hudParent: {fileID: 822254260}
   huds: []
-  overlayParent: {fileID: 0}
+  overlayParent: {fileID: 850964542}
   overlays: []
-  screenParent: {fileID: 0}
-  screens: []
+  screenParent: {fileID: 1724868549}
+  screens:
+  - {fileID: 5555862392846487010}
 --- !u!1 &602441964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1072,6 +1089,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoadingScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 5689478382848321421, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8101720746069585393, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1157,6 +1178,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
+--- !u!114 &5555862392846487010 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7260705582026373656, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
+  m_PrefabInstance: {fileID: 5555862392846487009}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86079181dc5f4456ae06f0480bb26898, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Screen.LoadingScreen
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
