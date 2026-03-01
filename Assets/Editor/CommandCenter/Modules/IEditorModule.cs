@@ -5,8 +5,6 @@ namespace Editor.CommandCenter.Modules
     public interface IEditorModule
     {
         string ModuleName { get; }
-        float MinHeight { get; }
-        float MaxHeight { get; }
 
         ModuleStatus Status { get; }
 

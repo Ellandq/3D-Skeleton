@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Editor.CommandCenter.Modules;
+using Editor.CommandCenter.Utils;
 
 namespace Editor.CommandCenter
 {
@@ -13,6 +14,7 @@ namespace Editor.CommandCenter
     {
         private readonly List<IEditorModule> _modules = new();
         private readonly Dictionary<IEditorModule, Label> _statusIndicators = new();
+        private static readonly List<(string message, Color color)> _logHistory = new();
         
         private ScrollView _moduleScroll;
         private ScrollView _consoleScroll;
@@ -36,7 +38,32 @@ namespace Editor.CommandCenter
             CreateHeader();
             CreateModuleArea();
             CreateConsole();
+            foreach (var entry in _logHistory)
+            {
+                AppendLogToUI(entry.message, entry.color);
+            }
             DiscoverModules();
+            RunAutoValidation();
+        }
+        
+        [InitializeOnLoadMethod]
+        private static void OnDomainReload()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+            EditorApplication.delayCall += () =>
+            {
+                var window = GetWindow<CommandCenterWindow>();
+                window?.RunAutoValidation();
+            };
+        }
+        
+        private void RunAutoValidation()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+            foreach (var module in _modules)
+                module.Validate();
+
+            RefreshStatuses();
         }
 
         #region Header
@@ -78,11 +105,13 @@ namespace Editor.CommandCenter
 
             var enforceAll = new Button(() =>
             {
-                foreach (var m in _modules)
-                    m.Enforce();
+                HierarchyStateHelper.PreserveHierarchy(() =>
+                {
+                    foreach (var m in _modules)
+                        m.Enforce();
+                });
                 RefreshStatuses();
-            })
-            { text = "Enforce All" };
+            }) { text = "Enforce All" };
 
             validateAll.style.marginRight = 6;
 
@@ -156,7 +185,6 @@ namespace Editor.CommandCenter
 
             var isOpen = EditorPrefs.GetBool(FoldoutPrefsKey + module.ModuleName, true);
 
-            // HEADER
             var header = new VisualElement
             {
                 style =
@@ -201,7 +229,6 @@ namespace Editor.CommandCenter
             header.Add(label);
             header.Add(statusDot);
 
-            // CONTENT
             var contentContainer = new VisualElement
             {
                 style =
@@ -243,7 +270,7 @@ namespace Editor.CommandCenter
 
             var enforce = new Button(() =>
             {
-                module.Enforce();
+                HierarchyStateHelper.PreserveHierarchy(module.Enforce);
                 UpdateIndicator();
             }) { text = "Enforce" };
 
@@ -253,7 +280,6 @@ namespace Editor.CommandCenter
             buttonRow.Add(enforce);
             contentContainer.Add(buttonRow);
 
-            // TOGGLE BEHAVIOR
             header.RegisterCallback<ClickEvent>(_ =>
             {
                 isOpen = !isOpen;
@@ -347,15 +373,33 @@ namespace Editor.CommandCenter
 
         private void AddLog(string message, Color color)
         {
+            _logHistory.Add((message, color));
+            AppendLogToUI(message, color);
+        }
+        
+        private void AppendLogToUI(string message, Color color)
+        {
             var label = new Label(message)
             {
-                style =
-                {
-                    color = color
-                }
+                style = { color = color }
             };
+
             _consoleScroll.Add(label);
-            _consoleScroll.scrollOffset = new Vector2(0, float.MaxValue);
+
+            label.RegisterCallback<GeometryChangedEvent>(_ =>
+            {
+                _consoleScroll.verticalScroller.value =
+                    _consoleScroll.verticalScroller.highValue;
+            });
+        }
+        
+        private void ScrollConsoleToBottom()
+        {
+            _consoleScroll.schedule.Execute(() =>
+            {
+                _consoleScroll.verticalScroller.value =
+                    _consoleScroll.verticalScroller.highValue;
+            }).ExecuteLater(1);
         }
 
         #endregion
