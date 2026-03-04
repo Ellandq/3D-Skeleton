@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Utils.SO.Settings
 {
-    public class InputAssignments : SettingSO
+    [CreateAssetMenu(menuName = "Settings/Input Assignments")]
+    public class InputAssignments : SettingSO<string>
     {
         public Dictionary<string, string> AsDictionary() => settingNames
                 .Select((setting, index) => new

@@ -9,7 +9,7 @@ namespace Managers
     public class InputManager : ManagerBase<InputManager>
     {
         [Header("Input Settings")]
-        [SerializeField] private InputAssignments defaultInputAssignments;
+        [SerializeField] public InputAssignments defaultInputAssignments;
         
         [Header("Runtime Dictionary")]
         private Dictionary<PlayerAction, ButtonInformationWrapper> _buttonInfoDict = new();

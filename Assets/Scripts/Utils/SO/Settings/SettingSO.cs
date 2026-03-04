@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Utils.SO.Settings
 {
-    public class SettingSO : ScriptableObject
+    public class SettingSO<T> : ScriptableObject
     {
         public List<string> settingNames;
-        public List<string> defaultValues;
+        public List<T> defaultValues;
     }
 }
