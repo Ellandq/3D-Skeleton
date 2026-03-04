@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df60e329ac5e4a1492762a9f153372cc, type: 3}
+  m_Name: InputAssignments
+  m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.InputAssignments
+  settingNames:
+  - Action1
+  - Action1_Alt
+  - Action2
+  - Action2_Alt
+  - Action3
+  - Action3_Alt
+  - Action4
+  - Action4_Alt
+  - Action5
+  - Action5_Alt
+  - MoveLeft
+  - MoveLeft_Alt
+  - MoveRight
+  - MoveRight_Alt
+  - MoveForwards
+  - MoveForwards_Alt
+  - MoveBackwards
+  - MoveBackwards_Alt
+  - Jump
+  - Jump_Alt
+  - Sprint
+  - Sprint_Alt
+  - Crouch
+  - Crouch_Alt
+  - Prone
+  - Prone_Alt
+  - Walk
+  - Walk_Alt
+  - Interaction
+  - Interaction_Alt
+  - Inventory
+  - Inventory_Alt
+  - ItemSlot1
+  - ItemSlot1_Alt
+  - ItemSlot2
+  - ItemSlot2_Alt
+  - ItemSlot3
+  - ItemSlot3_Alt
+  - ItemSlot4
+  - ItemSlot4_Alt
+  - ItemSlot5
+  - ItemSlot5_Alt
+  - ItemSlot6
+  - ItemSlot6_Alt
+  - ItemSlot7
+  - ItemSlot7_Alt
+  - ItemSlot8
+  - ItemSlot8_Alt
+  - ItemSlot9
+  - ItemSlot9_Alt
+  - Escape
+  - Escape_Alt
+  defaultValues:
+  - Left
+  - 
+  - Right
+  - 
+  - Middle
+  - 
+  - 
+  - 
+  - 
+  - 
+  - A
+  - LeftArrow
+  - D
+  - RightArrow
+  - W
+  - UpArrow
+  - S
+  - DownArrow
+  - Space
+  - 
+  - Shift
+  - 
+  - Control
+  - 
+  - Z
+  - 
+  - Alt
+  - 
+  - E
+  - 
+  - Tab
+  - 
+  - 1
+  - 
+  - 2
+  - 
+  - 3
+  - 
+  - 4
+  - 
+  - 5
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Escape
+  - 
