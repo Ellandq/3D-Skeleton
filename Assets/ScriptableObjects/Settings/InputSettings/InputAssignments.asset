@@ -66,55 +66,55 @@ MonoBehaviour:
   - Escape
   - Escape_Alt
   defaultValues:
-  - Left
-  - 
-  - Right
-  - 
-  - Middle
-  - 
-  - 
-  - 
-  - 
-  - 
-  - A
-  - LeftArrow
-  - D
-  - RightArrow
-  - W
-  - UpArrow
-  - S
-  - DownArrow
-  - Space
-  - 
-  - Shift
-  - 
-  - Control
-  - 
-  - Z
-  - 
-  - Alt
-  - 
-  - E
-  - 
-  - Tab
-  - 
-  - 1
-  - 
-  - 2
-  - 
-  - 3
-  - 
-  - 4
-  - 
-  - 5
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - Escape
-  - 
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None
+  - None

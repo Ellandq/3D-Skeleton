@@ -99,7 +99,7 @@ namespace Editor.CommandCenter.Modules
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            var inputManager = Object.FindObjectOfType<InputManager>();
+            var inputManager = Object.FindAnyObjectByType<InputManager>();
             if (!inputManager)
             {
                 _logger.LogError("No InputManager found in scene.");
@@ -125,10 +125,10 @@ namespace Editor.CommandCenter.Modules
             foreach (var key in keys)
             {
                 asset.settingNames.Add(key);
-                asset.defaultValues.Add(KeyCode.None.ToString());
+                asset.defaultValues.Add(nameof(KeyCode.None));
 
                 asset.settingNames.Add(key + "_Alt");
-                asset.defaultValues.Add(KeyCode.None.ToString());
+                asset.defaultValues.Add(nameof(KeyCode.None));
             }
 
             EditorUtility.SetDirty(asset);
