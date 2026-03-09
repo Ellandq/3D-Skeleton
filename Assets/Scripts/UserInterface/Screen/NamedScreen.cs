@@ -6,6 +6,7 @@ namespace UserInterface.Screen
 {
     public enum NamedScreen
     {
-        Loading
+        Loading,
+        MainMenu
     }
 }

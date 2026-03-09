@@ -3,7 +3,6 @@ using System.Linq;
 using Managers;
 using SaveAndLoad;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UserInterface.Screen;
@@ -187,17 +186,19 @@ namespace Editor.CommandCenter.Modules
 
         private void AssignAllToGameLoader()
         {
-            var bootstrapPath = $"{SceneFolder}/{BootstrapSceneName}.unity";
-            var scene = EditorSceneManager.OpenScene(bootstrapPath);
-
             var loader = Object.FindAnyObjectByType<GameLoader>();
             if (!loader)
             {
-                _logger.LogError("GameLoader not found in Bootstrap scene.");
+                _logger.LogError("GameLoader not found in currently loaded scene.");
                 return;
             }
 
             var gameManager = loader.GetComponent<GameManager>();
+            if (!gameManager)
+            {
+                _logger.LogError("GameManager component not found on GameLoader.");
+                return;
+            }
 
             var profiles = GetAllProfiles()
                 .Where(p => p.name != BootstrapSceneName)
@@ -208,16 +209,18 @@ namespace Editor.CommandCenter.Modules
 
             serialized.Update();
             property.arraySize = profiles.Length;
+
             for (var i = 0; i < profiles.Length; i++)
             {
                 property.GetArrayElementAtIndex(i).objectReferenceValue = profiles[i];
             }
+
             serialized.ApplyModifiedProperties();
 
             gameManager.gameLoader = loader;
 
-            EditorSceneManager.MarkSceneDirty(scene);
-            EditorSceneManager.SaveScene(scene);
+            EditorUtility.SetDirty(loader);
+            EditorUtility.SetDirty(gameManager);
         }
         
         private void SyncProfile(SceneProfile profile, string sceneName)

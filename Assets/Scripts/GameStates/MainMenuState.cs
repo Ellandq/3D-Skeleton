@@ -19,7 +19,11 @@ namespace GameStates
         {
             await GameManager.LoadHandle.LoadGame(
                 NamedScene.MainMenu,
-                () => UIManager.Instance.DeactivateComponent(NamedScreen.Loading, false, Resume)
+                () =>
+                {
+                    UIManager.Instance.DeactivateComponent(NamedScreen.Loading, false, Resume);
+                    UIManager.Instance.ActivateComponent(NamedScreen.MainMenu, true);
+                }
             );
         }
 
