@@ -51,6 +51,25 @@ namespace Managers
             );
         }
 
+        #region UTILS
+
+        private void SortScreensByPriority()
+        {
+            var ordered = _screens.Values
+                .Where(s => s)
+                .OrderBy(s => s.Priority)
+                .Reverse()
+                .ToList();
+
+            for (var i = 0; i < ordered.Count; i++)
+            {
+                if (ordered[i])
+                    ordered[i].transform.SetSiblingIndex(i);
+            }
+        }
+
+        #endregion
+
         #region COMPONENT CONTROL
 
         public IUIComponent GetComponent<T>(T type) where T : Enum
@@ -142,6 +161,7 @@ namespace Managers
             await AddComponents(profile.hudKeys, _huds, hudParent, declareStepsCallBack, declareStep);
             await AddComponents(profile.overlayKeys, _overlays, overlayParent, declareStepsCallBack, declareStep);
             await AddComponents(profile.screenKeys, _screens, screenParent, declareStepsCallBack, declareStep);
+            SortScreensByPriority();
         }
         
         private static async Task AddComponents<TEnum, TComp>(
@@ -174,7 +194,7 @@ namespace Managers
             foreach (var key in onlyInList)
             {
                 declareStep.Invoke($"Adding {typeof(TComp).Name}: {key}");
-                var obj = await assetManager.InstantiatePrefabAsync(key, parent);
+                var obj = await assetManager.InstantiatePrefabAsync(key, parent, false);
                 currentDict.Add(key, obj.GetComponent<TComp>());
             }
         }
