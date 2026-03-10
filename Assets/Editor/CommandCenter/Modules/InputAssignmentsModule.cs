@@ -117,17 +117,30 @@ namespace Editor.CommandCenter.Modules
 
         private static void InitializeAsset(InputAssignments asset)
         {
-            var keys = Enum.GetNames(typeof(PlayerAction)).ToList();
+            var actions = Enum.GetNames(typeof(PlayerAction));
 
-            asset.settingNames = new List<string>();
-            asset.defaultValues = new List<string>();
+            asset.settingNames ??= new List<string>();
 
-            foreach (var key in keys)
+            asset.defaultValues ??= new List<string>();
+
+            var desired = new List<string>();
+
+            foreach (var a in actions)
+            {
+                desired.Add(a);
+                desired.Add(a + "_Alt");
+            }
+
+            for (var i = asset.settingNames.Count - 1; i >= 0; i--)
+            {
+                if (desired.Contains(asset.settingNames[i])) continue;
+                asset.settingNames.RemoveAt(i);
+                asset.defaultValues.RemoveAt(i);
+            }
+
+            foreach (var key in desired.Where(key => !asset.settingNames.Contains(key)))
             {
                 asset.settingNames.Add(key);
-                asset.defaultValues.Add(nameof(KeyCode.None));
-
-                asset.settingNames.Add(key + "_Alt");
                 asset.defaultValues.Add(nameof(KeyCode.None));
             }
 

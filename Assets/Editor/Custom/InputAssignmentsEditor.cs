@@ -24,17 +24,67 @@ namespace Editor.Custom
 
             _categories = new Dictionary<string, string[]>
             {
-                { "Mouse Buttons", Enum.GetNames(typeof(MouseKey)) },
-                { "Letters", Enumerable.Range('A', 26).Select(i => ((char)i).ToString()).ToArray() },
-                { "Numbers", Enumerable.Range(0, 10).Select(i => i.ToString()).ToArray() },
-                { "F Keys", Enumerable.Range(1, 12).Select(i => "F" + i).ToArray() },
-                { "Common Keys", new[] { "Space", "Backspace", "Tab", "Enter", "Escape", "Shift", "Control", "Alt" } },
-                { "Others", Enum.GetNames(typeof(KeyCode))
-                    .Except(Enumerable.Range('A',26).Select(i => ((char)i).ToString()))
-                    .Except(Enumerable.Range(0,10).Select(i => i.ToString()))
-                    .Except(Enumerable.Range(1,12).Select(i => "F"+i))
-                    .Except(new[] { "Space", "Backspace", "Tab", "Enter", "Escape", "Shift", "Control", "Alt" })
-                    .ToArray()
+                { nameof(MouseKey), Enum.GetNames(typeof(MouseKey)) },
+
+                { "KeyCode/Letters",
+                    Enumerable.Range('A', 26)
+                        .Select(i => ((KeyCode)((int)KeyCode.A + (i - 'A'))).ToString())
+                        .ToArray()
+                },
+
+                { "KeyCode/Numbers",
+                    Enumerable.Range(0, 10)
+                        .Select(i => ((KeyCode)((int)KeyCode.Alpha0 + i)).ToString())
+                        .ToArray()
+                },
+
+                { "KeyCode/FKeys",
+                    Enumerable.Range(1, 12)
+                        .Select(i => ((KeyCode)((int)KeyCode.F1 + (i - 1))).ToString())
+                        .ToArray()
+                },
+
+                { "KeyCode/Common",
+                    new[]
+                    {
+                        nameof(KeyCode.Space),
+                        nameof(KeyCode.Backspace),
+                        nameof(KeyCode.Tab),
+                        nameof(KeyCode.Return),
+                        nameof(KeyCode.Escape),
+                        nameof(KeyCode.LeftShift),
+                        nameof(KeyCode.RightShift),
+                        nameof(KeyCode.LeftControl),
+                        nameof(KeyCode.RightControl),
+                        nameof(KeyCode.LeftAlt),
+                        nameof(KeyCode.RightAlt)
+                    }
+                },
+
+                { "KeyCode/Other",
+                    Enum.GetNames(typeof(KeyCode))
+                        .Except(Enum.GetNames(typeof(MouseKey)))
+                        .Except(Enumerable.Range('A',26)
+                            .Select(i => ((KeyCode)((int)KeyCode.A + (i - 'A'))).ToString()))
+                        .Except(Enumerable.Range(0,10)
+                            .Select(i => ((KeyCode)((int)KeyCode.Alpha0 + i)).ToString()))
+                        .Except(Enumerable.Range(1,12)
+                            .Select(i => ((KeyCode)((int)KeyCode.F1 + (i - 1))).ToString()))
+                        .Except(new[]
+                        {
+                            nameof(KeyCode.Space),
+                            nameof(KeyCode.Backspace),
+                            nameof(KeyCode.Tab),
+                            nameof(KeyCode.Return),
+                            nameof(KeyCode.Escape),
+                            nameof(KeyCode.LeftShift),
+                            nameof(KeyCode.RightShift),
+                            nameof(KeyCode.LeftControl),
+                            nameof(KeyCode.RightControl),
+                            nameof(KeyCode.LeftAlt),
+                            nameof(KeyCode.RightAlt)
+                        })
+                        .ToArray()
                 }
             };
         }
