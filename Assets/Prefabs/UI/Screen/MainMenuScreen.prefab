@@ -876,6 +876,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Screen.MainMenuScreen
   canvasGroup: {fileID: 2090355589333422355}
+  startButton: {fileID: 8422007904511927671}
+  continueButton: {fileID: 5135842149085281138}
+  settingsButton: {fileID: 1135342817507331389}
+  quitButton: {fileID: 1675091078440123140}
 --- !u!1 &7853931964328499388
 GameObject:
   m_ObjectHideFlags: 0

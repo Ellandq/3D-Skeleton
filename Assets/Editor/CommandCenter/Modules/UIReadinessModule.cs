@@ -9,6 +9,7 @@ using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UserInterface.HUD;
 using UserInterface.Overlay;
 using UserInterface.Screen;
+using UserInterface.Windows;
 
 namespace Editor.CommandCenter.Modules
 {
@@ -23,6 +24,7 @@ namespace Editor.CommandCenter.Modules
         private const string ScreenEnumPath = "Assets/Scripts/UserInterface/Screen/NamedScreen.cs";
         private const string HUDEnumPath = "Assets/Scripts/UserInterface/HUD/NamedHUD.cs";
         private const string OverlayEnumPath = "Assets/Scripts/UserInterface/Overlay/NamedOverlay.cs";
+        private const string WindowEnumPath = "Assets/Scripts/UserInterface/Windows/NamedWindow.cs";
 
         public void Initialize(ICommandCenterLogger logger) => _logger = logger;
 
@@ -37,6 +39,7 @@ namespace Editor.CommandCenter.Modules
             ValidateCategory(typeof(ScreenBase), typeof(NamedScreen), "Screen");
             ValidateCategory(typeof(HUDBase), typeof(NamedHUD), "HUD");
             ValidateCategory(typeof(OverlayBase), typeof(NamedOverlay), "Overlay");
+            ValidateCategory(typeof(WindowBase), typeof(NamedWindow), "Window");
         }
 
         public void Enforce()
@@ -46,6 +49,7 @@ namespace Editor.CommandCenter.Modules
             EnforceCategory(typeof(ScreenBase), ScreenEnumPath, "UserInterface.Screen", "NamedScreen", "Screen");
             EnforceCategory(typeof(HUDBase), HUDEnumPath, "UserInterface.HUD", "NamedHUD", "HUD");
             EnforceCategory(typeof(OverlayBase), OverlayEnumPath, "UserInterface.Overlay", "NamedOverlay", "Overlay");
+            EnforceCategory(typeof(WindowBase), WindowEnumPath, "UserInterface.Windows", "NamedWindow", "Window");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -53,7 +57,7 @@ namespace Editor.CommandCenter.Modules
 
         #endregion
 
-        #region VALIDATION (READ-ONLY)
+        #region VALIDATION
 
         private void ValidateCategory(Type baseType, Type enumType, string folder)
         {
@@ -74,6 +78,8 @@ namespace Editor.CommandCenter.Modules
                     enumName = enumName[..^"HUD".Length];
                 else if (folder.Equals("Overlay", StringComparison.OrdinalIgnoreCase) && enumName.EndsWith("Overlay"))
                     enumName = enumName[..^"Overlay".Length];
+                else if (folder.Equals("Window", StringComparison.OrdinalIgnoreCase) && enumName.EndsWith("Window"))
+                    enumName = enumName[..^"Window".Length];
 
                 if (!enumNames.Contains(enumName))
                 {
@@ -132,6 +138,8 @@ namespace Editor.CommandCenter.Modules
                         strippedEnumName = strippedEnumName[..^"HUD".Length];
                     else if (folder.Equals("Overlay", StringComparison.OrdinalIgnoreCase) && strippedEnumName.EndsWith("Overlay"))
                         strippedEnumName = strippedEnumName[..^"Overlay".Length];
+                    else if (folder.Equals("Window", StringComparison.OrdinalIgnoreCase) && strippedEnumName.EndsWith("Window"))
+                        strippedEnumName = strippedEnumName[..^"Window".Length];
 
                     return new { EnumName = strippedEnumName, PrefabName = fullPrefabName };
                 })
@@ -176,6 +184,7 @@ namespace Editor.CommandCenter.Modules
                 "Screen" => "NamedScreen",
                 "HUD" => "NamedHUD",
                 "Overlay" => "NamedOverlay",
+                "Window" => "NamedWindow",
                 _ => "Default"
             };
 

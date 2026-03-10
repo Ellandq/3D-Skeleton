@@ -1,6 +1,6 @@
 ﻿namespace UserInterface.Screen
 {
-    public enum ScreenPriority
+    public enum UIPriority
     {
         High,
         Medium,
