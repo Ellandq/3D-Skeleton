@@ -1,6 +1,8 @@
 ﻿using System;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
+using UserInterface.Windows;
 
 namespace UserInterface.Screen
 {
@@ -17,7 +19,7 @@ namespace UserInterface.Screen
 
         private void Awake()
         {
-            
+            quitButton.onClick.AddListener(() => UIManager.Instance.ActivateComponent(NamedWindow.ExitConfirmation, false));
         }
     }
 }
