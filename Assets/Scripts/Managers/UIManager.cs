@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UserInterface;
+using UserInterface.Components;
 using UserInterface.HUD;
 using UserInterface.Overlay;
 using UserInterface.Screen;
+using UserInterface.Windows;
 using Utils.Collections;
 using Utils.Contract;
 using Utils.SO;
@@ -30,6 +32,15 @@ namespace Managers
         [SerializeField] private Transform screenParent;
         private Dictionary<NamedScreen, ScreenBase> _screens = new();
         [SerializeField] private List<ScreenBase> screens;
+        
+        // Screens
+        [SerializeField] private Transform windowParent;
+        private Dictionary<NamedWindow, WindowBase> _windows = new();
+        [SerializeField] private List<WindowBase> windows;
+        
+        // Utils
+        [SerializeField] private OutsideClickDetector _outsideClickDetector;
+        public OutsideClickDetector OutsideClickDetectorRef => _outsideClickDetector;
 
         protected override void Awake()
         {
@@ -48,6 +59,11 @@ namespace Managers
             _screens = screens.ToDictionary(
                 screen => screen.Name,
                 screen => screen
+            );
+            
+            _windows = windows.ToDictionary(
+                window => window.Name,
+                window => window
             );
         }
 
@@ -126,6 +142,13 @@ namespace Managers
                 if (active) screen.Activate(instant);
                 else screen.Deactivate(instant);
             }
+            else if (typeof(T) == typeof(NamedWindow))
+            {
+                var key = (NamedWindow)(object)type;
+                if (!_windows.TryGetValue(key, out var window)) return;
+                if (active) window.Activate(instant);
+                else window.Deactivate(instant);
+            }
             else
             {
                 throw new ArgumentException("Unsupported enum type: " + typeof(T));
@@ -144,7 +167,7 @@ namespace Managers
             Action<int> declareStepsCallBack,
             Action<string> declareStep
         ) {
-            declareSubprocessesCount.Invoke(3);
+            declareSubprocessesCount.Invoke(4);
             await AddComponents(
                 sceneProfile,
                 declareStepsCallBack,
@@ -161,10 +184,11 @@ namespace Managers
             await AddComponents(profile.hudKeys, _huds, hudParent, declareStepsCallBack, declareStep);
             await AddComponents(profile.overlayKeys, _overlays, overlayParent, declareStepsCallBack, declareStep);
             await AddComponents(profile.screenKeys, _screens, screenParent, declareStepsCallBack, declareStep);
+            await AddComponents(profile.windowKeys, _windows, windowParent, declareStepsCallBack, declareStep);
             SortScreensByPriority();
         }
         
-        private static async Task AddComponents<TEnum, TComp>(
+        private async static Task AddComponents<TEnum, TComp>(
             List<TEnum> desiredKeys,
             Dictionary<TEnum, TComp> currentDict,
             Transform parent,
