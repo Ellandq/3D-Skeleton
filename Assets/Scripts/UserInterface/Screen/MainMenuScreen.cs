@@ -19,7 +19,7 @@ namespace UserInterface.Screen
 
         private void Awake()
         {
-            quitButton.onClick.AddListener(() => UIManager.Instance.ActivateComponent(NamedWindow.ExitConfirmation, false));
+            quitButton.onClick.AddListener(() => UIManager.Instance.ActivateComponent(NamedWindow.ExitConfirmation));
         }
     }
 }

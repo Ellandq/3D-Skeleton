@@ -739,6 +739,7 @@ GameObject:
   - component: {fileID: 791153530268135229}
   - component: {fileID: 5967672370709939987}
   - component: {fileID: 8060987951234494292}
+  - component: {fileID: 5583088128746983357}
   m_Layer: 0
   m_Name: ExitConfirmationWindow
   m_TagString: Untagged
@@ -794,7 +795,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Windows.ExitConfirmationWindow
   canvasGroup: {fileID: 5967672370709939987}
+  animator: {fileID: 5583088128746983357}
+  openTrigger: Open
+  closeTrigger: Close
+  openStateName: OpenExitConfirmationWindow
+  closeStateName: CloseExitConfirmationWindow
   confirmButton: {fileID: 4275401955705549299}
   cancelButton: {fileID: 8581915090490748297}
   message: {fileID: 3236246097604964922}
   outsideClickDetector: {fileID: 0}
+--- !u!95 &5583088128746983357
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8656072430265226410}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b1432047d252e6c479be873721ed22f7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

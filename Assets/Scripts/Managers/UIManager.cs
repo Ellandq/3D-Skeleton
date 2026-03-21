@@ -173,6 +173,11 @@ namespace Managers
                 declareStepsCallBack,
                 declareStep
             );
+
+            huds = _huds.Values.ToList();
+            overlays = _overlays.Values.ToList();
+            screens = _screens.Values.ToList();
+            windows = _windows.Values.ToList();
         }
 
         private async Task AddComponents(

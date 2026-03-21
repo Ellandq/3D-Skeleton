@@ -36,20 +36,20 @@ namespace Editor.CommandCenter.Modules
         {
             Status = ModuleStatus.Valid;
 
-            ValidateCategory(typeof(ScreenBase), typeof(NamedScreen), "Screen");
-            ValidateCategory(typeof(HUDBase), typeof(NamedHUD), "HUD");
-            ValidateCategory(typeof(OverlayBase), typeof(NamedOverlay), "Overlay");
-            ValidateCategory(typeof(WindowBase), typeof(NamedWindow), "Window");
+            ValidateCategory(typeof(IScreen), typeof(NamedScreen), "Screen");
+            ValidateCategory(typeof(IHUD), typeof(NamedHUD), "HUD");
+            ValidateCategory(typeof(IOverlay), typeof(NamedOverlay), "Overlay");
+            ValidateCategory(typeof(IWindow), typeof(NamedWindow), "Window");
         }
 
         public void Enforce()
         {
             Status = ModuleStatus.Valid;
 
-            EnforceCategory(typeof(ScreenBase), ScreenEnumPath, "UserInterface.Screen", "NamedScreen", "Screen");
-            EnforceCategory(typeof(HUDBase), HUDEnumPath, "UserInterface.HUD", "NamedHUD", "HUD");
-            EnforceCategory(typeof(OverlayBase), OverlayEnumPath, "UserInterface.Overlay", "NamedOverlay", "Overlay");
-            EnforceCategory(typeof(WindowBase), WindowEnumPath, "UserInterface.Windows", "NamedWindow", "Window");
+            EnforceCategory(typeof(IScreen), ScreenEnumPath, "UserInterface.Screen", "NamedScreen", "Screen");
+            EnforceCategory(typeof(IHUD), HUDEnumPath, "UserInterface.HUD", "NamedHUD", "HUD");
+            EnforceCategory(typeof(IOverlay), OverlayEnumPath, "UserInterface.Overlay", "NamedOverlay", "Overlay");
+            EnforceCategory(typeof(IWindow), WindowEnumPath, "UserInterface.Windows", "NamedWindow", "Window");
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -61,9 +61,7 @@ namespace Editor.CommandCenter.Modules
 
         private void ValidateCategory(Type baseType, Type enumType, string folder)
         {
-            var implementations = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .Where(t => baseType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
+            var implementations = GetImplementations(baseType);
 
             var enumNames = Enum.GetNames(enumType).ToList();
 
@@ -124,9 +122,7 @@ namespace Editor.CommandCenter.Modules
 
         private void EnforceCategory(Type baseType, string enumPath, string enumNamespace, string enumName, string folder)
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .Where(t => baseType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface)
+            var types = GetImplementations(baseType)
                 .Select(t =>
                 {
                     var strippedEnumName = t.Name;
@@ -219,5 +215,28 @@ namespace Editor.CommandCenter.Modules
         }
 
         #endregion
+        
+        private static Type[] GetImplementations(Type baseType)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a =>
+                {
+                    try { return a.GetTypes(); }
+                    catch { return Array.Empty<Type>(); }
+                })
+                .Where(t =>
+                {
+                    if (t.IsAbstract || t.IsInterface)
+                        return false;
+
+                    if (baseType.IsInterface)
+                    {
+                        return baseType.IsAssignableFrom(t);
+                    }
+
+                    return baseType.IsAssignableFrom(t) && t != baseType;
+                })
+                .ToArray();
+        }
     }
 }

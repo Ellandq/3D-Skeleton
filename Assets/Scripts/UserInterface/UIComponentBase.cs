@@ -33,6 +33,7 @@ namespace UserInterface
                 onDeactivate?.Invoke();
                 return;
             }
+            onDeactivate += () => gameObject.SetActive(false);
             StartCoroutine(CloseAnimation(onDeactivate));
         }
 
