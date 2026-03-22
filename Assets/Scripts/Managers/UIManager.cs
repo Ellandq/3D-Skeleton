@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameInput;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UserInterface;
 using UserInterface.Components;
 using UserInterface.HUD;
@@ -17,30 +19,33 @@ namespace Managers
 {
     public class UIManager : ManagerBase<UIManager>, IAsyncInitializable
     {
-        [Header("UI Components")]
-        // HUDs
+        [Header("HUD's")]
         [SerializeField] private Transform hudParent;
         private Dictionary<NamedHUD, HUDBase> _huds = new();
         [SerializeField] private List<HUDBase> huds; 
         
-        // Overlays
+        [Header("Overlays")]
         [SerializeField] private Transform overlayParent;
         private Dictionary<NamedOverlay, OverlayBase> _overlays = new();
         [SerializeField] private List<OverlayBase> overlays;
         
-        // Screens
+        [Header("Screens")]
         [SerializeField] private Transform screenParent;
         private Dictionary<NamedScreen, ScreenBase> _screens = new();
         [SerializeField] private List<ScreenBase> screens;
         
-        // Screens
+        [Header("Windows")]
         [SerializeField] private Transform windowParent;
         private Dictionary<NamedWindow, WindowBase> _windows = new();
         [SerializeField] private List<WindowBase> windows;
         
-        // Utils
-        [SerializeField] private OutsideClickDetector _outsideClickDetector;
-        public OutsideClickDetector OutsideClickDetectorRef => _outsideClickDetector;
+        [Header("Utils")]
+        [SerializeField] private OutsideClickDetector outsideClickDetector;
+        public OutsideClickDetector OutsideClickDetectorRef => outsideClickDetector;
+
+        [Header("UI Stack")] 
+        private readonly Stack<IUIStackable> _uiStack = new ();
+        private Action _onEmptyStackExit;
 
         protected override void Awake()
         {
@@ -67,6 +72,17 @@ namespace Managers
             );
         }
 
+        private void Start()
+        {
+            InputManager.Instance.Subscribe(PlayerAction.Escape, state =>
+            {
+                if (state == ButtonState.Down)
+                {
+                    PopUIStack();
+                }
+            });
+        }
+
         #region UTILS
 
         private void SortScreensByPriority()
@@ -82,6 +98,45 @@ namespace Managers
                 if (ordered[i])
                     ordered[i].transform.SetSiblingIndex(i);
             }
+        }
+
+        #endregion
+
+        #region UI STACK
+
+        public void PushToUIStack(IUIStackable stackable)
+        {
+            if (_uiStack.TryPeek(out var component))
+            {
+                component.OnPushOther();
+            }
+            _uiStack.Push(stackable);
+            stackable.OnPush();
+        }
+
+        private void PopUIStack()
+        {
+            if (_uiStack.TryPeek(out var component))
+            {
+                component.OnPop();
+            }
+            else
+            {
+                _onEmptyStackExit?.Invoke();
+            }
+        }
+
+        public void OnFinishPop(IUIStackable stackable)
+        {
+            if (_uiStack.TryPeek(out var component) && component == stackable)
+            {
+                _uiStack.Pop();
+            }
+        }
+        
+        public void SetOnEmptyStackExitCallback(Action action)
+        {
+            _onEmptyStackExit = action;
         }
 
         #endregion

@@ -13,7 +13,13 @@ namespace Managers
         
         [Header("Runtime Dictionary")]
         private Dictionary<PlayerAction, ButtonInformationWrapper> _buttonInfoDict = new();
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            LoadSettings();
+        }
+
         private void Update()
         {
             foreach (var wrapper in _buttonInfoDict.Values)
@@ -45,7 +51,7 @@ namespace Managers
             var defaultDict = defaultInputAssignments.AsDictionary();
             var newDict = new Dictionary<string, string>();
             
-            foreach (string key in Enum.GetValues(typeof(PlayerAction)))
+            foreach (var key in Enum.GetNames(typeof(PlayerAction)))
             {
                 var altKey = key + "_Alt";
                 newDict.Add(key, PlayerPrefs.GetString(key, defaultDict[key]));

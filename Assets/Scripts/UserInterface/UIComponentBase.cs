@@ -5,66 +5,171 @@ using UnityEngine;
 namespace UserInterface
 {
     [RequireComponent(typeof(CanvasGroup))]
+    [RequireComponent(typeof(Animator))]
     public abstract class UIComponentBase : MonoBehaviour, IUIComponent
     {
         [Header("Components")]
         [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private Animator animator;
+        
+        [Header("Animation Settings")]
+        [SerializeField] private string openState = "Open"; 
+        [SerializeField] private string closeState = "Close";
+        public bool IsOpening;
+        public bool IsClosing;
+            
+        private Action _onAnimationFinish;
+        
+        [Header("Parameter hashes")]
+        private static readonly int Speed = Animator.StringToHash("Speed");
         
         public virtual void Activate(bool instant, Action onActivate = null)
         {
-            StopAllCoroutines();
             if (instant)
             {
-                canvasGroup.alpha = 1f;
-                gameObject.SetActive(true);
+                ChangeComponentState(true);
+                _onAnimationFinish = onActivate;
+                IsOpening = true;
+                IsClosing = false;
+                ForceAnimationFinish(openState);
                 return;
             }
-            gameObject.SetActive(true);
-            StartCoroutine(OpenAnimation(onActivate));
+
+            if (IsOpening)
+            {
+                return;
+            }
+            
+            IsOpening = true;
+            _onAnimationFinish = onActivate;
+            
+            if (IsClosing)
+            {
+                IsClosing = false;
+                StartCoroutine(ReverseAnimation());
+                return;
+            }
+            
+            ChangeComponentState(true);
+            StartCoroutine(RunAnimation(openState));
         }
 
         public virtual void Deactivate(bool instant, Action onDeactivate = null)
         {
-            StopAllCoroutines();
+            onDeactivate += () => ChangeComponentState(false);
             if (instant)
             {
-                canvasGroup.alpha = 0f;
-                gameObject.SetActive(false);
-                onDeactivate?.Invoke();
+                _onAnimationFinish = onDeactivate;
+                IsOpening = false;
+                IsClosing = true;
+                ForceAnimationFinish(closeState);
                 return;
             }
-            onDeactivate += () => gameObject.SetActive(false);
-            StartCoroutine(CloseAnimation(onDeactivate));
+            
+            if (IsClosing)
+            {
+                return;
+            }
+            
+            IsClosing = true;
+            _onAnimationFinish = onDeactivate;
+            
+            if (IsOpening)
+            {
+                IsOpening = false;
+                StartCoroutine(ReverseAnimation());
+                return;
+            }
+            
+            StartCoroutine(RunAnimation(closeState));
         }
 
-        protected virtual IEnumerator OpenAnimation(Action onActivate = null)
+        protected virtual void ChangeComponentState(bool active)
         {
-            return FadeRoutine(1f, onActivate);
+            gameObject.SetActive(active);
         }
 
-        protected virtual IEnumerator CloseAnimation(Action onDeactivate = null)
+        protected void ForceAnimationFinish(string stateKey)
         {
-            return FadeRoutine(0f, onDeactivate);
+            StopAllCoroutines();
+            animator.SetFloat(Speed, 1f);
+            animator.Play(stateKey, 0, 1f);
+            animator.Update(0f);
+            _onAnimationFinish?.Invoke();
         }
         
-        private IEnumerator FadeRoutine(float targetAlpha, Action onFinish = null)
+        protected virtual IEnumerator ReverseAnimation()
         {
-            var startAlpha = canvasGroup.alpha;
+            const float duration = 0.1f;
+            const float targetSpeed = -1f;
+            
             var time = 0f;
-            var fadeDuration = Math.Abs(targetAlpha - startAlpha) * 0.5f;
-
-            while (time < fadeDuration)
+            var startSpeed = animator.GetFloat(Speed);
+            
+            while (time < duration)
             {
                 time += Time.unscaledDeltaTime;
-                canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
+                var t = time / duration;
+
+                t *= t;
+
+                var newSpeed = Mathf.Lerp(startSpeed, targetSpeed, t);
+                animator.SetFloat(Speed, newSpeed);
+
+                yield return null;
+            }
+            
+            animator.SetFloat(Speed, targetSpeed);
+        }
+
+        protected virtual IEnumerator RunAnimation(string stateKey)
+        {
+            animator.SetFloat(Speed, 1f);
+            animator.Play(stateKey, 0, 0f);
+            animator.Update(0f);
+
+            while (true)
+            {
+                var stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                var speed = animator.GetFloat(Speed);
+
+                if (speed < 0f && stateInfo.normalizedTime <= 0f)
+                {
+                    break;
+                }
+
+                if (stateInfo.IsName(stateKey) && stateInfo.normalizedTime >= 1f)
+                {
+                    break;
+                }
+
                 yield return null;
             }
 
-            canvasGroup.alpha = targetAlpha;
-            canvasGroup.interactable = targetAlpha > 0;
-            canvasGroup.blocksRaycasts = targetAlpha > 0;
-            
-            onFinish?.Invoke();
+            FinishAnimation();
+        }
+        
+        private void FinishAnimation()
+        {
+            IsOpening = false;
+            IsClosing = false;
+
+            animator.SetFloat(Speed, 1f);
+
+            _onAnimationFinish?.Invoke();
+            _onAnimationFinish = null;
+        }
+
+        protected void EnableInteractions()
+        {
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
+
+        protected void DisableInteractions()
+        {
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
         }
     }
 }

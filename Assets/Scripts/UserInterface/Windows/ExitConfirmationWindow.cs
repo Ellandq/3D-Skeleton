@@ -5,10 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Components;
 using UserInterface.Screen;
+using Utils.Contract;
 
 namespace UserInterface.Windows
 {
-    public class ExitConfirmationWindow : AnimatedWindowBase
+    public class ExitConfirmationWindow : WindowBase, IUIStackable
     {
         public override NamedWindow Name => NamedWindow.ExitConfirmation;
         public override UIPriority Priority => UIPriority.High;
@@ -40,7 +41,10 @@ namespace UserInterface.Windows
         public override void Deactivate(bool instant, Action onDeactivate = null)
         {
             outsideClickDetector.Unsubscribe(_outsideClickAction);
-            onDeactivate += () => outsideClickDetector.gameObject.SetActive(false);
+            onDeactivate += () =>
+            {
+                outsideClickDetector.gameObject.SetActive(false);
+            };
             base.Deactivate(instant, onDeactivate);
         }
 
@@ -48,5 +52,45 @@ namespace UserInterface.Windows
         {
             outsideClickDetector.Unsubscribe(_outsideClickAction);
         }
+
+        #region UI STACK
+
+        public void OnPush()
+        {
+            EnableInteractions();
+        }
+
+        public void OnPushOther()
+        {
+            DisableInteractions();
+        }
+
+        public void OnPop()
+        {
+            if (!IsClosing)
+            {
+                Deactivate(false);
+                return;
+            }
+            Deactivate(true);
+        }
+
+        public void OnPopOther()
+        {
+            EnableInteractions();
+        }
+
+        protected override void ChangeComponentState(bool active)
+        {
+            base.ChangeComponentState(active);
+            if (active)
+            {
+                UIManager.Instance.PushToUIStack(this);
+                return;
+            }
+            UIManager.Instance.OnFinishPop(this);
+        }
+
+        #endregion
     }
 }
