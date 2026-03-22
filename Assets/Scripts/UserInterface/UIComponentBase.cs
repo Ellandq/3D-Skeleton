@@ -15,8 +15,8 @@ namespace UserInterface
         [Header("Animation Settings")]
         [SerializeField] private string openState = "Open"; 
         [SerializeField] private string closeState = "Close";
-        public bool IsOpening;
-        public bool IsClosing;
+        protected bool IsOpening { get; set; }
+        protected bool IsClosing { get; set; }
             
         private Action _onAnimationFinish;
         
