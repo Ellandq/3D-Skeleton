@@ -1,4 +1,4 @@
-﻿namespace Editor.CommandCenter.Modules
+﻿namespace Editor.CommandCenter.Modules.Validation
 {
     public enum ModuleStatus
     {

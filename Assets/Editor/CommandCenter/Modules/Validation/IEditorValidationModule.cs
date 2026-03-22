@@ -1,8 +1,8 @@
 ﻿using UnityEngine.UIElements;
 
-namespace Editor.CommandCenter.Modules
+namespace Editor.CommandCenter.Modules.Validation
 {
-    public interface IEditorModule
+    public interface IEditorValidationModule
     {
         string ModuleName { get; }
 

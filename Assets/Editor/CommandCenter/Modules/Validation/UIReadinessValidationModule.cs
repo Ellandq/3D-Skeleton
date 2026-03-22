@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Linq;
+using Editor.CommandCenter.Utils;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.AddressableAssets;
-using Editor.CommandCenter.Utils;
-using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UserInterface.HUD;
 using UserInterface.Overlay;
 using UserInterface.Screen;
 using UserInterface.Windows;
 
-namespace Editor.CommandCenter.Modules
+namespace Editor.CommandCenter.Modules.Validation
 {
-    public class UIReadinessModule : IEditorModule
+    public class UIReadinessValidationModule : IEditorValidationModule
     {
         public string ModuleName => "UI Readiness";
         public ModuleStatus Status { get; private set; } = ModuleStatus.Unknown;

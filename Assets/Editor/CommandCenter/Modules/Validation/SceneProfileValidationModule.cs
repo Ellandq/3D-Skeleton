@@ -9,9 +9,9 @@ using UserInterface.Screen;
 using Utils.Enum;
 using Utils.SO;
 
-namespace Editor.CommandCenter.Modules
+namespace Editor.CommandCenter.Modules.Validation
 {
-    public class SceneProfileModule : IEditorModule
+    public class SceneProfileValidationModule : IEditorValidationModule
     {
         public string ModuleName => "Scene Profile Validator";
 

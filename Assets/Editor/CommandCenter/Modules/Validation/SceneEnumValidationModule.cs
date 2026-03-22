@@ -5,9 +5,9 @@ using Editor.CommandCenter.Utils;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace Editor.CommandCenter.Modules
+namespace Editor.CommandCenter.Modules.Validation
 {
-    public class SceneEnumModule : IEditorModule
+    public class SceneEnumValidationModule : IEditorValidationModule
     {
         public string ModuleName => "Scene Enum Validator";
 

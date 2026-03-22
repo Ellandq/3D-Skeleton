@@ -10,9 +10,9 @@ using UnityEngine.UIElements;
 using Utils.SO.Settings;
 using Object = UnityEngine.Object;
 
-namespace Editor.CommandCenter.Modules
+namespace Editor.CommandCenter.Modules.Validation
 {
-    public class InputAssignmentsModule : IEditorModule
+    public class InputAssignmentsValidationModule : IEditorValidationModule
     {
         public string ModuleName => "Input Assignments Validator";
         public ModuleStatus Status { get; private set; } = ModuleStatus.Unknown;

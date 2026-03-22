@@ -9,9 +9,9 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using Utils.Enum;
 
-namespace Editor.CommandCenter.Modules
+namespace Editor.CommandCenter.Modules.Validation
 {
-    public class GameStateSyncModule : IEditorModule
+    public class GameStateSyncValidationModule : IEditorValidationModule
     {
         public string ModuleName => "Game State Synchronizer";
 
