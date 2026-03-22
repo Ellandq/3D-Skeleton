@@ -233,7 +233,7 @@ MonoBehaviour:
   - {fileID: 5555862392846487010}
   windowParent: {fileID: 1875788106}
   windows: []
-  _outsideClickDetector: {fileID: 453871093}
+  outsideClickDetector: {fileID: 453871093}
 --- !u!1 &453871091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1339,6 +1339,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7260705582026373656, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 5555862392846487011}
     - target: {fileID: 8101720746069585393, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1419,6 +1423,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9186231027171694598, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7acdedaac467a9a4a95863b43cc995b5, type: 2}
+    - target: {fileID: 9186231027171694598, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1435,6 +1447,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86079181dc5f4456ae06f0480bb26898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Screen.LoadingScreen
+--- !u!95 &5555862392846487011 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9186231027171694598, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
+  m_PrefabInstance: {fileID: 5555862392846487009}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

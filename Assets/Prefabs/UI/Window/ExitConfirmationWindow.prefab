@@ -796,10 +796,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Windows.ExitConfirmationWindow
   canvasGroup: {fileID: 5967672370709939987}
   animator: {fileID: 5583088128746983357}
-  openTrigger: Open
-  closeTrigger: Close
-  openStateName: OpenExitConfirmationWindow
-  closeStateName: CloseExitConfirmationWindow
+  openState: Open
+  closeState: Close
   confirmButton: {fileID: 4275401955705549299}
   cancelButton: {fileID: 8581915090490748297}
   message: {fileID: 3236246097604964922}
@@ -814,7 +812,7 @@ Animator:
   m_GameObject: {fileID: 8656072430265226410}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b1432047d252e6c479be873721ed22f7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3558e682439d06f4eb15e8a70de158e5, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 2
   m_ApplyRootMotion: 0
