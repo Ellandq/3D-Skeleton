@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b50eadcc35f44c6391bb4d46e889f586, type: 3}
+  m_Name: 662eb106bee342c42825c73e6c3229f5
+  m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageCategorySO
+  uniqueId: 662eb106bee342c42825c73e6c3229f5
+  categoryName: Exploration and Combat
+  items:
+  - {fileID: 11400000, guid: 2180d666a7d1cf74db74faf1560b1833, type: 2}
+  - {fileID: 11400000, guid: 3a4dc0742bb39f04c9750bf63ac4c696, type: 2}
+  - {fileID: 11400000, guid: 22ffdad8e64848144ab9c82eddaff721, type: 2}
+  - {fileID: 11400000, guid: 60f696237500b294faad94ce3dcbdf27, type: 2}
+  - {fileID: 11400000, guid: 7c633018997c39c4cab04f19e0a9a993, type: 2}
+  - {fileID: 11400000, guid: 39d3798ed2aa56948b89e0fa5d03f36b, type: 2}
+  - {fileID: 11400000, guid: ec916984145c2a14fae4440f4bb9f28d, type: 2}
+  - {fileID: 11400000, guid: 66413853eafde7c418c94656729b2791, type: 2}
+  - {fileID: 11400000, guid: c97fcf1823fc58e49be6b45adcc46d7f, type: 2}

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b50eadcc35f44c6391bb4d46e889f586, type: 3}
+  m_Name: bc94ddcf70006e24b945bcf3e7d0a5ed
+  m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageCategorySO
+  uniqueId: bc94ddcf70006e24b945bcf3e7d0a5ed
+  categoryName: Display
+  items:
+  - {fileID: 11400000, guid: ede45f30bcf32bc4bab12e9bcf0e540b, type: 2}
+  - {fileID: 11400000, guid: 954d5a3af99bccb46a3cfe371f5f8a0d, type: 2}
+  - {fileID: 11400000, guid: 18ceb048542145f4196b031671ea56c4, type: 2}
+  - {fileID: 11400000, guid: 8b9a60724257a8c42b51c066fa326696, type: 2}
+  - {fileID: 11400000, guid: 55b4686ef16d2ab45accbe5f805c6306, type: 2}
