@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Editor.CommandCenter.Screens.Modules.Settings;
+using Editor.CommandCenter.Utils;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -258,13 +259,17 @@ namespace Editor.CommandCenter.Screens
             _contentContainer.Clear();
             if (!_activePage) return;
 
-            var pageModule = new SettingsPageModule(_activePage, page =>
-            {
-                _pages.Remove(page);
-                _activePage = null;
-                _contentContainer.Clear();
-                RefreshPageButtons();
-            });
+            var pageModule = new SettingsPageModule(
+                _activePage,
+                page =>
+                {
+                    _pages.Remove(page);
+                    _activePage = null;
+                    _contentContainer.Clear();
+                    RefreshPageButtons();
+                },
+                RefreshPageButtons
+            );
             _contentContainer.Add(pageModule.CreateUI());
         }
 
@@ -278,6 +283,7 @@ namespace Editor.CommandCenter.Screens
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<SettingsPageSO>)
                 .Where(a => a)
+                .OrderBy(p => p.index)
                 .ToList();
             
             UpdateKeyDictionary();
@@ -315,6 +321,8 @@ namespace Editor.CommandCenter.Screens
                 SavePageWithChildren(page);
 
             RemoveOrphanedAssets();
+            
+            GenerateCustomEnum();
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -469,6 +477,8 @@ namespace Editor.CommandCenter.Screens
             page.categories = new List<SettingsPageCategorySO>();
 
             _pages.Add(page);
+            
+            UpdatePageIndices();
             RefreshPageButtons();
         }
         
@@ -476,6 +486,52 @@ namespace Editor.CommandCenter.Screens
         {
             for (var i = 0; i < _pages.Count; i++)
                 _pages[i].index = i;
+        }
+        
+        private void GenerateCustomEnum()
+        {
+            var values = new List<string>();
+
+            foreach (var item in _pages.SelectMany(page => page.categories.SelectMany(cat => cat.items)))
+            {
+                CollectCustomItems(item, values);
+            }
+
+            var sanitized = values
+                .Select(SanitizeEnumName)
+                .Where(v => !string.IsNullOrEmpty(v))
+                .ToArray();
+
+            EnumSynchronizer.Synchronize(
+                enumPath: "Assets/Scripts/Utils/Enum/NamedCustomSetting.cs",
+                enumNamespace: "Utils.Enum",
+                enumName: "NamedCustomSetting",
+                values: sanitized,
+                logger: _logger
+            );
+        }
+        
+        private static void CollectCustomItems(SettingsPageItemSO item, List<string> result)
+        {
+            if (item.itemType == SettingsItemType.Custom)
+            {
+                result.Add(item.settingName);
+            }
+
+            if (item.itemType != SettingsItemType.Boolean ||
+                !item.BooleanIsConditional ||
+                item.ConditionalItems == null)
+                return;
+            foreach (var child in item.ConditionalItems)
+            {
+                CollectCustomItems(child, result);
+            }
+        }
+        
+        private static string SanitizeEnumName(string input)
+        {
+            return string.IsNullOrWhiteSpace(input) ? null : input.Replace(" ", "");
+
         }
 
         #endregion

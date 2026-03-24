@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using GameInput;
 using UnityEngine;
 
@@ -23,6 +25,9 @@ namespace Utils.SO.Settings.Screen
 
         // Boolean
         public bool BoolDefaultValue { get; set; }
+        public bool BooleanIsConditional { get; set; }
+        [System.NonSerialized]
+        public List<SettingsPageItemSO> ConditionalItems = new();
 
         // InputKey
         public PlayerAction ActionName { get; set; }
@@ -35,14 +40,39 @@ namespace Utils.SO.Settings.Screen
         {
             strValue = itemType switch
             {
-                SettingsItemType.Float => string.Join("/", "float", FloatDefaultValue.ToString(CultureInfo.InvariantCulture),
-                    MinValue.ToString(CultureInfo.InvariantCulture), MaxValue.ToString(CultureInfo.InvariantCulture),
-                    MinIncrement.ToString(CultureInfo.InvariantCulture)),
-                SettingsItemType.Enum => $"enum/{EnumTypeName}/{EnumDefaultValue}",
-                SettingsItemType.Boolean => $"boolean/{BoolDefaultValue}",
-                SettingsItemType.InputKey => $"inputKey/{ActionName}",
+                SettingsItemType.Float => string.Join("/",
+                    "float",
+                    FloatDefaultValue.ToString(CultureInfo.InvariantCulture),
+                    MinValue.ToString(CultureInfo.InvariantCulture),
+                    MaxValue.ToString(CultureInfo.InvariantCulture),
+                    MinIncrement.ToString(CultureInfo.InvariantCulture)
+                ),
+
+                SettingsItemType.Enum => $"enum/{Escape(EnumTypeName)}/{Escape(EnumDefaultValue)}",
+
+                SettingsItemType.Boolean => SerializeBoolean(),
+
+                SettingsItemType.InputKey => $"inputKey/{Escape(ActionName.ToString())}",
+
+                SettingsItemType.Custom => "custom",
+
                 _ => strValue
             };
+        }
+        
+        private string SerializeBoolean()
+        {
+            if (!BooleanIsConditional || ConditionalItems == null || ConditionalItems.Count == 0)
+                return $"boolean/{BoolDefaultValue}/false";
+
+            var children = ConditionalItems
+                .Select(c =>
+                {
+                    c.ConvertToString();
+                    return c.strValue.Replace("|", "");
+                });
+
+            return $"boolean/{BoolDefaultValue}/true/{string.Join("|", children)}";
         }
 
         public void ConvertFromString()
@@ -71,11 +101,10 @@ namespace Utils.SO.Settings.Screen
 
                 case "enum":
                     itemType = SettingsItemType.Enum;
-
                     if (parts.Length >= 3)
                     {
-                        EnumTypeName = parts[1];
-                        EnumDefaultValue = parts[2];
+                        EnumTypeName = Unescape(parts[1]);
+                        EnumDefaultValue = Unescape(parts[2]);
                     }
                     break;
 
@@ -84,16 +113,52 @@ namespace Utils.SO.Settings.Screen
 
                     if (parts.Length >= 2 && bool.TryParse(parts[1], out var b))
                         BoolDefaultValue = b;
+
+                    if (parts.Length >= 3 && bool.TryParse(parts[2], out var conditional))
+                        BooleanIsConditional = conditional;
+
+                    ConditionalItems = new List<SettingsPageItemSO>();
+
+                    if (BooleanIsConditional && parts.Length >= 4)
+                    {
+                        var childrenRaw = parts[3].Split('|');
+
+                        foreach (var childStr in childrenRaw)
+                        {
+                            var child = CreateInstance<SettingsPageItemSO>();
+                            child.strValue = Unescape(childStr);
+                            child.ConvertFromString();
+                            ConditionalItems.Add(child);
+                        }
+                    }
                     break;
 
                 case "inputKey":
                     itemType = SettingsItemType.InputKey;
-
-                    if (parts.Length >= 2 &&
-                        System.Enum.TryParse(parts[1], out PlayerAction action))
+                    if (parts.Length >= 2 && System.Enum.TryParse(Unescape(parts[1]), out PlayerAction action))
                         ActionName = action;
                     break;
+                
+                case "custom":
+                    itemType = SettingsItemType.Custom;
+                    break;
             }
+        }
+        
+        private static string Escape(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return "";
+            return input.Replace("\\", @"\\")
+                .Replace("/", "\\/")
+                .Replace("|", "\\|");
+        }
+
+        private static string Unescape(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return "";
+            return input.Replace("\\|", "|")
+                .Replace("\\/", "/")
+                .Replace(@"\\", "\\");
         }
 
         private static bool TryParse(string input, out float value)
@@ -107,6 +172,7 @@ namespace Utils.SO.Settings.Screen
         Float,
         Enum,
         Boolean,
-        InputKey
+        InputKey,
+        Custom
     }
 }

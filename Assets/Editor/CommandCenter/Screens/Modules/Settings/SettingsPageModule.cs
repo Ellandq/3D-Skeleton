@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -11,12 +12,14 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
     {
         private readonly SettingsPageSO _page;
 
-        private readonly System.Action<SettingsPageSO> _onRemove;
+        private readonly Action<SettingsPageSO> _onRemove;
+        private readonly Action _onChanged;
 
-        public SettingsPageModule(SettingsPageSO page, System.Action<SettingsPageSO> onRemove)
+        public SettingsPageModule(SettingsPageSO page, Action<SettingsPageSO> onRemove, Action onChanged)
         {
             _page = page;
             _onRemove = onRemove;
+            _onChanged = onChanged;
         }
 
         public VisualElement CreateUI()
@@ -33,7 +36,11 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
                 value = _page.pageName,
                 style = { flexGrow = 1, fontSize = 18, unityFontStyleAndWeight = FontStyle.Bold }
             };
-            nameField.RegisterValueChangedCallback(e => _page.pageName = e.newValue);
+            nameField.RegisterValueChangedCallback(e =>
+            {
+                _page.pageName = e.newValue;
+                _onChanged?.Invoke();
+            });
             topBar.Add(nameField);
 
             var removeBtn = new Button(() =>

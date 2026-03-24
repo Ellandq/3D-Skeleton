@@ -38,8 +38,8 @@
         ItemSlot9,
         
         // User actions
-        Escape
-        
-        
+        Escape,
+        QuickSave,
+        QuickLoad
     }
 }

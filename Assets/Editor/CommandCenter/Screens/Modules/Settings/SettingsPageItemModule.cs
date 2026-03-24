@@ -70,6 +70,7 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
                 case SettingsItemType.Boolean: DrawBool(_typeContainer, _item); break;
                 case SettingsItemType.InputKey: DrawInputKey(_typeContainer, _item); break;
                 case SettingsItemType.Enum: DrawEnum(_typeContainer, _item); break;
+                case SettingsItemType.Custom: DrawCustom(_typeContainer, _item); break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -132,6 +133,27 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
             var separator = new VisualElement { style = { height = 1, backgroundColor = new Color(0.5f, 0.5f, 0.5f), marginBottom = 4 } };
             root.Add(separator);
         }
+        
+        private void DrawCustom(VisualElement root, SettingsPageItemSO item)
+        {
+            var row = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center,
+                    marginBottom = 4
+                }
+            };
+
+            var label = new Label("Custom setting (no parameters)")
+            {
+                style = { unityTextAlign = TextAnchor.MiddleLeft }
+            };
+
+            row.Add(label);
+            root.Add(row);
+        }
 
         private void DrawFloat(VisualElement root, SettingsPageItemSO item)
         {
@@ -171,9 +193,17 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
             
             slider.RegisterValueChangedCallback(e =>
             {
-                item.FloatDefaultValue = e.newValue;
-                valueField.SetValueWithoutNotify(e.newValue);
-                defaultValueField.SetValueWithoutNotify(e.newValue);
+                var singleStep = item.MinIncrement <= 0 ? 1f : item.MinIncrement;
+                var snappedValue = Mathf.Round(e.newValue / singleStep) * singleStep;
+
+                snappedValue = Mathf.Clamp(snappedValue, slider.lowValue, slider.highValue);
+
+                item.FloatDefaultValue = snappedValue;
+
+                slider.SetValueWithoutNotify(snappedValue);
+                valueField.SetValueWithoutNotify(snappedValue);
+                defaultValueField.SetValueWithoutNotify(snappedValue);
+
                 _item.ConvertToString();
             });
             
@@ -218,19 +248,99 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
 
         private void DrawBool(VisualElement root, SettingsPageItemSO item)
         {
-            var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center, marginBottom = 4 } };
-            var toggleLabel = new Label("Default State:") { style = { width = 90 } };
+            var container = new VisualElement
+            {
+                style = { flexDirection = FlexDirection.Column, marginBottom = 4 }
+            };
+
+            var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+
+            var toggleLabel = new Label("Default State:") { style = { width = 110 } };
             var toggle = new Toggle { value = item.BoolDefaultValue };
 
             toggle.RegisterValueChangedCallback(e =>
             {
                 item.BoolDefaultValue = e.newValue;
-                _item.ConvertToString();
+                item.ConvertToString();
             });
 
             row.Add(toggleLabel);
             row.Add(toggle);
-            root.Add(row);
+            container.Add(row);
+
+            var conditionalRow = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+
+            var conditionalLabel = new Label("Is Conditional:") { style = { width = 110 } };
+            var conditionalToggle = new Toggle { value = item.BooleanIsConditional };
+
+            conditionalRow.Add(conditionalLabel);
+            conditionalRow.Add(conditionalToggle);
+            container.Add(conditionalRow);
+
+            var nestedContainer = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Column,
+                    marginTop = 6,
+                    marginLeft = 10,
+                    borderLeftWidth = 2,
+                    borderLeftColor = new Color(0.4f, 0.4f, 0.4f),
+                    paddingLeft = 6
+                }
+            };
+
+            container.Add(nestedContainer);
+
+            conditionalToggle.RegisterValueChangedCallback(e =>
+            {
+                item.BooleanIsConditional = e.newValue;
+
+                if (!e.newValue)
+                    item.ConditionalItems?.Clear();
+
+                RefreshNested();
+                item.ConvertToString();
+            });
+
+            RefreshNested();
+
+            root.Add(container);
+            return;
+
+            void RefreshNested()
+            {
+                nestedContainer.Clear();
+
+                if (!item.BooleanIsConditional)
+                    return;
+
+                item.ConditionalItems ??= new List<SettingsPageItemSO>();
+
+                foreach (var module in item.ConditionalItems.ToList().Select(child => new SettingsPageItemModule(child, removed =>
+                         {
+                             item.ConditionalItems.Remove(removed);
+                             RefreshNested();
+                             item.ConvertToString();
+                         })))
+                {
+                    nestedContainer.Add(module.CreateUI());
+                }
+
+                var addBtn = new Button(() =>
+                {
+                    var newItem = ScriptableObject.CreateInstance<SettingsPageItemSO>();
+                    item.ConditionalItems.Add(newItem);
+
+                    RefreshNested();
+                    item.ConvertToString();
+                })
+                {
+                    text = "+ Add Conditional Item"
+                };
+
+                nestedContainer.Add(addBtn);
+            }
         }
 
         private void DrawInputKey(VisualElement root, SettingsPageItemSO item)
@@ -272,9 +382,15 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
 
             var valueRow = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center, marginBottom = 4 } };
             var valueLabel = new Label("Default Value:") { style = { width = 80 } };
+            var values = defaultType != null 
+                ? Enum.GetNames(defaultType).ToList() 
+                : new List<string>();
 
-            var values = defaultType != null ? Enum.GetNames(defaultType).ToList() : new List<string>();
-            var valueDropdown = new PopupField<string>(values, item.EnumDefaultValue ?? values.FirstOrDefault());
+            var safeValue = values.Contains(item.EnumDefaultValue)
+                ? item.EnumDefaultValue
+                : values.FirstOrDefault();
+
+            var valueDropdown = new PopupField<string>(values, safeValue);
 
             valueRow.Add(valueLabel);
             valueRow.Add(valueDropdown);
@@ -299,10 +415,9 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
             container.Add(valueRow);
             root.Add(container);
         }
-
+        
         private void CacheEnums()
         {
-            if (_cachedEnums != null) return;
             _cachedEnums = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(a => a.GetTypes())
                 .Where(t => t.IsEnum && t.Namespace == "Utils.Enum.Settings")

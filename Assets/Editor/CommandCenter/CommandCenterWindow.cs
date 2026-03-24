@@ -56,7 +56,8 @@ namespace Editor.CommandCenter
                     flexDirection = FlexDirection.Column,
                     backgroundColor = new Color(0.22f, 0.22f, 0.22f),
                     borderBottomWidth = 1,
-                    borderBottomColor = new Color(0.1f, 0.1f, 0.1f)
+                    borderBottomColor = new Color(0.1f, 0.1f, 0.1f),
+                    flexShrink = 0
                 }
             };
 
