@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GameInput;
 using UnityEngine;
 
 namespace Utils.SO.Settings

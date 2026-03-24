@@ -9,7 +9,7 @@ using UserInterface.Screen;
 using Utils.Enum;
 using Utils.SO;
 
-namespace Editor.CommandCenter.Modules.Validation
+namespace Editor.CommandCenter.Screens.Modules.Validation
 {
     public class SceneProfileValidationModule : IEditorValidationModule
     {

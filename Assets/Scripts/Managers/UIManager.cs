@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using GameInput;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UserInterface;
 using UserInterface.Components;
 using UserInterface.HUD;

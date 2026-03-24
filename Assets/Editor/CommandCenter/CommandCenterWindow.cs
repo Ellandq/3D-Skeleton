@@ -164,15 +164,12 @@ namespace Editor.CommandCenter
         
         private void ShowScreen(ICommandCenterScreen screen)
         {
-            _activeScreen?.OnHide();
-
             _screenContainer.Clear();
 
             var content = screen.CreateContent();
             _screenContainer.Add(content);
 
             _activeScreen = screen;
-            _activeScreen.OnShow();
         }
 
         #region Console

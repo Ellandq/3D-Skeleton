@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 using Utils.SO.Settings;
 using Object = UnityEngine.Object;
 
-namespace Editor.CommandCenter.Modules.Validation
+namespace Editor.CommandCenter.Screens.Modules.Validation
 {
     public class InputAssignmentsValidationModule : IEditorValidationModule
     {

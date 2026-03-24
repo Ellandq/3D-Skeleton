@@ -6,6 +6,9 @@ namespace Utils.SO.Settings.Screen
     [CreateAssetMenu(menuName = "Settings/Screen/Page")]
     public class SettingsPageSO : ScriptableObject
     {
-        public List<SettingsPageCategory> categories;
+        public string uniqueId;
+        public int index;
+        public string pageName;
+        public List<SettingsPageCategorySO> categories = new();
     }
 }

@@ -4,12 +4,10 @@ using UnityEngine;
 namespace Utils.SO.Settings.Screen
 {
     [CreateAssetMenu(menuName = "Settings/Screen/Category")]
-    public class SettingsPageCategory : ScriptableObject
+    public class SettingsPageCategorySO : ScriptableObject
     {
-        [Header("Category Info")] 
+        public string uniqueId;
         public string categoryName;
-
-        [Header("Items")] 
-        public List<SettingsPageItem> items = new();
+        public List<SettingsPageItemSO> items = new();
     }
 }

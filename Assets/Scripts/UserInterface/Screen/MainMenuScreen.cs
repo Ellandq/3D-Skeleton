@@ -1,5 +1,4 @@
-﻿using System;
-using Managers;
+﻿using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Windows;

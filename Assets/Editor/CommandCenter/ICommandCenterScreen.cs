@@ -9,8 +9,5 @@ namespace Editor.CommandCenter
         void Initialize(ICommandCenterLogger logger);
 
         VisualElement CreateContent();
-
-        void OnShow();
-        void OnHide();
     }
 }

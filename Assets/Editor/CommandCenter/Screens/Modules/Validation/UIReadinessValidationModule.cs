@@ -11,7 +11,7 @@ using UserInterface.Overlay;
 using UserInterface.Screen;
 using UserInterface.Windows;
 
-namespace Editor.CommandCenter.Modules.Validation
+namespace Editor.CommandCenter.Screens.Modules.Validation
 {
     public class UIReadinessValidationModule : IEditorValidationModule
     {

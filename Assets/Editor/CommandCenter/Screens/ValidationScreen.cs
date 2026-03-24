@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Editor.CommandCenter.Modules.Validation;
+using Editor.CommandCenter.Screens.Modules.Validation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Editor.CommandCenter
+namespace Editor.CommandCenter.Screens
 {
     public class ValidationScreen : ICommandCenterScreen
     {
@@ -105,13 +105,6 @@ namespace Editor.CommandCenter
                 btn.style.unityBackgroundImageTintColor = Color.white;
             }
         }
-
-        public void OnShow()
-        {
-            RunAutoValidation();
-        }
-        
-        public void OnHide() { }
 
         private void DiscoverModules()
         {
