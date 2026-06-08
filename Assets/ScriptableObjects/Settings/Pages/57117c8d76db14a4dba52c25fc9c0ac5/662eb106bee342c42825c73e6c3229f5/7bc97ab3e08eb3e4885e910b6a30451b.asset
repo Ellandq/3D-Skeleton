@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 7bc97ab3e08eb3e4885e910b6a30451b
   settingName: Move Left
   itemType: 3
-  strValue: inputKey/MoveLeft
+  strValue: inputKey/Action1

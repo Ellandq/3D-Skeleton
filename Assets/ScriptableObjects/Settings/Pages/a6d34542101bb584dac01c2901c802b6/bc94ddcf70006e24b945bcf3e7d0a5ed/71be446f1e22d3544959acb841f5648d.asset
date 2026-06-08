@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 71be446f1e22d3544959acb841f5648d
   settingName: Maximum FPS
   itemType: 2
-  strValue: boolean/False/true/float/0/0/100/1
+  strValue: boolean/{"value":false,"conditional":false,"children":[]}

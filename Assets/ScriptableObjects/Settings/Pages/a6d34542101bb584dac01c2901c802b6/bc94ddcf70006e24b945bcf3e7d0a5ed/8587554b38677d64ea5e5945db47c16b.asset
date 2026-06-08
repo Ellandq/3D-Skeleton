@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 8587554b38677d64ea5e5945db47c16b
   settingName: Windowed Mode
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.WindowedModeSetting/WindowedBorderless
+  strValue: enum//

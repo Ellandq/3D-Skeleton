@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: dd108e8cbb6ba3d44a11082b730626a3
   settingName: Toggle Walking
   itemType: 3
-  strValue: inputKey/Walk
+  strValue: inputKey/Action1

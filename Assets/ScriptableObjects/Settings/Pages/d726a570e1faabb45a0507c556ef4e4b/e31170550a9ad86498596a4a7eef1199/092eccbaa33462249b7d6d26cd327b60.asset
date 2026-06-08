@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 092eccbaa33462249b7d6d26cd327b60
   settingName: Contact Shadows
   itemType: 2
-  strValue: boolean/True
+  strValue: boolean/{"value":true,"conditional":false,"children":[]}

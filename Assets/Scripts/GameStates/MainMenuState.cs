@@ -24,7 +24,7 @@ namespace GameStates
                 {
                     var uiManager = UIManager.Instance;
                     uiManager.DeactivateComponent(NamedScreen.Loading, false, Resume);
-                    uiManager.ActivateComponent(NamedScreen.MainMenu, true);
+                    uiManager.ActivateComponent(NamedScreen.MainMenu);
                     uiManager.SetOnEmptyStackExitCallback(() => uiManager.ActivateComponent(NamedWindow.ExitConfirmation));
                 }
             );

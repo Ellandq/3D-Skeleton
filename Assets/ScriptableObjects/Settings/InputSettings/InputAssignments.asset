@@ -65,6 +65,10 @@ MonoBehaviour:
   - ItemSlot9_Alt
   - Escape
   - Escape_Alt
+  - QuickSave
+  - QuickSave_Alt
+  - QuickLoad
+  - QuickLoad_Alt
   defaultValues:
   - Mouse0
   - None
@@ -118,3 +122,7 @@ MonoBehaviour:
   - Keypad9
   - Escape
   - None
+  - F5
+  - 
+  - F9
+  - 

@@ -31,10 +31,6 @@ namespace Utils.SO.Settings.Screen
 
         // InputKey
         public PlayerAction ActionName { get; set; }
-        
-        // =========================
-        // SERIALIZATION
-        // =========================
 
         public void ConvertToString()
         {
@@ -62,71 +58,86 @@ namespace Utils.SO.Settings.Screen
         
         private string SerializeBoolean()
         {
-            if (!BooleanIsConditional || ConditionalItems == null || ConditionalItems.Count == 0)
-                return $"boolean/{BoolDefaultValue}/false";
+            var data = new BooleanData
+            {
+                value = BoolDefaultValue,
+                conditional = BooleanIsConditional,
+                children = new List<BooleanChildData>()
+            };
 
-            var children = ConditionalItems
-                .Select(c =>
+            if (!BooleanIsConditional || ConditionalItems == null)
+                return "boolean/" + JsonUtility.ToJson(data);
+            foreach (var child in ConditionalItems)
+            {
+                child.ConvertToString();
+                data.children.Add(new BooleanChildData
                 {
-                    c.ConvertToString();
-                    return c.strValue.Replace("|", "");
+                    settingName = child.settingName,
+                    strValue = child.strValue
                 });
+            }
 
-            return $"boolean/{BoolDefaultValue}/true/{string.Join("|", children)}";
+            return "boolean/" + JsonUtility.ToJson(data);
         }
 
         public void ConvertFromString()
         {
             if (string.IsNullOrEmpty(strValue))
                 return;
+            
+            var typeSeparatorIndex = strValue.IndexOf('/');
 
-            var parts = strValue.Split('/');
-
-            if (parts.Length == 0)
+            if (typeSeparatorIndex == -1)
                 return;
 
-            switch (parts[0])
+            var type = strValue[..typeSeparatorIndex];
+            var payload = strValue[(typeSeparatorIndex + 1)..];
+
+            switch (type)
             {
                 case "float":
                     itemType = SettingsItemType.Float;
 
-                    if (parts.Length >= 5)
+                    var floatParts = payload.Split('/');
+
+                    if (floatParts.Length >= 4)
                     {
-                        if (TryParse(parts[1], out var v)) FloatDefaultValue = v;
-                        if (TryParse(parts[2], out var min)) MinValue = min;
-                        if (TryParse(parts[3], out var max)) MaxValue = max;
-                        if (TryParse(parts[4], out var inc)) MinIncrement = inc;
+                        if (TryParse(floatParts[0], out var v)) FloatDefaultValue = v;
+                        if (TryParse(floatParts[1], out var min)) MinValue = min;
+                        if (TryParse(floatParts[2], out var max)) MaxValue = max;
+                        if (TryParse(floatParts[3], out var inc)) MinIncrement = inc;
                     }
                     break;
 
                 case "enum":
                     itemType = SettingsItemType.Enum;
-                    if (parts.Length >= 3)
+
+                    var enumParts = payload.Split('/');
+
+                    if (enumParts.Length >= 2)
                     {
-                        EnumTypeName = Unescape(parts[1]);
-                        EnumDefaultValue = Unescape(parts[2]);
+                        EnumTypeName = Unescape(enumParts[0]);
+                        EnumDefaultValue = Unescape(enumParts[1]);
                     }
                     break;
 
                 case "boolean":
                     itemType = SettingsItemType.Boolean;
 
-                    if (parts.Length >= 2 && bool.TryParse(parts[1], out var b))
-                        BoolDefaultValue = b;
+                    var data = JsonUtility.FromJson<BooleanData>(payload);
+                    if (data == null) return;
 
-                    if (parts.Length >= 3 && bool.TryParse(parts[2], out var conditional))
-                        BooleanIsConditional = conditional;
+                    BoolDefaultValue = data.value;
+                    BooleanIsConditional = data.conditional;
 
                     ConditionalItems = new List<SettingsPageItemSO>();
-
-                    if (BooleanIsConditional && parts.Length >= 4)
+                    if (BooleanIsConditional && data.children != null)
                     {
-                        var childrenRaw = parts[3].Split('|');
-
-                        foreach (var childStr in childrenRaw)
+                        foreach (var childData in data.children)
                         {
                             var child = CreateInstance<SettingsPageItemSO>();
-                            child.strValue = Unescape(childStr);
+                            child.settingName = childData.settingName;
+                            child.strValue = childData.strValue;
                             child.ConvertFromString();
                             ConditionalItems.Add(child);
                         }
@@ -135,8 +146,13 @@ namespace Utils.SO.Settings.Screen
 
                 case "inputKey":
                     itemType = SettingsItemType.InputKey;
-                    if (parts.Length >= 2 && System.Enum.TryParse(Unescape(parts[1]), out PlayerAction action))
+
+                    if (string.IsNullOrEmpty(payload))
+                        return;
+
+                    if (System.Enum.TryParse(Unescape(payload), out PlayerAction action))
                         ActionName = action;
+
                     break;
                 
                 case "custom":
@@ -164,6 +180,21 @@ namespace Utils.SO.Settings.Screen
         private static bool TryParse(string input, out float value)
         {
             return float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+        }
+        
+        [System.Serializable]
+        private class BooleanChildData
+        {
+            public string settingName;
+            public string strValue;
+        }
+
+        [System.Serializable]
+        private class BooleanData
+        {
+            public bool value;
+            public bool conditional;
+            public List<BooleanChildData> children;
         }
     }
 
