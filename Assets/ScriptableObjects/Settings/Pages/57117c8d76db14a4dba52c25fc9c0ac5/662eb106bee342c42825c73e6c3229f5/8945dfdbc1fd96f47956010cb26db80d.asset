@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 8945dfdbc1fd96f47956010cb26db80d
   settingName: Move Forward
   itemType: 3
-  strValue: inputKey/MoveForwards
+  strValue: inputKey/Action1

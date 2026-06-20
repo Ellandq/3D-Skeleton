@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 11ae36d86a15e354bbc0f3dea5c066b3
   settingName: Vignette
   itemType: 2
-  strValue: boolean/True
+  strValue: boolean/{"value":true,"conditional":false,"children":[]}

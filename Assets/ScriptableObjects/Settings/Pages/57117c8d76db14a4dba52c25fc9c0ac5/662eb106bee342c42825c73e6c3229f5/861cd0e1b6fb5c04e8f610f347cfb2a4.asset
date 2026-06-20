@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 861cd0e1b6fb5c04e8f610f347cfb2a4
   settingName: Move Right
   itemType: 3
-  strValue: inputKey/MoveRight
+  strValue: inputKey/Action1

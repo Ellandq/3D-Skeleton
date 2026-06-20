@@ -11,13 +11,15 @@ namespace UserInterface.Screen
         public override UIPriority Priority => UIPriority.Low;
 
         [Header("Components")] 
-        [SerializeField] private Button startButton;
         [SerializeField] private Button continueButton;
+        [SerializeField] private Button loadGameButton;
+        [SerializeField] private Button newGameButton;
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button quitButton;
 
         private void Awake()
         {
+            settingsButton.onClick.AddListener(() => UIManager.Instance.ActivateComponent(NamedScreen.Settings));
             quitButton.onClick.AddListener(() => UIManager.Instance.ActivateComponent(NamedWindow.ExitConfirmation));
         }
     }

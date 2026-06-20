@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 8a2b97099e39c0d4ea4221c0822d5e5e
   settingName: VSync
   itemType: 2
-  strValue: boolean/False/false
+  strValue: boolean/{"value":false,"conditional":false,"children":[]}

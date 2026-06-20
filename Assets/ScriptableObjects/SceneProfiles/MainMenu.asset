@@ -17,5 +17,5 @@ MonoBehaviour:
   useLoadScreen: 1
   hudKeys: 
   overlayKeys: 
-  screenKeys: 0000000001000000
+  screenKeys: 000000000100000002000000
   windowKeys: 00000000

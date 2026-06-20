@@ -9,7 +9,7 @@ using Utils.SO.Settings.Screen;
 
 namespace Editor.CommandCenter.Screens
 {
-    public class SettingsScreen : ICommandCenterScreen
+    public class SettingsConstructorScreen : ICommandCenterScreen
     {
         public string ScreenName => "Settings";
 
@@ -285,8 +285,6 @@ namespace Editor.CommandCenter.Screens
                 .Where(a => a)
                 .OrderBy(p => p.index)
                 .ToList();
-            
-            UpdateKeyDictionary();
 
             foreach (var page in _pages)
             {
@@ -297,6 +295,8 @@ namespace Editor.CommandCenter.Screens
                     cat.items ??= new List<SettingsPageItemSO>();
                 }
             }
+            
+            UpdateKeyDictionary();
         }
 
         private void UpdateKeyDictionary()
@@ -376,7 +376,7 @@ namespace Editor.CommandCenter.Screens
             if (string.IsNullOrEmpty(item.uniqueId))
                 item.uniqueId = GUID.Generate().ToString();
             item.name = item.uniqueId;
-
+            item.ConvertToString();
             var path = $"{folder}/{item.uniqueId}.asset";
             var existingItem = AssetDatabase.LoadAssetAtPath<SettingsPageItemSO>(path);
             if (!existingItem)

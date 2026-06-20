@@ -20,6 +20,7 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
         {
             _item = item;
             _onRemove = onRemove;
+            _item.ConvertFromString();
         }
 
         public VisualElement CreateUI()
