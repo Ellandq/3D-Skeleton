@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b042de59d7e4b2fa64123dcb9ab4b57, type: 3}
+  m_Name: UIColorScheme
+  m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.UIColorScheme
+  states:
+  - state: 0
+    colors:
+    - type: 0
+      color: {r: 0.9686275, g: 0.8352942, b: 1, a: 1}
+    - type: 1
+      color: {r: 0.5019608, g: 0.2509804, b: 0.54509807, a: 1}
+    - type: 2
+      color: {r: 0.2392157, g: 0.13333334, b: 0.25882354, a: 1}
+    - type: 3
+      color: {r: 0.14901961, g: 0.08627451, b: 0.21960786, a: 1}
+  - state: 1
+    colors:
+    - type: 0
+      color: {r: 0.5764706, g: 0.85882354, b: 0.9764706, a: 1}
+    - type: 1
+      color: {r: 0.24705882, g: 0.42745098, b: 0.5019608, a: 1}
+    - type: 2
+      color: {r: 0.15138839, g: 0.32481536, b: 0.3962264, a: 1}
+    - type: 3
+      color: {r: 0.11372549, g: 0.24705882, b: 0.3019608, a: 1}
+  - state: 2
+    colors:
+    - type: 0
+      color: {r: 0.7294118, g: 0.7294118, b: 0.7294118, a: 1}
+    - type: 1
+      color: {r: 0.40392157, g: 0.40392157, b: 0.40392157, a: 1}
+    - type: 2
+      color: {r: 0.24705882, g: 0.24705882, b: 0.24705882, a: 1}
+    - type: 3
+      color: {r: 0.20784314, g: 0.20784314, b: 0.20784314, a: 1}
