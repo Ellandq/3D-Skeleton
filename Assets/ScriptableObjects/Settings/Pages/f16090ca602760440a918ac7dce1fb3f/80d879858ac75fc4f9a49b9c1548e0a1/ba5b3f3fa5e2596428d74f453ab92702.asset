@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: ba5b3f3fa5e2596428d74f453ab92702
   settingName: Interface
   itemType: 1
-  strValue: enum//
+  strValue: enum/Utils.Enum.Settings.TextLanguageSetting/English

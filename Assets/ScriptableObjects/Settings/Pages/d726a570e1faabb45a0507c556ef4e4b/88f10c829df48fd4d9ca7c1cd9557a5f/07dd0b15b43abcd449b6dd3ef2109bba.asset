@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 07dd0b15b43abcd449b6dd3ef2109bba
   settingName: Lens Flare
   itemType: 2
-  strValue: boolean/{"value":true,"conditional":false,"children":[]}
+  strValue: boolean/{"value":false,"conditional":false,"children":[]}

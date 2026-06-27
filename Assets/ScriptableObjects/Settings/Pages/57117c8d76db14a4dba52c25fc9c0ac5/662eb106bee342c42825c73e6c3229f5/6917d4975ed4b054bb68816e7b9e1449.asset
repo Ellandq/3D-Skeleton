@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 6917d4975ed4b054bb68816e7b9e1449
   settingName: Crouch / Dive
   itemType: 3
-  strValue: inputKey/Action1
+  strValue: inputKey/Crouch/True

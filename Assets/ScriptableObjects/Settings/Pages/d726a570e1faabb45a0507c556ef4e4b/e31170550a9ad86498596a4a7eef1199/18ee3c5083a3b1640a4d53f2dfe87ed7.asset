@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 18ee3c5083a3b1640a4d53f2dfe87ed7
   settingName: Screen Spce Reflections Quality
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.OffToHighSetting/Medium
+  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

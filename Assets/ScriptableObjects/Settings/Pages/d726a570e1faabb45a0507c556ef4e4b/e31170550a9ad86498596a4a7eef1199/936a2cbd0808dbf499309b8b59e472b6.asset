@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 936a2cbd0808dbf499309b8b59e472b6
   settingName: Mirror Quality
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Medium
+  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

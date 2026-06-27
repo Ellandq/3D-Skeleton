@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: aed2ffb090e389d41834dbe762694155
   settingName: Motion Blur
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Medium
+  strValue: enum/Utils.Enum.Settings.OffToHighSetting/Medium

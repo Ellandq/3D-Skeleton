@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 70d7b800b9606dd4f9c419b2f8008289
   settingName: Volumetric Fog Resolution
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.OffToHighSetting/Medium
+  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

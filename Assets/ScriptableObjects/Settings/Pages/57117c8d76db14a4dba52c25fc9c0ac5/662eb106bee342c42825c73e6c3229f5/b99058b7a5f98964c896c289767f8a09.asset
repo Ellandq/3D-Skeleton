@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: b99058b7a5f98964c896c289767f8a09
   settingName: Jump / Surface
   itemType: 3
-  strValue: inputKey/Action1
+  strValue: inputKey/Jump/True

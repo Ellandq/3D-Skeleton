@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: e0ec851aa7d0f95498ce665297f9d1a7
   settingName: Colorblind Modes
   itemType: 1
-  strValue: enum//
+  strValue: enum/Utils.Enum.Settings.ColorblindModesSetting/Off

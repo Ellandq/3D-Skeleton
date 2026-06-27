@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 7219c5a920fe84940910476c82deae0b
   settingName: Local Shadow Mesh Quality
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Medium
+  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

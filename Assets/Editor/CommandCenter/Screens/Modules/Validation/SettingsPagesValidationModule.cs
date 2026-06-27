@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 using UserInterface.Screen;
 using Utils.SO.Settings.Screen;
@@ -90,7 +91,7 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
         
         private static SettingsScreen FindSettingsScreen()
         {
-            return Object.FindAnyObjectByType<SettingsScreen>();
+            return Object.FindAnyObjectByType<SettingsScreen>(FindObjectsInactive.Include);
         }
 
         private static List<SettingsPageSO> LoadAllPages()

@@ -164,7 +164,7 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
 
         private static bool IsAssignedToGameLoader(SceneProfile profile)
         {
-            var loader = Object.FindFirstObjectByType<GameLoader>();
+            var loader = Object.FindAnyObjectByType<GameLoader>();
 
             if (!loader)
             {

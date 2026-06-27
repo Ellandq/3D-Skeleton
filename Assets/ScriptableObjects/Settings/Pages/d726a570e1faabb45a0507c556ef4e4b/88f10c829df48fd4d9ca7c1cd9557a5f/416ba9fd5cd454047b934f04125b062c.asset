@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 416ba9fd5cd454047b934f04125b062c
   settingName: Chromatic Aberration
   itemType: 2
-  strValue: boolean/{"value":true,"conditional":false,"children":[]}
+  strValue: boolean/{"value":false,"conditional":false,"children":[]}

@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 79ce399da6aa19344834e77a94358761
   settingName: Local Shadow Quality
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.OffToHighSetting/Medium
+  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

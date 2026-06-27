@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 507f027f81e77784da2c07733a79de4a
   settingName: Subtitles
   itemType: 1
-  strValue: enum//
+  strValue: enum/Utils.Enum.Settings.TextLanguageSetting/English

@@ -135,7 +135,7 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
             root.Add(separator);
         }
         
-        private void DrawCustom(VisualElement root, SettingsPageItemSO item)
+        private static void DrawCustom(VisualElement root, SettingsPageItemSO item)
         {
             var row = new VisualElement
             {
@@ -247,7 +247,7 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
             }
         }
 
-        private void DrawBool(VisualElement root, SettingsPageItemSO item)
+        private static void DrawBool(VisualElement root, SettingsPageItemSO item)
         {
             var container = new VisualElement
             {
@@ -344,20 +344,59 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
             }
         }
 
-        private void DrawInputKey(VisualElement root, SettingsPageItemSO item)
+        private static void DrawInputKey(VisualElement root, SettingsPageItemSO item)
         {
-            var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center, marginBottom = 4 } };
-            var label = new Label("Action:") { style = { width = 60 } };
-            var dropdown = new EnumField(item.ActionName) { style = { width = 180 } };
+            var row = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row,
+                    alignItems = Align.Center,
+                    marginBottom = 4
+                }
+            };
 
-            dropdown.RegisterValueChangedCallback(e =>
+            var actionLabel = new Label("Action:")
+            {
+                style = { width = 60 }
+            };
+
+            var actionDropdown = new EnumField(item.ActionName)
+            {
+                style = { width = 180 }
+            };
+
+            actionDropdown.RegisterValueChangedCallback(e =>
             {
                 item.ActionName = (PlayerAction)e.newValue;
-                _item.ConvertToString();
+                item.ConvertToString();
             });
 
-            row.Add(label);
-            row.Add(dropdown);
+            var secondaryLabel = new Label("Allow Secondary:")
+            {
+                style =
+                {
+                    marginLeft = 12,
+                    width = 120
+                }
+            };
+
+            var secondaryToggle = new Toggle
+            {
+                value = item.AllowSecondaryInput
+            };
+
+            secondaryToggle.RegisterValueChangedCallback(e =>
+            {
+                item.AllowSecondaryInput = e.newValue;
+                item.ConvertToString();
+            });
+
+            row.Add(actionLabel);
+            row.Add(actionDropdown);
+            row.Add(secondaryLabel);
+            row.Add(secondaryToggle);
+
             root.Add(row);
         }
 
@@ -373,6 +412,26 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
             var defaultType = _cachedEnums.FirstOrDefault(t => t.FullName == item.EnumTypeName)
                               ?? _cachedEnums.FirstOrDefault();
 
+            var values = defaultType != null
+                ? Enum.GetNames(defaultType).ToList()
+                : new List<string>();
+
+            var safeValue = values.Contains(item.EnumDefaultValue)
+                ? item.EnumDefaultValue
+                : values.FirstOrDefault();
+
+            if (string.IsNullOrEmpty(item.EnumTypeName) && defaultType != null)
+            {
+                item.EnumTypeName = defaultType.FullName;
+            }
+
+            if (string.IsNullOrEmpty(item.EnumDefaultValue))
+            {
+                item.EnumDefaultValue = safeValue;
+            }
+
+            item.ConvertToString();
+
             var typeDropdown = new PopupField<Type>(_cachedEnums, defaultType, t => t.Name)
             {
                 style = { width = 180 }
@@ -383,13 +442,6 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
 
             var valueRow = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center, marginBottom = 4 } };
             var valueLabel = new Label("Default Value:") { style = { width = 80 } };
-            var values = defaultType != null 
-                ? Enum.GetNames(defaultType).ToList() 
-                : new List<string>();
-
-            var safeValue = values.Contains(item.EnumDefaultValue)
-                ? item.EnumDefaultValue
-                : values.FirstOrDefault();
 
             var valueDropdown = new PopupField<string>(values, safeValue);
 

@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 8ebb0b8b2a713014eb800d9140cd96d5
   settingName: Ambient Occlusion
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.OffToHighSetting/Medium
+  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

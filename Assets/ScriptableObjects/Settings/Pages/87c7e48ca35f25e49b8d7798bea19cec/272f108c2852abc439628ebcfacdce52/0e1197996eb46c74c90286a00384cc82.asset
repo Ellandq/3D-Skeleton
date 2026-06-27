@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 0e1197996eb46c74c90286a00384cc82
   settingName: Tutorials
   itemType: 2
-  strValue: boolean/{"value":true,"conditional":false,"children":[]}
+  strValue: boolean/{"value":false,"conditional":false,"children":[]}

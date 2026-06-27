@@ -17,4 +17,3 @@ MonoBehaviour:
   pageName: Sound
   categories:
   - {fileID: 11400000, guid: 335d453e6380a594fbefdcc80f7113ec, type: 2}
-  - {fileID: 11400000, guid: f5940b9e8d105a54386d214d0fcf2d29, type: 2}

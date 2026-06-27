@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: 10162d28abd9d5d498b0685c63ff1946
   settingName: Quick Preset
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.GraphicsPresetSetting/Medium
+  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Medium

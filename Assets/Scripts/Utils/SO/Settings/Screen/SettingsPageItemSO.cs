@@ -31,6 +31,7 @@ namespace Utils.SO.Settings.Screen
 
         // InputKey
         public PlayerAction ActionName { get; set; }
+        public bool AllowSecondaryInput { get; set; } = true;
 
         public void ConvertToString()
         {
@@ -48,7 +49,12 @@ namespace Utils.SO.Settings.Screen
 
                 SettingsItemType.Boolean => SerializeBoolean(),
 
-                SettingsItemType.InputKey => $"inputKey/{Escape(ActionName.ToString())}",
+                SettingsItemType.InputKey =>
+                    string.Join("/",
+                        "inputKey",
+                        Escape(ActionName.ToString()),
+                        AllowSecondaryInput.ToString()
+                    ),
 
                 SettingsItemType.Custom => "custom",
 
@@ -147,13 +153,26 @@ namespace Utils.SO.Settings.Screen
                 case "inputKey":
                     itemType = SettingsItemType.InputKey;
 
-                    if (string.IsNullOrEmpty(payload))
-                        return;
+                    var parts = payload.Split('/');
 
-                    if (System.Enum.TryParse(Unescape(payload), out PlayerAction action))
+                    if (parts.Length >= 1 &&
+                        System.Enum.TryParse(Unescape(parts[0]), out PlayerAction action))
+                    {
                         ActionName = action;
+                    }
+
+                    if (parts.Length >= 2)
+                    {
+                        bool.TryParse(parts[1], out var allowSecondary);
+                        AllowSecondaryInput = allowSecondary;
+                    }
+                    else
+                    {
+                        AllowSecondaryInput = true;
+                    }
 
                     break;
+                
                 
                 case "custom":
                     itemType = SettingsItemType.Custom;

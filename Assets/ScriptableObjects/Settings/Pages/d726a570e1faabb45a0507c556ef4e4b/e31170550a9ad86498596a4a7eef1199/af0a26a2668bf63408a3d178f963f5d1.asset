@@ -15,4 +15,4 @@ MonoBehaviour:
   uniqueId: af0a26a2668bf63408a3d178f963f5d1
   settingName: Max Dynamic Decals
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Medium
+  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

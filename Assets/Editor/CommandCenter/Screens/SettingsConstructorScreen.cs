@@ -503,7 +503,7 @@ namespace Editor.CommandCenter.Screens
                 .ToArray();
 
             EnumSynchronizer.Synchronize(
-                enumPath: "Assets/Scripts/Utils/Enum/NamedCustomSetting.cs",
+                enumPath: "Assets/Scripts/Utils/Enum/Named/NamedCustomSetting.cs",
                 enumNamespace: "Utils.Enum",
                 enumName: "NamedCustomSetting",
                 values: sanitized,
