@@ -8955,7 +8955,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       propertyPath: inputKeySpriteDictionary.entries.Array.size
-      value: 68
+      value: 82
       objectReference: {fileID: 0}
     - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       propertyPath: inputKeySpriteDictionary.entries.Array.data[0].key
@@ -9230,9 +9230,185 @@ PrefabInstance:
       value: LeftArrow
       objectReference: {fileID: 0}
     - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[68].key
+      value: Quote
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[69].key
+      value: LeftBracket
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[70].key
+      value: RightBracket
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[71].key
+      value: CapsLock
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[72].key
+      value: Semicolon
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[73].key
+      value: Comma
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[74].key
+      value: Delete
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[75].key
+      value: Equals
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[76].key
+      value: Minus
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[77].key
+      value: Period
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[78].key
+      value: Plus
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[79].key
+      value: Backslash
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[80].key
+      value: Slash
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[81].key
+      value: BackQuote
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[0].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 9b4335c269434ea449be76b0898ab974, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[1].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 536f7f2b05658bb43a8e75c393df3640, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[2].value
+      value: 
+      objectReference: {fileID: 21300000, guid: acb5394e95213db458c81edc8ad2f73d, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[3].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 59edd502b3c65844abae2bb1b3bfa32f, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[4].value
+      value: 
+      objectReference: {fileID: 21300000, guid: a66a7f2bedc847c4690f08bea56b6a8a, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       propertyPath: inputKeySpriteDictionary.entries.Array.data[5].value
       value: 
       objectReference: {fileID: 21300000, guid: e014f6dbcad5ba64bbdfc1d3f7af3945, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[6].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 78e869e3f3834aa4c9972516c42dafd4, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[7].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 7cde7ea49a681214dbb390499b2d56ad, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[8].value
+      value: 
+      objectReference: {fileID: 21300000, guid: fe56d41eede313c4d9432939027492f4, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[9].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 650bdb54065d491449e9b9b315d7a28e, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[10].value
+      value: 
+      objectReference: {fileID: 21300000, guid: ef5d13a34b3299b41b1cb7d8542820c4, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[11].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 7efb2b48b6f0a8a418a218167480be83, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[12].value
+      value: 
+      objectReference: {fileID: 21300000, guid: e79ea471ca86fd348a06d222ef8b5f5c, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[13].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 4f024b36c314e244687baf9486471ddf, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[14].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 3c033c37e82435741a48ad52ed1be856, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[15].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 7cdc72c9fa801e24da6adbef8207fe64, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[16].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 5480c4798f53e4740a74383895531277, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[17].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 06987291b7988c948a3ae5e4fdccda26, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[18].value
+      value: 
+      objectReference: {fileID: 21300000, guid: f36fd4293c9ad634293aa7cd4fdff2b0, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[19].value
+      value: 
+      objectReference: {fileID: 21300000, guid: fc5d30061f4a32943ba2be897554cbaf, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[20].value
+      value: 
+      objectReference: {fileID: 21300000, guid: bc2bf666578d2ba4cb80c19459e8f481, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[21].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 43960b293488b9846b28fa0d478c842d, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[22].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 9c80481b400939d40b09c83b72e4348d, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[23].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 0b69602ca3e6dc04ebfaf1b6faa57240, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[24].value
+      value: 
+      objectReference: {fileID: 21300000, guid: ca425399890fe664e89b3d570202ede3, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[25].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 9c645599a3aa2394789d91ea633f350c, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[26].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 6c34b83c93a350843bee26401b9f49b9, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[27].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 6d569db3eba7c8d4ea92bc096d860641, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[28].value
+      value: 
+      objectReference: {fileID: 21300000, guid: b83298dd11b86724faf1c99e5dfecd70, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[29].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 68017335cbb18c94d988792ccbb11ccd, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[30].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 75314227cc2308741a7ceef4ff1d7913, type: 3}
     - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       propertyPath: inputKeySpriteDictionary.entries.Array.data[31].value
       value: 
@@ -9274,6 +9450,90 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 400e50792c569774fa2abf9d22d88439, type: 3}
     - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[41].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 05af8ed311446d34092c90cba32c6bef, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[42].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 2f60db1e62e29e044bd206c7781a3b5b, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[43].value
+      value: 
+      objectReference: {fileID: 21300000, guid: e2560932f5370e1429a457cbb2063d6d, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[44].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 50f3f92c04522bd4b956bcef39e98244, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[45].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 00762df6342c1ac4e990a7893e2ee2c8, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[46].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 151094ec3a181ff439a7bdc7af8fe8dc, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[47].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 5e04f3b23c6a69345b01fdc720ce1c36, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[48].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 1bf31b929c3ab3542969d8568bfae01e, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[49].value
+      value: 
+      objectReference: {fileID: 21300000, guid: f3237bdf5ab76bb4296328a395532ff6, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[50].value
+      value: 
+      objectReference: {fileID: 21300000, guid: d1d6a658437dc8e44a949410614e4c1d, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[51].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 6acd94deeda1e7743a344c609d2ca453, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[52].value
+      value: 
+      objectReference: {fileID: 21300000, guid: a09f1b3377109624486457c5214bf0f0, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[53].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 2dce51a9e62d16448bc6102f924cae87, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[54].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 753f952b55a15f945a1c1879ff525ff1, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[55].value
+      value: 
+      objectReference: {fileID: 21300000, guid: be71b2a01eb17564ab6d1c50c7c1190f, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[56].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 64720a84316535848a0adff4f5790d8b, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[57].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 639954ae46ba3ad4aaac3ab9651be953, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[58].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 32a40b512ae6f794d8dafda68414d509, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[59].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 32a40b512ae6f794d8dafda68414d509, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[60].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 6af86aed6db028f45b13c13636731b24, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[61].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 6af86aed6db028f45b13c13636731b24, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       propertyPath: inputKeySpriteDictionary.entries.Array.data[62].value
       value: 
       objectReference: {fileID: 21300000, guid: 86662b7f20d8e7043bc8700ab4808a74, type: 3}
@@ -9297,6 +9557,62 @@ PrefabInstance:
       propertyPath: inputKeySpriteDictionary.entries.Array.data[67].value
       value: 
       objectReference: {fileID: 21300000, guid: 76ce02cc5fa10ab41a69291b2fcb7f1a, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[68].value
+      value: 
+      objectReference: {fileID: 21300000, guid: af503711c81d96847a7e0991a68460be, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[69].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 0b98e59b7fe562f49817d8c84f203524, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[70].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 203e6ea62293edb46a9a28f63c316bc7, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[71].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 31f061f97ca58fe4ab3fdfb08f043932, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[72].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 973f0a33397ec724eade40ea1c284759, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[73].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 34f1d03aabe45b54c8142b5bc960b49c, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[74].value
+      value: 
+      objectReference: {fileID: 21300000, guid: c201e7a6fa0f0594a9a2bcf85a38ed72, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[75].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 876fe6e18b67d464c80b214ab31f29ed, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[76].value
+      value: 
+      objectReference: {fileID: 21300000, guid: f24176fb812ecd44a946eab8de061f34, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[77].value
+      value: 
+      objectReference: {fileID: 21300000, guid: d41c96ac223c3f543bb84e06120c93a9, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[78].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 4e1305d6a5ba77d41af31a36044674f5, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[79].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 4c656db26334bb742ab700d51c9dd963, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[80].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 1f039151943fbc540ba0a03bcdebc550, type: 3}
+    - target: {fileID: 2065994161066818799, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      propertyPath: inputKeySpriteDictionary.entries.Array.data[81].value
+      value: 
+      objectReference: {fileID: 21300000, guid: 19391ce6da495bf4fa71c25068a2d634, type: 3}
     - target: {fileID: 3040976808595083050, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

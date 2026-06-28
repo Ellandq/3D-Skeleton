@@ -4,6 +4,7 @@ using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Screen.Components.Settings;
+using UserInterface.Screen.Components.Settings.UserInterface.Screen.Components.Settings;
 using Utils.Contract;
 using Utils.Enum;
 using Utils.SO.Settings.Screen;
@@ -33,6 +34,9 @@ namespace UserInterface.Screen
 
         [Header("Object References - View")] 
         [SerializeField] private Transform viewParent;
+        
+        [Header("Input Key Dictionary")]
+        [SerializeField] private InputKeySpriteDictionary inputKeySpriteDictionary;
 
         [Header("Settings Assets")] 
         public List<SettingsPageSO> pageAssets;
@@ -43,7 +47,6 @@ namespace UserInterface.Screen
         private int _activePageIndex = -1;
         private Dictionary<string, ISettingItem> _settingItems;
         private string _selectedItem;
-        
 
         private void Start()
         {
