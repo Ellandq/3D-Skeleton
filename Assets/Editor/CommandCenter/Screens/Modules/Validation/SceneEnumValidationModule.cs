@@ -16,7 +16,7 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
         private ICommandCenterLogger _logger;
 
         private const string SceneFolder = "Assets/Scenes";
-        private const string EnumPath = "Assets/Scripts/Utils/Enum/NamedScene.cs";
+        private const string EnumPath = "Assets/Scripts/Utils/Enum/Named/NamedScene.cs";
 
         public void Initialize(ICommandCenterLogger logger)
         {

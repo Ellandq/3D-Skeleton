@@ -20,7 +20,7 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
         private ICommandCenterLogger _logger;
 
         private const string EnumPath =
-            "Assets/Scripts/Utils/Enum/NamedState.cs";
+            "Assets/Scripts/Utils/Enum/Named/NamedState.cs";
 
         private const string FactoryPath =
             "Assets/Scripts/GameStates/GameStateFactory.cs";

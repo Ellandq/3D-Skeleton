@@ -6,6 +6,7 @@ namespace UserInterface.Windows
 {
     public enum NamedWindow
     {
-        ExitConfirmation
+        ExitConfirmation,
+        InputAssignment
     }
 }

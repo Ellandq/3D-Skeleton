@@ -84,10 +84,7 @@ namespace UserInterface.Windows
         {
             base.ChangeComponentState(active);
             if (active)
-            {
-                UIManager.Instance.PushToUIStack(this);
                 return;
-            }
             UIManager.Instance.OnFinishPop(this);
         }
 

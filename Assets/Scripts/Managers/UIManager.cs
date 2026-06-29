@@ -42,6 +42,8 @@ namespace Managers
         [Header("Utils")]
         [SerializeField] private OutsideClickDetector outsideClickDetector;
         public OutsideClickDetector OutsideClickDetectorRef => outsideClickDetector;
+        [SerializeField] private BackgroundDim backgroundDim;
+        public BackgroundDim BackgroundDim => backgroundDim;
 
         [Header("UI Stack")] 
         private readonly Stack<IUIStackable> _uiStack = new ();
@@ -72,14 +74,13 @@ namespace Managers
             );
         }
 
-        private void Start()
+        public void Start()
         {
             InputManager.Instance.Subscribe(PlayerAction.Escape, state =>
             {
                 if (state == ButtonState.Down)
-                {
                     PopUIStack();
-                }
+                
             });
         }
 
@@ -104,12 +105,14 @@ namespace Managers
 
         #region UI STACK
 
-        public void PushToUIStack(IUIStackable stackable)
+        private void PushToUIStack(IUIStackable stackable)
         {
+
             if (_uiStack.TryPeek(out var component))
             {
                 component.OnPushOther();
             }
+
             _uiStack.Push(stackable);
             stackable.OnPush();
         }
@@ -119,6 +122,7 @@ namespace Managers
             if (_uiStack.TryPeek(out var component))
             {
                 component.OnPop();
+                _uiStack.Pop();
             }
             else
             {
@@ -131,6 +135,11 @@ namespace Managers
             if (_uiStack.TryPeek(out var component) && component == stackable)
             {
                 _uiStack.Pop();
+            }
+            
+            if (_uiStack.TryPeek(out var nextComponent))
+            {
+                nextComponent.OnPopOther();
             }
         }
         
@@ -180,29 +189,69 @@ namespace Managers
             {
                 var key = (NamedHUD)(object)type;
                 if (!_huds.TryGetValue(key, out var hud)) return;
-                if (active) hud.Activate(instant, onFinish);
-                else hud.Deactivate(instant);
+                if (active)
+                {
+                    hud.Activate(instant);
+                    if (hud is IUIStackable stackable)
+                        PushToUIStack(stackable);
+                }
+                else
+                {
+                    hud.Deactivate(instant);
+                    if (hud is IUIStackable stackable)
+                        PopUIStack();
+                }
             }
             else if (typeof(T) == typeof(NamedOverlay))
             {
                 var key = (NamedOverlay)(object)type;
                 if (!_overlays.TryGetValue(key, out var overlay)) return;
-                if (active) overlay.Activate(instant);
-                else overlay.Deactivate(instant);
+                if (active)
+                {
+                    overlay.Activate(instant);
+                    if (overlay is IUIStackable stackable)
+                        PushToUIStack(stackable);
+                }
+                else
+                {
+                    overlay.Deactivate(instant);
+                    if (overlay is IUIStackable stackable)
+                        PopUIStack();
+                }
             }
             else if (typeof(T) == typeof(NamedScreen))
             {
                 var key = (NamedScreen)(object)type;
                 if (!_screens.TryGetValue(key, out var screen)) return;
-                if (active) screen.Activate(instant);
-                else screen.Deactivate(instant);
+                if (active)
+                {
+                    screen.Activate(instant);
+                    if (screen is IUIStackable stackable)
+                        PushToUIStack(stackable);
+                }
+                else
+                {
+                    screen.Deactivate(instant);
+                    if (screen is IUIStackable stackable)
+                        PopUIStack();
+                }
             }
             else if (typeof(T) == typeof(NamedWindow))
             {
                 var key = (NamedWindow)(object)type;
                 if (!_windows.TryGetValue(key, out var window)) return;
-                if (active) window.Activate(instant);
-                else window.Deactivate(instant);
+                if (active)
+                {
+                    window.Activate(instant);
+                    if (window is IUIStackable stackable)
+                        PushToUIStack(stackable);
+                }
+                else
+                {
+                    window.Deactivate(instant);
+                    if (window is IUIStackable stackable)
+                        PopUIStack();
+                }
             }
             else
             {
