@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Enum;
+using Utils.SO;
 using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings
@@ -38,8 +39,19 @@ namespace UserInterface.Screen.Components.Settings
 #endif
             }
             baseButton = Instantiate(buttonPrefab, container).GetComponent<InputKeyButton>();
-            if (allowSecondaryInput)
-                alternateButton = Instantiate(buttonPrefab, container).GetComponent<InputKeyButton>();
+            baseButton.Initialize(this);
+            if (!allowSecondaryInput) return;
+            alternateButton = Instantiate(buttonPrefab, container).GetComponent<InputKeyButton>();
+            alternateButton.Initialize(this);
+
+        }
+
+        public override void ChangeState(UIComponentState newState)
+        {
+            base.ChangeState(newState);
+
+            baseButton.ChangeState(newState);
+            alternateButton?.ChangeState(newState);
         }
     }
 }

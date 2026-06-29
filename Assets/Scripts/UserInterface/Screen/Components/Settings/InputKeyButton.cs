@@ -22,11 +22,16 @@ namespace UserInterface.Screen.Components.Settings
             button.onClick.AddListener(() => UIManager.Instance.ActivateComponent(NamedWindow.InputAssignment));
         }
 
-        public void ChangeState(UIComponentState state)
+        public void Initialize(InputKeySetting parent)
         {
-            if (state == this.state)
+            button.onClick.AddListener(parent.SelectItem);
+        }
+
+        public void ChangeState(UIComponentState newState)
+        {
+            if (newState == state)
                 return;
-            this.state = state;
+            state = newState;
             var colors = UITheme.GetColors(state);
             var lighterC = colors[UIColorType.Lighter];
             var darkerC = colors[UIColorType.Darker];
