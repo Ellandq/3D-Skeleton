@@ -15,19 +15,13 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private TMP_Text text;
         [SerializeField] private Image background;
 
-        [Header("Callback")] 
-        private Action<int> _initializePageCallback;
-
         public void Initialize(Action<int> initializePageCallback, int index, string pageName)
         {
             text.text = pageName;
             ChangeState(UIComponentState.Enabled);
-            
-            button.onClick.AddListener(() =>
-            {
-                ChangeState(UIComponentState.Selected);
-                initializePageCallback.Invoke(index);
-            });
+
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => initializePageCallback(index));
         }
         
         public void ChangeState(UIComponentState newState)

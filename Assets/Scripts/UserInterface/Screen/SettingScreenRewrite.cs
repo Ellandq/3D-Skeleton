@@ -12,7 +12,7 @@ using Utils.SO.Settings.Screen;
 namespace UserInterface.Screen
 {
     [ExecuteAlways]
-    public class SettingsScreen : ScreenBase, IUIStackable
+    public class SettingScreenRewrite : ScreenBase, IUIStackable
     {
         [Header("Screen Properties")]
         public override NamedScreen Name => NamedScreen.Settings;
@@ -74,38 +74,15 @@ namespace UserInterface.Screen
         [ContextMenu("Force Initialization")]
         public void ForceInitialize()
         {
-            if (!pagesInitialized)
-            {
-                _customSettingsDict = new Dictionary<NamedCustomSetting, GameObject>();
-
-                foreach (var prefab in customSettingItemPrefabs)
-                {
-                    var comp = prefab.GetComponent<ICustomSettingItem>();
-                    _customSettingsDict.Add(comp.GetSettingType(), prefab);
-                }
-            }
             Initialize(true);
         }
 
-        private void Initialize(bool force = false)
+        public void Initialize(bool force = false)
         {
             InitializePageButtons();
             InitializeScreenContent(force);
-            InitializePageItemList();
 
             pagesInitialized = Application.isPlaying;
-        }
-
-        private void InitializePageItemList()
-        {
-            _pageItemsIndexList = new List<(int startIndex, int endIndex)>();
-            var lastIndex = -1;
-            foreach (var indexes in pageAssets.Select(page => (lastIndex + 1,
-                         lastIndex + page.categories.Count + page.categories.Sum(category => category.items.Count))))
-            {
-                lastIndex = indexes.Item2;
-                _pageItemsIndexList.Add(indexes);
-            }
         }
 
         private void InitializePageButtons()
@@ -122,13 +99,12 @@ namespace UserInterface.Screen
 #else
                     Destroy(pageButtons[i].gameObject);
 #endif
-                    pageButtons.RemoveAt(i);
                 }
-            } 
-            while (pageButtons.Count < pageAssets.Count)
+            } else if (pageCount > buttonCount)
             {
                 var go = Instantiate(pageButtonPrefab, headerPagesButtonsParent);
-                pageButtons.Add(go.GetComponent<PageButton>());
+                var comp = go.GetComponent<PageButton>();
+                pageButtons.Add(comp);
             }
     
             var index = 0;
@@ -141,37 +117,49 @@ namespace UserInterface.Screen
 
         private void InitializeScreenContent(bool force = false)
         {
-            if (!force && (pagesInitialized
-                           || viewParent.childCount == pageAssets.Sum(page =>
-                               page.categories.Count + page.categories.Sum(category => category.items.Count)))) return;
-            for (var i = viewParent.childCount - 1; i >= 0; i--)
+            if (force || !pagesInitialized
+                && viewParent.childCount != pageAssets.Sum(
+                    page => page.categories.Count + page.categories.Sum(category => category.items.Count)))
             {
+                for (var i = viewParent.childCount - 1; i >= 0; i--)
+                {
 #if UNITY_EDITOR
-                if (!Application.isPlaying)
-                    DestroyImmediate(viewParent.GetChild(i).gameObject);
-                else
-                    Destroy(viewParent.GetChild(i).gameObject);
+                    if (!Application.isPlaying)
+                        DestroyImmediate(viewParent.GetChild(i).gameObject);
+                    else
+                        Destroy(viewParent.GetChild(i).gameObject);
 #else
                     Destroy(viewParent.GetChild(i).gameObject);
 #endif
-            }
+                }
                 
-            CreatePageAssets();
+                CreatePageAssets();
+            }
         }
         
         #region ASSET CREATION
 
         private void CreatePageAssets()
         {
-            _settingItems ??= new Dictionary<string, ISettingItem>();
-
-            foreach (var cat in pageAssets.SelectMany(page => page.categories))
+            _pageItemsIndexList = new List<(int startIndex, int endIndex)>();
+            
+            var index = -1;
+            foreach (var page in pageAssets)
             {
-                CreateCategory(cat);
-                foreach (var it in cat.items)
+                (int start, int end) itemIndex;
+                itemIndex.start = index + 1;
+                foreach (var cat in page.categories)
                 {
-                    CreateSetting(it, viewParent);
+                    CreateCategory(cat);
+                    index++;
+                    foreach (var it in cat.items)
+                    {
+                        CreateSetting(it, viewParent);
+                        index++;
+                    }
                 }
+                itemIndex.end = index;
+                _pageItemsIndexList.Add(itemIndex);
             }
         }
 
@@ -254,7 +242,6 @@ namespace UserInterface.Screen
             }
             else
             {
-                pageButtons[_activePageIndex].ChangeState(UIComponentState.Enabled);
                 for (var i = _pageItemsIndexList[_activePageIndex].startIndex;
                      i <= _pageItemsIndexList[_activePageIndex].endIndex;
                      i++)
@@ -264,7 +251,7 @@ namespace UserInterface.Screen
             }
             
             _activePageIndex = pageIndex;
-            pageButtons[_activePageIndex].ChangeState(UIComponentState.Selected);
+            
             for (var i = _pageItemsIndexList[_activePageIndex].startIndex;
                  i <= _pageItemsIndexList[_activePageIndex].endIndex;
                  i++)
