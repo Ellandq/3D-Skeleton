@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using Managers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UserInterface.Components;
 using Utils.Enum;
@@ -23,28 +21,32 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private Slider slider;
         [SerializeField] private SliderReleaseListener releaseListener;
 
-        [Header("Settings")] 
+        [Header("Settings")]
         [SerializeField] private float startValue;
         [SerializeField] private bool wasChanged;
         [SerializeField] private float value;
         [SerializeField] private float minValue;
         [SerializeField] private float maxValue;
         [SerializeField] private float step;
-        
+
         public override void Initialize(
-            SettingsPageItemSO asset, 
-            Action<string> onSelect,  
+            SettingsPageItemSO asset,
+            Action<string> onSelect,
             Action<(string key, float value)> onValueChange,
-            Action<(string key, float value)> onValueReset, 
+            Action<(string key, float value)> onValueReset,
             UIComponentState defaultState)
         {
             wasChanged = false;
+
             base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
+
             slider.minValue = minValue = asset.MinValue;
             slider.maxValue = maxValue = asset.MaxValue;
             slider.value = value = asset.FloatDefaultValue;
-            handleText.text = value.ToString(CultureInfo.InvariantCulture);
             step = asset.MinIncrement;
+
+            handleText.text = value.ToString(CultureInfo.InvariantCulture);
+
             slider.onValueChanged.AddListener(UpdateValue);
             releaseListener.onReleased += NotifyValueChanged;
         }
@@ -55,15 +57,11 @@ namespace UserInterface.Screen.Components.Settings
 
             var colors = UITheme.GetColors(newState);
 
-            var lighterC = colors[UIColorType.Lighter];
-            var lightC = colors[UIColorType.Light];
-            var darkC = colors[UIColorType.Dark];
-
-            handleFrame.color = lighterC;
-            handleText.color = lighterC;
-            fill.color = lighterC;
-            handleBackground.color = lightC;
-            sliderBackground.color = darkC;
+            handleFrame.color = colors[UIColorType.Lighter];
+            handleText.color = colors[UIColorType.Lighter];
+            fill.color = colors[UIColorType.Lighter];
+            handleBackground.color = colors[UIColorType.Light];
+            sliderBackground.color = colors[UIColorType.Dark];
         }
 
         private void UpdateValue(float newValue)

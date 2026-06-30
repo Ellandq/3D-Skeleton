@@ -13,7 +13,7 @@ namespace UserInterface.Screen.Components.Settings
 {
     public class EnumSetting : SettingBase<int>
     {
-        [Header("Object References")] 
+        [Header("Object References")]
         [SerializeField] private Button leftButton;
         [SerializeField] private Image leftButtonImage;
         [SerializeField] private Button rightButton;
@@ -25,39 +25,41 @@ namespace UserInterface.Screen.Components.Settings
 
         [SerializeField] private List<Image> previewItems;
 
-        [Header("Prefabs")] 
+        [Header("Prefabs")]
         [SerializeField] private GameObject previewItemPrefab;
 
-        [Header("Settings")] 
+        [Header("Settings")]
         [SerializeField] private List<string> availableValues;
         [SerializeField] private int selectedIndex;
         [SerializeField] private int startingValue;
         [SerializeField] private bool wasChanged;
-        
+
         public override void Initialize(
-            SettingsPageItemSO asset, 
-            Action<string> onSelect,  
+            SettingsPageItemSO asset,
+            Action<string> onSelect,
             Action<(string key, int value)> onValueChange,
-            Action<(string key, int value)> onValueReset, 
+            Action<(string key, int value)> onValueReset,
             UIComponentState defaultState)
         {
             wasChanged = false;
-            var enumType = Type.GetType(asset.EnumTypeName);
 
+            var enumType = Type.GetType(asset.EnumTypeName);
             if (enumType is not { IsEnum: true })
             {
                 throw new ArgumentException($"Invalid enum type name: {asset.EnumTypeName}");
             }
-            
-            availableValues = Enum.GetNames(enumType).Select(FormatEnumValue).ToList();
+
+            availableValues = Enum.GetNames(enumType)
+                .Select(FormatEnumValue)
+                .ToList();
+
             selectedIndex = availableValues.IndexOf(FormatEnumValue(asset.EnumDefaultValue));
-            
+
             InitializePreview();
+
             base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
-            
-            leftButton.interactable = selectedIndex != 0;
-            rightButton.interactable = selectedIndex != availableValues.Count - 1;
-            optionName.text = availableValues[selectedIndex];
+
+            UpdateSelectionUI();
             startingValue = selectedIndex;
         }
 
@@ -66,6 +68,7 @@ namespace UserInterface.Screen.Components.Settings
             for (var i = itemSelectionPreviewParent.childCount - 1; i >= 0; i--)
             {
                 var child = itemSelectionPreviewParent.GetChild(i);
+
 #if UNITY_EDITOR
                 if (!Application.isPlaying)
                     UnityEditor.Undo.DestroyObjectImmediate(child.gameObject);
@@ -75,9 +78,12 @@ namespace UserInterface.Screen.Components.Settings
                 Destroy(child.gameObject);
 #endif
             }
+
             previewItems = new List<Image>();
-            foreach (var item in availableValues.Select(_ => Instantiate(previewItemPrefab, itemSelectionPreviewParent)))
+
+            for (var i = 0; i < availableValues.Count; i++)
             {
+                var item = Instantiate(previewItemPrefab, itemSelectionPreviewParent);
                 previewItems.Add(item.GetComponent<Image>());
             }
         }
@@ -85,43 +91,47 @@ namespace UserInterface.Screen.Components.Settings
         public override void ChangeState(UIComponentState newState)
         {
             base.ChangeState(newState);
-            var colors = UITheme.GetColors(newState);
-            var lighterC = colors[UIColorType.Lighter];
-            var lightC = colors[UIColorType.Light];
-            var darkerC = colors[UIColorType.Darker];
 
-            leftButtonImage.color = lighterC;
-            rightButtonImage.color = lighterC;
-            frame.color = lighterC;
-            optionName.color = lighterC;
-            background.color = darkerC;
+            var colors = UITheme.GetColors(newState);
+
+            var lighter = colors[UIColorType.Lighter];
+            var light = colors[UIColorType.Light];
+            var darker = colors[UIColorType.Darker];
+
+            leftButtonImage.color = lighter;
+            rightButtonImage.color = lighter;
+            frame.color = lighter;
+            optionName.color = lighter;
+            background.color = darker;
 
             for (var i = 0; i < previewItems.Count; i++)
             {
-                previewItems[i].color = i == selectedIndex
-                    ? lighterC
-                    : lightC;
+                previewItems[i].color = i == selectedIndex ? lighter : light;
             }
         }
-        
+
         public void ChangeSelection(bool increment)
         {
-            if (increment && selectedIndex < availableValues.Count - 1)
+            if (increment)
             {
+                if (selectedIndex >= availableValues.Count - 1)
+                    return;
+
                 previewItems[selectedIndex].color = UITheme.GetColor(State, UIColorType.Light);
                 selectedIndex++;
-                previewItems[selectedIndex].color = UITheme.GetColor(State, UIColorType.Lighter);
-            } 
-            else if (selectedIndex > 0)
-            {
-                    previewItems[selectedIndex].color = UITheme.GetColor(State, UIColorType.Light);
-                selectedIndex--;
-                previewItems[selectedIndex].color = UITheme.GetColor(State, UIColorType.Lighter);
             }
-            
-            leftButton.interactable = selectedIndex != 0;
-            rightButton.interactable = selectedIndex != availableValues.Count - 1;
-            optionName.text = availableValues[selectedIndex];
+            else
+            {
+                if (selectedIndex <= 0)
+                    return;
+
+                previewItems[selectedIndex].color = UITheme.GetColor(State, UIColorType.Light);
+                selectedIndex--;
+            }
+
+            previewItems[selectedIndex].color = UITheme.GetColor(State, UIColorType.Lighter);
+
+            UpdateSelectionUI();
 
             if (startingValue == selectedIndex && wasChanged)
             {
@@ -134,30 +144,43 @@ namespace UserInterface.Screen.Components.Settings
                 wasChanged = true;
             }
         }
-        
+
+        private void UpdateSelectionUI()
+        {
+            leftButton.interactable = selectedIndex != 0;
+            rightButton.interactable = selectedIndex != availableValues.Count - 1;
+            optionName.text = availableValues[selectedIndex];
+        }
+
         private static string FormatEnumValue(string enumValue)
         {
             if (string.IsNullOrEmpty(enumValue))
                 return enumValue;
 
-            if (enumValue.Length > 1 && char.IsLetter(enumValue[0]) && char.IsDigit(enumValue[1]))
+            if (enumValue.Length > 1 &&
+                char.IsLetter(enumValue[0]) &&
+                char.IsDigit(enumValue[1]))
             {
-                if (enumValue[0] == 'X')
-                    enumValue = "x" + enumValue[1..];
-                else
-                    enumValue = enumValue[1..];
+                enumValue = enumValue[0] == 'X'
+                    ? "x" + enumValue[1..]
+                    : enumValue[1..];
             }
 
             enumValue = enumValue.Replace("_", "x");
 
             var result = new StringBuilder();
+
             for (var i = 0; i < enumValue.Length; i++)
             {
                 var c = enumValue[i];
-                if (i > 0 && char.IsUpper(c) && (char.IsLower(enumValue[i - 1]) || char.IsDigit(enumValue[i - 1])))
+
+                if (i > 0 &&
+                    char.IsUpper(c) &&
+                    (char.IsLower(enumValue[i - 1]) || char.IsDigit(enumValue[i - 1])))
                 {
                     result.Append(' ');
                 }
+
                 result.Append(c);
             }
 

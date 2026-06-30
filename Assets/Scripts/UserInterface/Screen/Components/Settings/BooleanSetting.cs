@@ -1,5 +1,4 @@
 ﻿using System;
-using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,38 +17,38 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private Image background;
         [SerializeField] private Image frame;
         [SerializeField] private TMP_Text text;
+
         private RectTransform _rootLayout;
 
-        [Header("Sprites")] 
+        [Header("Sprites")]
         [SerializeField] private Sprite onSprite;
         [SerializeField] private Sprite offSprite;
 
-        [Header("Settings")] 
+        [Header("Settings")]
         [SerializeField] private bool isOn;
         [SerializeField] private bool wasChanged;
-        
+
         public Transform GetConditionalParent() => conditionalSettingsContentParent;
 
         public override void Initialize(
-            SettingsPageItemSO asset, 
-            Action<string> onSelect, 
+            SettingsPageItemSO asset,
+            Action<string> onSelect,
             Action<(string key, int value)> onValueChange,
-            Action<(string key, int value)> onValueReset, 
+            Action<(string key, int value)> onValueReset,
             UIComponentState defaultState)
         {
             base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
+
             wasChanged = false;
             isOn = asset.BoolDefaultValue;
-            UpdateStatus();
-            if (isOn)
+
+            if (isOn && asset.ConditionalItems != null && asset.ConditionalItems.Count > 0)
             {
-                if (isOn && asset.ConditionalItems != null && asset.ConditionalItems.Count != 0)
-                {
-                    conditionalSettingsObject.SetActive(true);
-                }
+                conditionalSettingsObject.SetActive(true);
             }
-            
+
             button.onClick.AddListener(ChangeStatus);
+
             UpdateStatus();
             DeselectItem();
         }
@@ -60,26 +59,19 @@ namespace UserInterface.Screen.Components.Settings
 
             var colors = UITheme.GetColors(newState);
 
-            var lighterC = colors[UIColorType.Lighter];
-            var lightC = colors[UIColorType.Light];
-
-            text.color = lighterC;
-            frame.color = lighterC;
-            background.color = lightC;
+            text.color = colors[UIColorType.Lighter];
+            frame.color = colors[UIColorType.Lighter];
+            background.color = colors[UIColorType.Light];
 
             button.interactable = newState != UIComponentState.Disabled;
         }
 
         private void UpdateStatus()
         {
-            frame.sprite = isOn
-                ? onSprite
-                : offSprite;
-            text.text = isOn
-                ? "On"
-                : "Off";
+            frame.sprite = isOn ? onSprite : offSprite;
+            text.text = isOn ? "On" : "Off";
         }
-        
+
         private void ChangeStatus()
         {
             isOn = !isOn;
@@ -87,6 +79,7 @@ namespace UserInterface.Screen.Components.Settings
 
             if (conditionalSettingsContentParent.childCount == 0)
                 return;
+
             conditionalSettingsObject.SetActive(isOn);
 
             if (_rootLayout)
@@ -105,7 +98,7 @@ namespace UserInterface.Screen.Components.Settings
                 wasChanged = true;
             }
         }
-        
+
         public void SetRootLayout(RectTransform root)
         {
             _rootLayout = root;
