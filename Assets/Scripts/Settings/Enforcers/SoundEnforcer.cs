@@ -16,5 +16,14 @@ namespace Settings.Enforcers
             string value)
         {
         }
+
+        void ISettingEnforcer.Enforce(
+            string fullName,
+            object value)
+        {
+            Enforce(
+                fullName,
+                (string)value);
+        }
     }
 }
