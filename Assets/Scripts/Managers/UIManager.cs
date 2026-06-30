@@ -48,6 +48,7 @@ namespace Managers
         [Header("UI Stack")] 
         private readonly Stack<IUIStackable> _uiStack = new ();
         private Action _onEmptyStackExit;
+        private bool _transitionLocked;
 
         protected override void Awake()
         {
@@ -79,7 +80,7 @@ namespace Managers
             InputManager.Instance.Subscribe(PlayerAction.Escape, state =>
             {
                 if (state == ButtonState.Down)
-                    PopUIStack();
+                    PopUIStack(false);
                 
             });
         }
@@ -105,7 +106,7 @@ namespace Managers
 
         #region UI STACK
 
-        private void PushToUIStack(IUIStackable stackable)
+        private void PushToUIStack(IUIStackable stackable, bool instant, Action onActivate = null)
         {
 
             if (_uiStack.TryPeek(out var component))
@@ -114,15 +115,18 @@ namespace Managers
             }
 
             _uiStack.Push(stackable);
-            stackable.OnPush();
+            stackable.OnPush(instant, onActivate);
         }
 
-        private void PopUIStack()
+        private void PopUIStack(bool instant, Action onDeactivate = null)
         {
+            if (_transitionLocked && !instant)
+                return;
             if (_uiStack.TryPeek(out var component))
             {
-                component.OnPop();
-                _uiStack.Pop();
+                onDeactivate += () => OnFinishPop(component);
+                component.OnPop(instant, onDeactivate);
+                _transitionLocked = true;
             }
             else
             {
@@ -132,6 +136,7 @@ namespace Managers
 
         public void OnFinishPop(IUIStackable stackable)
         {
+            _transitionLocked = false;
             if (_uiStack.TryPeek(out var component) && component == stackable)
             {
                 _uiStack.Pop();
@@ -175,90 +180,68 @@ namespace Managers
 
         public void ActivateComponent<T>(T type, bool instant = false, Action onActivate = null) where T : Enum
         {
-            ChangeComponentState(type, true, instant);
+            ChangeComponentState(type, true, instant, onActivate);
         }
 
         public void DeactivateComponent<T>(T type, bool instant = false, Action onDeactivate = null) where T : Enum
         {
-            ChangeComponentState(type, false, instant);
+            ChangeComponentState(type, false, instant, onDeactivate);
         }
 
         private void ChangeComponentState<T>(T type, bool active, bool instant = false, Action onFinish = null) where T : Enum
         {
+            IUIComponent component = null;
+
             if (typeof(T) == typeof(NamedHUD))
             {
                 var key = (NamedHUD)(object)type;
-                if (!_huds.TryGetValue(key, out var hud)) return;
-                if (active)
-                {
-                    hud.Activate(instant);
-                    if (hud is IUIStackable stackable)
-                        PushToUIStack(stackable);
-                }
-                else
-                {
-                    hud.Deactivate(instant);
-                    if (hud is IUIStackable stackable)
-                        PopUIStack();
-                }
+                _huds.TryGetValue(key, out var comp);
+                component = comp;
             }
             else if (typeof(T) == typeof(NamedOverlay))
             {
                 var key = (NamedOverlay)(object)type;
-                if (!_overlays.TryGetValue(key, out var overlay)) return;
-                if (active)
-                {
-                    overlay.Activate(instant);
-                    if (overlay is IUIStackable stackable)
-                        PushToUIStack(stackable);
-                }
-                else
-                {
-                    overlay.Deactivate(instant);
-                    if (overlay is IUIStackable stackable)
-                        PopUIStack();
-                }
+                _overlays.TryGetValue(key, out var comp);
+                component = comp;
             }
             else if (typeof(T) == typeof(NamedScreen))
             {
                 var key = (NamedScreen)(object)type;
-                if (!_screens.TryGetValue(key, out var screen)) return;
-                if (active)
-                {
-                    screen.Activate(instant);
-                    if (screen is IUIStackable stackable)
-                        PushToUIStack(stackable);
-                }
-                else
-                {
-                    screen.Deactivate(instant);
-                    if (screen is IUIStackable stackable)
-                        PopUIStack();
-                }
+                _screens.TryGetValue(key, out var comp);
+                component = comp;
             }
             else if (typeof(T) == typeof(NamedWindow))
             {
                 var key = (NamedWindow)(object)type;
-                if (!_windows.TryGetValue(key, out var window)) return;
-                if (active)
-                {
-                    window.Activate(instant);
-                    if (window is IUIStackable stackable)
-                        PushToUIStack(stackable);
-                }
-                else
-                {
-                    window.Deactivate(instant);
-                    if (window is IUIStackable stackable)
-                        PopUIStack();
-                }
+                _windows.TryGetValue(key, out var comp);
+                component = comp;
             }
             else
             {
                 throw new ArgumentException("Unsupported enum type: " + typeof(T));
             }
-        }
 
+            switch (component)
+            {
+                case null:
+                    return;
+                case IUIStackable stackable when active:
+                    PushToUIStack(stackable, instant, onFinish);
+                    break;
+                case IUIStackable:
+                    PopUIStack(instant, onFinish);
+                    break;
+                default:
+                {
+                    if (active)
+                        component.Activate(instant, onFinish);
+                    else
+                        component.Deactivate(instant, onFinish);
+                    break;
+                }
+            }
+        }
+        
         #endregion
 
         #region ASYNC INITIALIZATION

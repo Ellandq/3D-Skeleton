@@ -55,8 +55,14 @@ namespace UserInterface.Windows
 
         #region UI STACK
 
-        public void OnPush()
+        public void OnPush(bool instant, Action onActivate = null)
         {
+            if (!IsClosing)
+            {
+                Activate(instant, onActivate);
+                return;
+            }
+            Activate(true, onActivate);
             EnableInteractions();
         }
 
@@ -65,14 +71,14 @@ namespace UserInterface.Windows
             DisableInteractions();
         }
 
-        public void OnPop()
+        public void OnPop(bool instant, Action onDeactivate = null)
         {
             if (!IsClosing)
             {
-                Deactivate(false);
+                Deactivate(instant, onDeactivate);
                 return;
             }
-            Deactivate(true);
+            Deactivate(true, onDeactivate);
         }
 
         public void OnPopOther()

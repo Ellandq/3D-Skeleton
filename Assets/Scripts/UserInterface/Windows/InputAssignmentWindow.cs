@@ -1,25 +1,54 @@
 ﻿using System;
 using Managers;
+using UnityEngine;
 using Utils.Contract;
 
 namespace UserInterface.Windows
 {
     public class InputAssignmentWindow : WindowBase, IUIStackable
     {
-        private static Action<string> _onInputRegistration;
+        public static InputAssignmentWindow Instance { get; private set; }
         
-        public static void Subscribe(Action<string> onInputRegistration) => _onInputRegistration += onInputRegistration;
+        private Action<string> _onInputAssigned;
 
-        public override void Activate(bool instant, Action onActivate = null)
+        private void Awake()
         {
-            // TODO
-            base.Activate(instant, onActivate);
+            Instance = this;
         }
-        
+
+        public void OpenForAssignment(Action<string> callback)
+        {
+            _onInputAssigned = callback;
+            BeginWaitingForInput();
+        }
+
+
+        private void BeginWaitingForInput()
+        {
+            InputManager.Instance.WaitForInput(OnInputReceived);
+        }
+
+
+        private void OnInputReceived(string input)
+        {
+            var callback = _onInputAssigned;
+
+            _onInputAssigned = null;
+
+            callback?.Invoke(input);
+        }
+
+
         #region UI STACK
 
-        public void OnPush()
+        public void OnPush(bool instant, Action onActivate = null)
         {
+            if (!IsClosing)
+            {
+                Activate(instant, onActivate);
+                return;
+            }
+            Activate(true, onActivate);
             UIManager.Instance.BackgroundDim.Activate(false);
             EnableInteractions();
         }
@@ -29,28 +58,27 @@ namespace UserInterface.Windows
             DisableInteractions();
         }
 
-        public void OnPop()
+        public void OnPop(bool instant, Action onDeactivate = null)
         {
-            UIManager.Instance.BackgroundDim.Deactivate(false);
             if (!IsClosing)
             {
-                Deactivate(false);
+                Deactivate(instant, onDeactivate);
                 return;
             }
-            Deactivate(true);
+            Deactivate(true, onDeactivate);
+            UIManager.Instance.BackgroundDim.Deactivate(false);
         }
 
         public void OnPopOther()
         {
             EnableInteractions();
         }
-
+        
         protected override void ChangeComponentState(bool active)
         {
             base.ChangeComponentState(active);
-            if (active)
-                return;
-            UIManager.Instance.OnFinishPop(this);
+            if (!active)
+                UIManager.Instance.OnFinishPop(this);
         }
 
         #endregion

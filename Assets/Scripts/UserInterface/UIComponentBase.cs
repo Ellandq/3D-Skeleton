@@ -29,27 +29,27 @@ namespace UserInterface
             {
                 ChangeComponentState(true);
                 _onAnimationFinish = onActivate;
+
                 IsOpening = true;
                 IsClosing = false;
-                ForceAnimationFinish(openState);
+
+                ForceAnimationFinish(openState, opening: true);
                 return;
             }
 
             if (IsOpening)
-            {
                 return;
-            }
-            
+
             IsOpening = true;
             _onAnimationFinish = onActivate;
-            
+
             if (IsClosing)
             {
                 IsClosing = false;
                 StartCoroutine(ReverseAnimation());
                 return;
             }
-            
+
             ChangeComponentState(true);
             StartCoroutine(RunAnimation(openState));
         }
@@ -57,30 +57,31 @@ namespace UserInterface
         public virtual void Deactivate(bool instant, Action onDeactivate = null)
         {
             onDeactivate += () => ChangeComponentState(false);
+
             if (instant)
             {
                 _onAnimationFinish = onDeactivate;
+
                 IsOpening = false;
                 IsClosing = true;
-                ForceAnimationFinish(closeState);
+
+                ForceAnimationFinish(closeState, opening: false);
                 return;
             }
-            
+
             if (IsClosing)
-            {
                 return;
-            }
-            
+
             IsClosing = true;
             _onAnimationFinish = onDeactivate;
-            
+
             if (IsOpening)
             {
                 IsOpening = false;
                 StartCoroutine(ReverseAnimation());
                 return;
             }
-            
+
             StartCoroutine(RunAnimation(closeState));
         }
 
@@ -89,13 +90,22 @@ namespace UserInterface
             gameObject.SetActive(active);
         }
 
-        protected void ForceAnimationFinish(string stateKey)
+        protected void ForceAnimationFinish(string stateKey, bool opening)
         {
             StopAllCoroutines();
+
             animator.SetFloat(Speed, 1f);
+
             animator.Play(stateKey, 0, 1f);
             animator.Update(0f);
-            _onAnimationFinish?.Invoke();
+
+            IsOpening = opening;
+            IsClosing = !opening;
+
+            var callback = _onAnimationFinish;
+            _onAnimationFinish = null;
+
+            callback?.Invoke();
         }
         
         protected virtual IEnumerator ReverseAnimation()

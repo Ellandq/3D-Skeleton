@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameInput;
 using UnityEngine;
+using Utils.SO.Input;
 using Utils.SO.Settings.Utils.SO.Settings;
 
 namespace Managers
@@ -10,11 +11,18 @@ namespace Managers
     public class InputManager : ManagerBase<InputManager>
     {
         [Header("Input Settings")]
+        [SerializeField] private AllowedInputKeys allowedInputKeys;
         [SerializeField] public InputAssignments defaultInputAssignments;
         private InputAssignments inputAssignments;
 
+        [Header("Runtime")]
         private Dictionary<PlayerAction, ButtonInformationWrapper> _buttonInfoDict = new();
+        private Dictionary<MouseKey, string> _allowedMouseButtons = new();
+        private Dictionary<KeyCode, string> _allowedKeyboardButtons = new();
+        private bool isWaitingForInput;
+        private Action<string> _listener;
 
+        [Header("Metadata info")]
         private const string InputPrefix = "Input/";
 
         protected override void Awake()
@@ -22,6 +30,18 @@ namespace Managers
             base.Awake();
 
             inputAssignments = Instantiate(defaultInputAssignments);
+            
+            _allowedMouseButtons = allowedInputKeys.categories
+                .Where(c => c.type == InputKeyType.MouseKey)
+                .SelectMany(c => c.keys)
+                .Where(e => e.isAllowed)
+                .ToDictionary(e => (MouseKey)e.intValue, e => e.value);
+            
+            _allowedKeyboardButtons = allowedInputKeys.categories
+                .Where(c => c.type == InputKeyType.KeyCode)
+                .SelectMany(c => c.keys)
+                .Where(e => e.isAllowed)
+                .ToDictionary(e => (KeyCode)e.intValue, e => e.value);
 
             LoadSettings();
         }
@@ -30,6 +50,29 @@ namespace Managers
         {
             foreach (var wrapper in _buttonInfoDict.Values)
                 wrapper.UpdateState();
+            
+            if (!isWaitingForInput)
+                return;
+
+            foreach (var kvp in from kvp in _allowedMouseButtons
+                     let state = Input.GetMouseButtonDown((int)kvp.Key)
+                     where state
+                     select kvp)
+            {
+                isWaitingForInput = false;
+                _listener?.Invoke(kvp.Value);
+                return;
+            }
+            
+            foreach (var kvp in from kvp in _allowedKeyboardButtons
+                     let state = Input.GetKeyDown(kvp.Key)
+                     where state
+                     select kvp)
+            {
+                isWaitingForInput = false;
+                _listener?.Invoke(kvp.Value);
+                return;
+            }
         }
 
         public void Subscribe(
@@ -46,6 +89,12 @@ namespace Managers
         {
             if (_buttonInfoDict.TryGetValue(action, out var wrapper))
                 wrapper.Unsubscribe(listener);
+        }
+
+        public void WaitForInput(Action<string> listener)
+        {
+            isWaitingForInput = true;
+            _listener = listener;
         }
 
 

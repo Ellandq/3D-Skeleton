@@ -16,22 +16,30 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private Image frame;
         [SerializeField] private Image icon;
 
+        [Header("Runtime")]
         private UIComponentState state;
+        private InputKeySetting _parent;
+        private bool _isAlt;
 
-
-        private void Awake()
+        public void Initialize(InputKeySetting parent, bool isAlt = false)
         {
-            button.onClick.AddListener(
-                () =>
-                    UIManager.Instance.ActivateComponent(
-                        NamedWindow.InputAssignment));
-        }
-
-
-        public void Initialize(InputKeySetting parent)
-        {
+            _parent = parent;
+            _isAlt = isAlt;
+            
             button.onClick.AddListener(
                 parent.SelectItem);
+            
+            button.onClick.AddListener(
+                () => UIManager.Instance.ActivateComponent(NamedWindow.InputAssignment, false, StartAssignment)
+            );
+        }
+
+        private void StartAssignment()
+        {
+            InputAssignmentWindow.Instance.OpenForAssignment(input =>
+            {
+                _parent.SettingChanged(input, _isAlt);
+            });
         }
 
 
@@ -54,6 +62,8 @@ namespace UserInterface.Screen.Components.Settings
             button.interactable =
                 state != UIComponentState.Disabled;
         }
+        
+        
 
 
         public void UpdateIcon(Sprite sprite)

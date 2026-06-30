@@ -3903,6 +3903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30f6a602421d4b19abaf9b47fffc52da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.InputManager
+  allowedInputKeys: {fileID: 11400000, guid: ebeb4afa6cf7bd6479ae110435504124, type: 2}
   defaultInputAssignments: {fileID: 11400000, guid: 9deda2c6c6d54274dbec2d6dbeeb8ea9, type: 2}
 --- !u!1 &2126276394
 GameObject:

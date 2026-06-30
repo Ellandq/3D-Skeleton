@@ -1,6 +1,7 @@
 ﻿using System;
 using Managers;
 using UnityEngine;
+using UserInterface.Windows;
 using Utils.Enum;
 using Utils.SO;
 using Utils.SO.Settings.Screen;
@@ -17,7 +18,10 @@ namespace UserInterface.Screen.Components.Settings
         [Header("Prefabs")]
         [SerializeField] private GameObject buttonPrefab;
 
+        [Header("Runtime")]
         private bool blockInteractions;
+        private string startingBaseValue;
+        private string startingAltValue;
 
         public override void Initialize(
             SettingsPageItemSO asset,
@@ -46,23 +50,19 @@ namespace UserInterface.Screen.Components.Settings
 
             baseButton = CreateButton();
 
-            baseButton.UpdateIcon(
-                SpriteManager.GetInputSprite(
-                    SettingsManager.GetStringSetting(
-                        fullName,
-                        "")));
+            startingBaseValue = SettingsManager.GetStringSetting(fullName, "");
+
+            baseButton.UpdateIcon(SpriteManager.GetInputSprite(startingBaseValue));
 
             if (!allowSecondaryInput) return;
-            alternateButton = CreateButton();
+            alternateButton = CreateButton(true);
 
-            alternateButton.UpdateIcon(
-                SpriteManager.GetInputSprite(
-                    SettingsManager.GetStringSetting(
-                        fullName + "_Alt",
-                        "")));
+            startingAltValue = SettingsManager.GetStringSetting(fullName + "_Alt", "");
+            
+            alternateButton.UpdateIcon(SpriteManager.GetInputSprite(startingAltValue));
         }
 
-        private InputKeyButton CreateButton()
+        private InputKeyButton CreateButton(bool isAlt = false)
         {
             var button =
                 Instantiate(
@@ -70,7 +70,7 @@ namespace UserInterface.Screen.Components.Settings
                     container)
                 .GetComponent<InputKeyButton>();
 
-            button.Initialize(this);
+            button.Initialize(this, isAlt);
 
             return button;
         }
@@ -106,6 +106,26 @@ namespace UserInterface.Screen.Components.Settings
 
             baseButton?.ChangeState(state);
             alternateButton?.ChangeState(state);
+        }
+
+        public void SettingChanged(string newValue, bool alt = false)
+        {
+            UIManager.Instance.DeactivateComponent(NamedWindow.InputAssignment);
+            var sprite = SpriteManager.GetInputSprite(newValue);
+            if (!alt)
+            {
+                if (newValue == startingAltValue)
+                    _onValueReset?.Invoke((fullName, newValue));
+                else _onValueChange?.Invoke((fullName, newValue));
+                baseButton.UpdateIcon(sprite);
+            }
+            else
+            {
+                if (newValue == startingAltValue)
+                    _onValueReset?.Invoke((fullName + "_Alt", newValue));
+                else _onValueChange?.Invoke((fullName + "_Alt", newValue));
+                alternateButton.UpdateIcon(sprite);
+            }
         }
     }
 }
