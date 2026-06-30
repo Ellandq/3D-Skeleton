@@ -61,6 +61,15 @@ namespace Settings.Enforcers
             {valueType} value)
         {{
         }}
+
+        void ISettingEnforcer.Enforce(
+            string fullName,
+            object value)
+        {{
+            Enforce(
+                fullName,
+                ({valueType})value);
+        }}
     }}
 }}";
 
