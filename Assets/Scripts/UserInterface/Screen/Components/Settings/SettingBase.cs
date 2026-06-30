@@ -90,7 +90,5 @@ namespace UserInterface.Screen.Components.Settings
             }
             ChangeState(UIComponentState.Enabled);
         }
-        
-        
     }
 }

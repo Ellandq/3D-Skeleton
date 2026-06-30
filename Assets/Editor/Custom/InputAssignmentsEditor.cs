@@ -4,6 +4,7 @@ using System.Linq;
 using GameInput;
 using UnityEditor;
 using UnityEngine;
+using Utils.SO.Input;
 using Utils.SO.Settings;
 using Utils.SO.Settings.Screen;
 using Utils.SO.Settings.Utils.SO.Settings;
@@ -15,7 +16,7 @@ namespace Editor.Custom
     {
         private InputAssignments _target;
         private string[] _allKeys;
-        private Dictionary<string, string[]> _categories;
+        private AllowedInputKeys _allowedInputKeys;
 
         private const float MinColumnWidth = 80f;
 
@@ -26,95 +27,20 @@ namespace Editor.Custom
 
             _allKeys = FindInputSettings();
 
-            _categories = new Dictionary<string, string[]>
-            {
-                { nameof(MouseKey), Enum.GetNames(typeof(MouseKey)) },
-
-                {
-                    "KeyCode/Letters",
-                    Enumerable.Range('A', 26)
-                        .Select(i =>
-                            ((KeyCode)((int)KeyCode.A + (i - 'A')))
-                            .ToString())
-                        .ToArray()
-                },
-
-                {
-                    "KeyCode/Numbers",
-                    Enumerable.Range(0, 10)
-                        .Select(i =>
-                            ((KeyCode)((int)KeyCode.Alpha0 + i))
-                            .ToString())
-                        .ToArray()
-                },
-
-                {
-                    "KeyCode/FKeys",
-                    Enumerable.Range(1, 12)
-                        .Select(i =>
-                            ((KeyCode)((int)KeyCode.F1 + (i - 1)))
-                            .ToString())
-                        .ToArray()
-                },
-
-                {
-                    "KeyCode/Common",
-                    new[]
-                    {
-                        nameof(KeyCode.Space),
-                        nameof(KeyCode.Backspace),
-                        nameof(KeyCode.Tab),
-                        nameof(KeyCode.Return),
-                        nameof(KeyCode.Escape),
-                        nameof(KeyCode.LeftShift),
-                        nameof(KeyCode.RightShift),
-                        nameof(KeyCode.LeftControl),
-                        nameof(KeyCode.RightControl),
-                        nameof(KeyCode.LeftAlt),
-                        nameof(KeyCode.RightAlt)
-                    }
-                },
-
-                {
-                    "KeyCode/Other",
-                    Enum.GetNames(typeof(KeyCode))
-                        .Except(Enum.GetNames(typeof(MouseKey)))
-                        .Except(
-                            Enumerable.Range('A', 26)
-                                .Select(i =>
-                                    ((KeyCode)((int)KeyCode.A +
-                                    (i - 'A')))
-                                    .ToString()))
-                        .Except(
-                            Enumerable.Range(0, 10)
-                                .Select(i =>
-                                    ((KeyCode)((int)KeyCode.Alpha0 + i))
-                                    .ToString()))
-                        .Except(
-                            Enumerable.Range(1, 12)
-                                .Select(i =>
-                                    ((KeyCode)((int)KeyCode.F1 +
-                                    (i - 1)))
-                                    .ToString()))
-                        .Except(new[]
-                        {
-                            nameof(KeyCode.Space),
-                            nameof(KeyCode.Backspace),
-                            nameof(KeyCode.Tab),
-                            nameof(KeyCode.Return),
-                            nameof(KeyCode.Escape),
-                            nameof(KeyCode.LeftShift),
-                            nameof(KeyCode.RightShift),
-                            nameof(KeyCode.LeftControl),
-                            nameof(KeyCode.RightControl),
-                            nameof(KeyCode.LeftAlt),
-                            nameof(KeyCode.RightAlt)
-                        })
-                        .ToArray()
-                }
-            };
+            _allowedInputKeys = LoadAllowedInputKeys();
         }
 
+        private static AllowedInputKeys LoadAllowedInputKeys()
+        {
+            var guids = AssetDatabase.FindAssets("t:AllowedInputKeys");
+
+            if (guids.Length != 0)
+                return AssetDatabase.LoadAssetAtPath<AllowedInputKeys>(
+                    AssetDatabase.GUIDToAssetPath(guids[0]));
+            Debug.LogError("AllowedInputKeys asset not found.");
+            return null;
+
+        }
 
         public override void OnInspectorGUI()
         {
@@ -248,22 +174,29 @@ namespace Editor.Custom
                 width,
                 EditorGUIUtility.singleLineHeight);
 
+
             if (!GUI.Button(
                     rect,
-                    string.IsNullOrEmpty(current) ? "None" : current,
+                    string.IsNullOrEmpty(current)
+                        ? "None"
+                        : current,
                     EditorStyles.popup))
             {
                 return;
             }
 
+
             var menu = new GenericMenu();
+
 
             menu.AddItem(
                 new GUIContent("None"),
                 string.IsNullOrEmpty(current),
                 () =>
                 {
-                    Undo.RecordObject(_target, "Clear Input Assignment");
+                    Undo.RecordObject(
+                        _target,
+                        "Clear Input Assignment");
 
                     onChanged("");
 
@@ -271,18 +204,20 @@ namespace Editor.Custom
                     AssetDatabase.SaveAssets();
                 });
 
-            foreach (var category in _categories)
-            {
-                foreach (var option in category.Value)
-                {
-                    var selected = option;
 
+            foreach (var category in _allowedInputKeys.categories)
+            {
+                foreach (var selected in from option in category.keys where option.isAllowed select option.value)
+                {
                     menu.AddItem(
-                        new GUIContent($"{category.Key}/{option}"),
-                        option == current,
+                        new GUIContent(
+                            $"{category.categoryName}/{selected}"),
+                        current == selected,
                         () =>
                         {
-                            Undo.RecordObject(_target, "Change Input Assignment");
+                            Undo.RecordObject(
+                                _target,
+                                "Change Input Assignment");
 
                             onChanged(selected);
 
@@ -292,11 +227,12 @@ namespace Editor.Custom
                 }
             }
 
+
             menu.DropDown(rect);
         }
 
 
-        private string[] FindInputSettings()
+        private static string[] FindInputSettings()
         {
             const string root =
                 "Assets/ScriptableObjects/Settings/Pages";

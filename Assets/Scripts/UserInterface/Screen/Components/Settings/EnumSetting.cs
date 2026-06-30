@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,11 +50,18 @@ namespace UserInterface.Screen.Components.Settings
                 throw new ArgumentException($"Invalid enum type name: {asset.EnumTypeName}");
             }
 
+            var defaultEnumValue = (Enum)Enum.Parse(enumType, asset.EnumDefaultValue);
+            
+            startingValue = SettingsManager.GetIntSetting(
+                asset.fullName,
+                Convert.ToInt32(defaultEnumValue)
+            );
+            
+            selectedIndex = startingValue;
+            
             availableValues = Enum.GetNames(enumType)
                 .Select(FormatEnumValue)
                 .ToList();
-
-            selectedIndex = availableValues.IndexOf(FormatEnumValue(asset.EnumDefaultValue));
 
             InitializePreview();
 

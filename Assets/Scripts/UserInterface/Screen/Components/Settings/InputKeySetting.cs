@@ -40,7 +40,6 @@ namespace UserInterface.Screen.Components.Settings
             ApplyState(defaultState);
         }
 
-
         private void CreateButtons(bool allowSecondaryInput)
         {
             ClearButtons();
@@ -63,7 +62,6 @@ namespace UserInterface.Screen.Components.Settings
                         "")));
         }
 
-
         private InputKeyButton CreateButton()
         {
             var button =
@@ -76,7 +74,6 @@ namespace UserInterface.Screen.Components.Settings
 
             return button;
         }
-
 
         private void ClearButtons()
         {
@@ -95,12 +92,10 @@ namespace UserInterface.Screen.Components.Settings
             }
         }
 
-
         public override void ChangeState(UIComponentState newState)
         {
             ApplyState(newState);
         }
-
 
         private void ApplyState(UIComponentState state)
         {

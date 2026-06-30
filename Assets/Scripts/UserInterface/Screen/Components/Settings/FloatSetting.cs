@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,7 +43,7 @@ namespace UserInterface.Screen.Components.Settings
 
             slider.minValue = minValue = asset.MinValue;
             slider.maxValue = maxValue = asset.MaxValue;
-            slider.value = value = asset.FloatDefaultValue;
+            slider.value = value = SettingsManager.GetFloatSetting(asset.fullName, asset.FloatDefaultValue);
             step = asset.MinIncrement;
 
             handleText.text = value.ToString(CultureInfo.InvariantCulture);

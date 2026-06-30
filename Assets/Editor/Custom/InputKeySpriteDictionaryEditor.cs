@@ -5,104 +5,14 @@ using GameInput;
 using UnityEditor;
 using UnityEngine;
 using UserInterface.Screen.Components.Settings.UserInterface.Screen.Components.Settings;
+using Utils.SO.Input;
 
 namespace Editor.Custom
 {
     [CustomPropertyDrawer(typeof(InputKeySpriteDictionary))]
     public class InputKeySpriteDictionaryEditor : PropertyDrawer
     {
-        private Dictionary<string, string[]> _categories;
-
-
-        private void BuildCategories()
-        {
-            if (_categories != null)
-                return;
-
-            _categories = new Dictionary<string, string[]>
-            {
-                {
-                    nameof(MouseKey),
-                    Enum.GetNames(typeof(MouseKey))
-                },
-
-                {
-                    "KeyCode/Letters",
-                    Enumerable.Range('A', 26)
-                        .Select(i =>
-                            ((KeyCode)((int)KeyCode.A + (i - 'A'))).ToString())
-                        .ToArray()
-                },
-
-                {
-                    "KeyCode/Numbers",
-                    Enumerable.Range(0, 10)
-                        .Select(i =>
-                            ((KeyCode)((int)KeyCode.Alpha0 + i)).ToString())
-                        .ToArray()
-                },
-
-                {
-                    "KeyCode/FKeys",
-                    Enumerable.Range(1, 12)
-                        .Select(i =>
-                            ((KeyCode)((int)KeyCode.F1 + (i - 1))).ToString())
-                        .ToArray()
-                },
-
-                {
-                    "KeyCode/Common",
-                    new[]
-                    {
-                        nameof(KeyCode.Space),
-                        nameof(KeyCode.Backspace),
-                        nameof(KeyCode.Tab),
-                        nameof(KeyCode.Return),
-                        nameof(KeyCode.Escape),
-                        nameof(KeyCode.LeftShift),
-                        nameof(KeyCode.RightShift),
-                        nameof(KeyCode.LeftControl),
-                        nameof(KeyCode.RightControl),
-                        nameof(KeyCode.LeftAlt),
-                        nameof(KeyCode.RightAlt)
-                    }
-                },
-
-                {
-                    "KeyCode/Other",
-                    Enum.GetNames(typeof(KeyCode))
-                        .Except(Enum.GetNames(typeof(MouseKey)))
-                        .Except(
-                            Enumerable.Range('A',26)
-                                .Select(i =>
-                                    ((KeyCode)((int)KeyCode.A + (i-'A'))).ToString()))
-                        .Except(
-                            Enumerable.Range(0,10)
-                                .Select(i =>
-                                    ((KeyCode)((int)KeyCode.Alpha0+i)).ToString()))
-                        .Except(
-                            Enumerable.Range(1,12)
-                                .Select(i =>
-                                    ((KeyCode)((int)KeyCode.F1+(i-1))).ToString()))
-                        .Except(new[]
-                        {
-                            nameof(KeyCode.Space),
-                            nameof(KeyCode.Backspace),
-                            nameof(KeyCode.Tab),
-                            nameof(KeyCode.Return),
-                            nameof(KeyCode.Escape),
-                            nameof(KeyCode.LeftShift),
-                            nameof(KeyCode.RightShift),
-                            nameof(KeyCode.LeftControl),
-                            nameof(KeyCode.RightControl),
-                            nameof(KeyCode.LeftAlt),
-                            nameof(KeyCode.RightAlt)
-                        })
-                        .ToArray()
-                }
-            };
-        }
-
+        private AllowedInputKeys _allowedInputKeys;
 
         public override float GetPropertyHeight(
             SerializedProperty property,
@@ -125,9 +35,22 @@ namespace Editor.Custom
             SerializedProperty property,
             GUIContent label)
         {
-            BuildCategories();
+            if (!_allowedInputKeys)
+            {
+                _allowedInputKeys = LoadAllowedInputKeys();
+            }
 
-            float line = EditorGUIUtility.singleLineHeight;
+            if (!_allowedInputKeys)
+            {
+                EditorGUI.HelpBox(
+                    position,
+                    "Missing AllowedInputKeys asset.",
+                    MessageType.Error);
+
+                return;
+            }
+
+            var line = EditorGUIUtility.singleLineHeight;
 
             Rect header = new(
                 position.x,
@@ -180,10 +103,10 @@ namespace Editor.Custom
                 property.FindPropertyRelative("entries");
 
 
-            float y = position.y + line + 4;
+            var y = position.y + line + 4;
 
 
-            for (int i = 0; i < list.arraySize; i++)
+            for (var i = 0; i < list.arraySize; i++)
             {
                 var entry =
                     list.GetArrayElementAtIndex(i);
@@ -237,24 +160,22 @@ namespace Editor.Custom
             }
 
 
-            if (GUI.Button(
-                new Rect(
-                    position.x,
-                    y,
-                    position.width,
-                    line),
-                "Add"))
-            {
-                list.InsertArrayElementAtIndex(list.arraySize);
+            if (!GUI.Button(
+                    new Rect(
+                        position.x,
+                        y,
+                        position.width,
+                        line),
+                    "Add")) return;
+            list.InsertArrayElementAtIndex(list.arraySize);
 
-                var newEntry =
-                    list.GetArrayElementAtIndex(list.arraySize - 1);
+            var newEntry =
+                list.GetArrayElementAtIndex(list.arraySize - 1);
 
-                newEntry.FindPropertyRelative("key").stringValue = "";
-                newEntry.FindPropertyRelative("value").objectReferenceValue = null;
+            newEntry.FindPropertyRelative("key").stringValue = "";
+            newEntry.FindPropertyRelative("value").objectReferenceValue = null;
 
-                property.serializedObject.ApplyModifiedProperties();
-            }
+            property.serializedObject.ApplyModifiedProperties();
         }
 
 
@@ -262,26 +183,22 @@ namespace Editor.Custom
         {
             entries.arraySize = 0;
 
-
-            foreach (var category in _categories)
+            foreach (var category in _allowedInputKeys.categories)
             {
-                if (category.Key == "KeyCode/Other")
-                    continue;
-
-
-                foreach (var option in category.Value)
+                foreach (var option in category.keys)
                 {
-                    int index = entries.arraySize;
+                    if (!option.isAllowed)
+                        continue;
+
+                    var index = entries.arraySize;
 
                     entries.InsertArrayElementAtIndex(index);
-
 
                     var entry =
                         entries.GetArrayElementAtIndex(index);
 
-
                     entry.FindPropertyRelative("key").stringValue =
-                        option;
+                        option.value;
 
                     entry.FindPropertyRelative("value").objectReferenceValue =
                         null;
@@ -294,7 +211,7 @@ namespace Editor.Custom
             Rect rect,
             SerializedProperty property)
         {
-            string current = property.stringValue;
+            var current = property.stringValue;
 
 
             if (!GUI.Button(
@@ -319,15 +236,18 @@ namespace Editor.Custom
                 });
 
 
-            foreach (var category in _categories)
+            foreach (var category in _allowedInputKeys.categories)
             {
-                foreach (var option in category.Value)
+                foreach (var option in category.keys)
                 {
-                    string selected = option;
+                    if (!option.isAllowed)
+                        continue;
+                    
+                    var selected = option.value;
 
                     menu.AddItem(
                         new GUIContent(
-                            $"{category.Key}/{option}"),
+                            $"{category.categoryName}/{option.value}"),
                         current == selected,
                         () =>
                         {
@@ -339,6 +259,18 @@ namespace Editor.Custom
 
 
             menu.DropDown(rect);
+        }
+        
+        private static AllowedInputKeys LoadAllowedInputKeys()
+        {
+            var guids = AssetDatabase.FindAssets("t:AllowedInputKeys");
+
+            if (guids.Length != 0)
+                return AssetDatabase.LoadAssetAtPath<AllowedInputKeys>(
+                    AssetDatabase.GUIDToAssetPath(guids[0]));
+            Debug.LogError("AllowedInputKeys asset not found.");
+            return null;
+
         }
     }
 }

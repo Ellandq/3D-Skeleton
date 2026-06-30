@@ -1,10 +1,21 @@
-﻿using Managers;
+﻿using System;
+using Managers;
 using Utils.Contract;
 
 namespace UserInterface.Windows
 {
     public class InputAssignmentWindow : WindowBase, IUIStackable
     {
+        private static Action<string> _onInputRegistration;
+        
+        public static void Subscribe(Action<string> onInputRegistration) => _onInputRegistration += onInputRegistration;
+
+        public override void Activate(bool instant, Action onActivate = null)
+        {
+            // TODO
+            base.Activate(instant, onActivate);
+        }
+        
         #region UI STACK
 
         public void OnPush()

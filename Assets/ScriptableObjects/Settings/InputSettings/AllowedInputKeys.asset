@@ -1,0 +1,1065 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d6d4d37e764756b4831f56d4112619, type: 3}
+  m_Name: AllowedInputKeys
+  m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Input.AllowedInputKeys
+  categories:
+  - type: 0
+    categoryName: MouseKey
+    keys:
+    - value: Left
+      intValue: 0
+      isAllowed: 1
+    - value: Right
+      intValue: 1
+      isAllowed: 1
+    - value: Middle
+      intValue: 2
+      isAllowed: 1
+    - value: Additional1
+      intValue: 3
+      isAllowed: 1
+    - value: Additional2
+      intValue: 4
+      isAllowed: 1
+  - type: 1
+    categoryName: KeyCode/Letters
+    keys:
+    - value: A
+      intValue: 97
+      isAllowed: 1
+    - value: B
+      intValue: 98
+      isAllowed: 1
+    - value: C
+      intValue: 99
+      isAllowed: 1
+    - value: D
+      intValue: 100
+      isAllowed: 1
+    - value: E
+      intValue: 101
+      isAllowed: 1
+    - value: F
+      intValue: 102
+      isAllowed: 1
+    - value: G
+      intValue: 103
+      isAllowed: 1
+    - value: H
+      intValue: 104
+      isAllowed: 1
+    - value: I
+      intValue: 105
+      isAllowed: 1
+    - value: J
+      intValue: 106
+      isAllowed: 1
+    - value: K
+      intValue: 107
+      isAllowed: 1
+    - value: L
+      intValue: 108
+      isAllowed: 1
+    - value: M
+      intValue: 109
+      isAllowed: 1
+    - value: N
+      intValue: 110
+      isAllowed: 1
+    - value: O
+      intValue: 111
+      isAllowed: 1
+    - value: P
+      intValue: 112
+      isAllowed: 1
+    - value: Q
+      intValue: 113
+      isAllowed: 1
+    - value: R
+      intValue: 114
+      isAllowed: 1
+    - value: S
+      intValue: 115
+      isAllowed: 1
+    - value: T
+      intValue: 116
+      isAllowed: 1
+    - value: U
+      intValue: 117
+      isAllowed: 1
+    - value: V
+      intValue: 118
+      isAllowed: 1
+    - value: W
+      intValue: 119
+      isAllowed: 1
+    - value: X
+      intValue: 120
+      isAllowed: 1
+    - value: Y
+      intValue: 121
+      isAllowed: 1
+    - value: Z
+      intValue: 122
+      isAllowed: 1
+  - type: 1
+    categoryName: KeyCode/Numbers
+    keys:
+    - value: Alpha0
+      intValue: 48
+      isAllowed: 1
+    - value: Alpha1
+      intValue: 49
+      isAllowed: 1
+    - value: Alpha2
+      intValue: 50
+      isAllowed: 1
+    - value: Alpha3
+      intValue: 51
+      isAllowed: 1
+    - value: Alpha4
+      intValue: 52
+      isAllowed: 1
+    - value: Alpha5
+      intValue: 53
+      isAllowed: 1
+    - value: Alpha6
+      intValue: 54
+      isAllowed: 1
+    - value: Alpha7
+      intValue: 55
+      isAllowed: 1
+    - value: Alpha8
+      intValue: 56
+      isAllowed: 1
+    - value: Alpha9
+      intValue: 57
+      isAllowed: 1
+  - type: 1
+    categoryName: KeyCode/FKeys
+    keys:
+    - value: F1
+      intValue: 282
+      isAllowed: 1
+    - value: F2
+      intValue: 283
+      isAllowed: 1
+    - value: F3
+      intValue: 284
+      isAllowed: 1
+    - value: F4
+      intValue: 285
+      isAllowed: 1
+    - value: F5
+      intValue: 286
+      isAllowed: 1
+    - value: F6
+      intValue: 287
+      isAllowed: 1
+    - value: F7
+      intValue: 288
+      isAllowed: 1
+    - value: F8
+      intValue: 289
+      isAllowed: 1
+    - value: F9
+      intValue: 290
+      isAllowed: 1
+    - value: F10
+      intValue: 291
+      isAllowed: 1
+    - value: F11
+      intValue: 292
+      isAllowed: 1
+    - value: F12
+      intValue: 293
+      isAllowed: 1
+  - type: 1
+    categoryName: KeyCode/Common
+    keys:
+    - value: Space
+      intValue: 32
+      isAllowed: 1
+    - value: Backspace
+      intValue: 8
+      isAllowed: 1
+    - value: Tab
+      intValue: 9
+      isAllowed: 1
+    - value: Return
+      intValue: 13
+      isAllowed: 1
+    - value: Escape
+      intValue: 27
+      isAllowed: 1
+    - value: LeftShift
+      intValue: 304
+      isAllowed: 1
+    - value: RightShift
+      intValue: 303
+      isAllowed: 1
+    - value: LeftControl
+      intValue: 306
+      isAllowed: 1
+    - value: RightControl
+      intValue: 305
+      isAllowed: 1
+    - value: LeftAlt
+      intValue: 308
+      isAllowed: 1
+    - value: RightAlt
+      intValue: 307
+      isAllowed: 1
+  - type: 1
+    categoryName: KeyCode/Other
+    keys:
+    - value: None
+      intValue: 0
+      isAllowed: 1
+    - value: Clear
+      intValue: 12
+      isAllowed: 1
+    - value: Pause
+      intValue: 19
+      isAllowed: 1
+    - value: Exclaim
+      intValue: 33
+      isAllowed: 1
+    - value: DoubleQuote
+      intValue: 34
+      isAllowed: 1
+    - value: Hash
+      intValue: 35
+      isAllowed: 1
+    - value: Dollar
+      intValue: 36
+      isAllowed: 1
+    - value: Percent
+      intValue: 37
+      isAllowed: 1
+    - value: Ampersand
+      intValue: 38
+      isAllowed: 1
+    - value: Quote
+      intValue: 39
+      isAllowed: 1
+    - value: LeftParen
+      intValue: 40
+      isAllowed: 1
+    - value: RightParen
+      intValue: 41
+      isAllowed: 1
+    - value: Asterisk
+      intValue: 42
+      isAllowed: 1
+    - value: Plus
+      intValue: 43
+      isAllowed: 1
+    - value: Comma
+      intValue: 44
+      isAllowed: 1
+    - value: Minus
+      intValue: 45
+      isAllowed: 1
+    - value: Period
+      intValue: 46
+      isAllowed: 1
+    - value: Slash
+      intValue: 47
+      isAllowed: 1
+    - value: Colon
+      intValue: 58
+      isAllowed: 1
+    - value: Semicolon
+      intValue: 59
+      isAllowed: 1
+    - value: Less
+      intValue: 60
+      isAllowed: 1
+    - value: Equals
+      intValue: 61
+      isAllowed: 1
+    - value: Greater
+      intValue: 62
+      isAllowed: 1
+    - value: Question
+      intValue: 63
+      isAllowed: 1
+    - value: At
+      intValue: 64
+      isAllowed: 1
+    - value: LeftBracket
+      intValue: 91
+      isAllowed: 1
+    - value: Backslash
+      intValue: 92
+      isAllowed: 1
+    - value: RightBracket
+      intValue: 93
+      isAllowed: 1
+    - value: Caret
+      intValue: 94
+      isAllowed: 1
+    - value: Underscore
+      intValue: 95
+      isAllowed: 1
+    - value: BackQuote
+      intValue: 96
+      isAllowed: 1
+    - value: LeftCurlyBracket
+      intValue: 123
+      isAllowed: 1
+    - value: Pipe
+      intValue: 124
+      isAllowed: 1
+    - value: RightCurlyBracket
+      intValue: 125
+      isAllowed: 1
+    - value: Tilde
+      intValue: 126
+      isAllowed: 1
+    - value: Delete
+      intValue: 127
+      isAllowed: 1
+    - value: Keypad0
+      intValue: 256
+      isAllowed: 0
+    - value: Keypad1
+      intValue: 257
+      isAllowed: 0
+    - value: Keypad2
+      intValue: 258
+      isAllowed: 0
+    - value: Keypad3
+      intValue: 259
+      isAllowed: 0
+    - value: Keypad4
+      intValue: 260
+      isAllowed: 0
+    - value: Keypad5
+      intValue: 261
+      isAllowed: 0
+    - value: Keypad6
+      intValue: 262
+      isAllowed: 0
+    - value: Keypad7
+      intValue: 263
+      isAllowed: 0
+    - value: Keypad8
+      intValue: 264
+      isAllowed: 0
+    - value: Keypad9
+      intValue: 265
+      isAllowed: 0
+    - value: KeypadPeriod
+      intValue: 266
+      isAllowed: 0
+    - value: KeypadDivide
+      intValue: 267
+      isAllowed: 0
+    - value: KeypadMultiply
+      intValue: 268
+      isAllowed: 0
+    - value: KeypadMinus
+      intValue: 269
+      isAllowed: 0
+    - value: KeypadPlus
+      intValue: 270
+      isAllowed: 0
+    - value: KeypadEnter
+      intValue: 271
+      isAllowed: 0
+    - value: KeypadEquals
+      intValue: 272
+      isAllowed: 0
+    - value: UpArrow
+      intValue: 273
+      isAllowed: 1
+    - value: DownArrow
+      intValue: 274
+      isAllowed: 1
+    - value: RightArrow
+      intValue: 275
+      isAllowed: 1
+    - value: LeftArrow
+      intValue: 276
+      isAllowed: 1
+    - value: Insert
+      intValue: 277
+      isAllowed: 0
+    - value: Home
+      intValue: 278
+      isAllowed: 0
+    - value: End
+      intValue: 279
+      isAllowed: 0
+    - value: PageUp
+      intValue: 280
+      isAllowed: 0
+    - value: PageDown
+      intValue: 281
+      isAllowed: 0
+    - value: F13
+      intValue: 294
+      isAllowed: 1
+    - value: F14
+      intValue: 295
+      isAllowed: 1
+    - value: F15
+      intValue: 296
+      isAllowed: 1
+    - value: Numlock
+      intValue: 300
+      isAllowed: 0
+    - value: CapsLock
+      intValue: 301
+      isAllowed: 1
+    - value: ScrollLock
+      intValue: 302
+      isAllowed: 0
+    - value: RightCommand
+      intValue: 309
+      isAllowed: 0
+    - value: RightMeta
+      intValue: 309
+      isAllowed: 0
+    - value: RightApple
+      intValue: 309
+      isAllowed: 0
+    - value: LeftCommand
+      intValue: 310
+      isAllowed: 0
+    - value: LeftMeta
+      intValue: 310
+      isAllowed: 0
+    - value: LeftApple
+      intValue: 310
+      isAllowed: 0
+    - value: LeftWindows
+      intValue: 311
+      isAllowed: 0
+    - value: RightWindows
+      intValue: 312
+      isAllowed: 0
+    - value: AltGr
+      intValue: 313
+      isAllowed: 0
+    - value: Help
+      intValue: 315
+      isAllowed: 0
+    - value: Print
+      intValue: 316
+      isAllowed: 0
+    - value: SysReq
+      intValue: 317
+      isAllowed: 0
+    - value: Break
+      intValue: 318
+      isAllowed: 0
+    - value: Menu
+      intValue: 319
+      isAllowed: 0
+    - value: WheelUp
+      intValue: 321
+      isAllowed: 0
+    - value: WheelDown
+      intValue: 322
+      isAllowed: 0
+    - value: Mouse0
+      intValue: 323
+      isAllowed: 0
+    - value: Mouse1
+      intValue: 324
+      isAllowed: 0
+    - value: Mouse2
+      intValue: 325
+      isAllowed: 0
+    - value: Mouse3
+      intValue: 326
+      isAllowed: 0
+    - value: Mouse4
+      intValue: 327
+      isAllowed: 0
+    - value: Mouse5
+      intValue: 328
+      isAllowed: 0
+    - value: Mouse6
+      intValue: 329
+      isAllowed: 0
+    - value: JoystickButton0
+      intValue: 330
+      isAllowed: 0
+    - value: JoystickButton1
+      intValue: 331
+      isAllowed: 0
+    - value: JoystickButton2
+      intValue: 332
+      isAllowed: 0
+    - value: JoystickButton3
+      intValue: 333
+      isAllowed: 0
+    - value: JoystickButton4
+      intValue: 334
+      isAllowed: 0
+    - value: JoystickButton5
+      intValue: 335
+      isAllowed: 0
+    - value: JoystickButton6
+      intValue: 336
+      isAllowed: 0
+    - value: JoystickButton7
+      intValue: 337
+      isAllowed: 0
+    - value: JoystickButton8
+      intValue: 338
+      isAllowed: 0
+    - value: JoystickButton9
+      intValue: 339
+      isAllowed: 0
+    - value: JoystickButton10
+      intValue: 340
+      isAllowed: 0
+    - value: JoystickButton11
+      intValue: 341
+      isAllowed: 0
+    - value: JoystickButton12
+      intValue: 342
+      isAllowed: 0
+    - value: JoystickButton13
+      intValue: 343
+      isAllowed: 0
+    - value: JoystickButton14
+      intValue: 344
+      isAllowed: 0
+    - value: JoystickButton15
+      intValue: 345
+      isAllowed: 0
+    - value: JoystickButton16
+      intValue: 346
+      isAllowed: 0
+    - value: JoystickButton17
+      intValue: 347
+      isAllowed: 0
+    - value: JoystickButton18
+      intValue: 348
+      isAllowed: 0
+    - value: JoystickButton19
+      intValue: 349
+      isAllowed: 0
+    - value: Joystick1Button0
+      intValue: 350
+      isAllowed: 0
+    - value: Joystick1Button1
+      intValue: 351
+      isAllowed: 0
+    - value: Joystick1Button2
+      intValue: 352
+      isAllowed: 0
+    - value: Joystick1Button3
+      intValue: 353
+      isAllowed: 0
+    - value: Joystick1Button4
+      intValue: 354
+      isAllowed: 0
+    - value: Joystick1Button5
+      intValue: 355
+      isAllowed: 0
+    - value: Joystick1Button6
+      intValue: 356
+      isAllowed: 0
+    - value: Joystick1Button7
+      intValue: 357
+      isAllowed: 0
+    - value: Joystick1Button8
+      intValue: 358
+      isAllowed: 0
+    - value: Joystick1Button9
+      intValue: 359
+      isAllowed: 0
+    - value: Joystick1Button10
+      intValue: 360
+      isAllowed: 0
+    - value: Joystick1Button11
+      intValue: 361
+      isAllowed: 0
+    - value: Joystick1Button12
+      intValue: 362
+      isAllowed: 0
+    - value: Joystick1Button13
+      intValue: 363
+      isAllowed: 0
+    - value: Joystick1Button14
+      intValue: 364
+      isAllowed: 0
+    - value: Joystick1Button15
+      intValue: 365
+      isAllowed: 0
+    - value: Joystick1Button16
+      intValue: 366
+      isAllowed: 0
+    - value: Joystick1Button17
+      intValue: 367
+      isAllowed: 0
+    - value: Joystick1Button18
+      intValue: 368
+      isAllowed: 0
+    - value: Joystick1Button19
+      intValue: 369
+      isAllowed: 0
+    - value: Joystick2Button0
+      intValue: 370
+      isAllowed: 0
+    - value: Joystick2Button1
+      intValue: 371
+      isAllowed: 0
+    - value: Joystick2Button2
+      intValue: 372
+      isAllowed: 0
+    - value: Joystick2Button3
+      intValue: 373
+      isAllowed: 0
+    - value: Joystick2Button4
+      intValue: 374
+      isAllowed: 0
+    - value: Joystick2Button5
+      intValue: 375
+      isAllowed: 0
+    - value: Joystick2Button6
+      intValue: 376
+      isAllowed: 0
+    - value: Joystick2Button7
+      intValue: 377
+      isAllowed: 0
+    - value: Joystick2Button8
+      intValue: 378
+      isAllowed: 0
+    - value: Joystick2Button9
+      intValue: 379
+      isAllowed: 0
+    - value: Joystick2Button10
+      intValue: 380
+      isAllowed: 0
+    - value: Joystick2Button11
+      intValue: 381
+      isAllowed: 0
+    - value: Joystick2Button12
+      intValue: 382
+      isAllowed: 0
+    - value: Joystick2Button13
+      intValue: 383
+      isAllowed: 0
+    - value: Joystick2Button14
+      intValue: 384
+      isAllowed: 0
+    - value: Joystick2Button15
+      intValue: 385
+      isAllowed: 0
+    - value: Joystick2Button16
+      intValue: 386
+      isAllowed: 0
+    - value: Joystick2Button17
+      intValue: 387
+      isAllowed: 0
+    - value: Joystick2Button18
+      intValue: 388
+      isAllowed: 0
+    - value: Joystick2Button19
+      intValue: 389
+      isAllowed: 0
+    - value: Joystick3Button0
+      intValue: 390
+      isAllowed: 0
+    - value: Joystick3Button1
+      intValue: 391
+      isAllowed: 0
+    - value: Joystick3Button2
+      intValue: 392
+      isAllowed: 0
+    - value: Joystick3Button3
+      intValue: 393
+      isAllowed: 0
+    - value: Joystick3Button4
+      intValue: 394
+      isAllowed: 0
+    - value: Joystick3Button5
+      intValue: 395
+      isAllowed: 0
+    - value: Joystick3Button6
+      intValue: 396
+      isAllowed: 0
+    - value: Joystick3Button7
+      intValue: 397
+      isAllowed: 0
+    - value: Joystick3Button8
+      intValue: 398
+      isAllowed: 0
+    - value: Joystick3Button9
+      intValue: 399
+      isAllowed: 0
+    - value: Joystick3Button10
+      intValue: 400
+      isAllowed: 0
+    - value: Joystick3Button11
+      intValue: 401
+      isAllowed: 0
+    - value: Joystick3Button12
+      intValue: 402
+      isAllowed: 0
+    - value: Joystick3Button13
+      intValue: 403
+      isAllowed: 0
+    - value: Joystick3Button14
+      intValue: 404
+      isAllowed: 0
+    - value: Joystick3Button15
+      intValue: 405
+      isAllowed: 0
+    - value: Joystick3Button16
+      intValue: 406
+      isAllowed: 0
+    - value: Joystick3Button17
+      intValue: 407
+      isAllowed: 0
+    - value: Joystick3Button18
+      intValue: 408
+      isAllowed: 0
+    - value: Joystick3Button19
+      intValue: 409
+      isAllowed: 0
+    - value: Joystick4Button0
+      intValue: 410
+      isAllowed: 0
+    - value: Joystick4Button1
+      intValue: 411
+      isAllowed: 0
+    - value: Joystick4Button2
+      intValue: 412
+      isAllowed: 0
+    - value: Joystick4Button3
+      intValue: 413
+      isAllowed: 0
+    - value: Joystick4Button4
+      intValue: 414
+      isAllowed: 0
+    - value: Joystick4Button5
+      intValue: 415
+      isAllowed: 0
+    - value: Joystick4Button6
+      intValue: 416
+      isAllowed: 0
+    - value: Joystick4Button7
+      intValue: 417
+      isAllowed: 0
+    - value: Joystick4Button8
+      intValue: 418
+      isAllowed: 0
+    - value: Joystick4Button9
+      intValue: 419
+      isAllowed: 0
+    - value: Joystick4Button10
+      intValue: 420
+      isAllowed: 0
+    - value: Joystick4Button11
+      intValue: 421
+      isAllowed: 0
+    - value: Joystick4Button12
+      intValue: 422
+      isAllowed: 0
+    - value: Joystick4Button13
+      intValue: 423
+      isAllowed: 0
+    - value: Joystick4Button14
+      intValue: 424
+      isAllowed: 0
+    - value: Joystick4Button15
+      intValue: 425
+      isAllowed: 0
+    - value: Joystick4Button16
+      intValue: 426
+      isAllowed: 0
+    - value: Joystick4Button17
+      intValue: 427
+      isAllowed: 0
+    - value: Joystick4Button18
+      intValue: 428
+      isAllowed: 0
+    - value: Joystick4Button19
+      intValue: 429
+      isAllowed: 0
+    - value: Joystick5Button0
+      intValue: 430
+      isAllowed: 0
+    - value: Joystick5Button1
+      intValue: 431
+      isAllowed: 0
+    - value: Joystick5Button2
+      intValue: 432
+      isAllowed: 0
+    - value: Joystick5Button3
+      intValue: 433
+      isAllowed: 0
+    - value: Joystick5Button4
+      intValue: 434
+      isAllowed: 0
+    - value: Joystick5Button5
+      intValue: 435
+      isAllowed: 0
+    - value: Joystick5Button6
+      intValue: 436
+      isAllowed: 0
+    - value: Joystick5Button7
+      intValue: 437
+      isAllowed: 0
+    - value: Joystick5Button8
+      intValue: 438
+      isAllowed: 0
+    - value: Joystick5Button9
+      intValue: 439
+      isAllowed: 0
+    - value: Joystick5Button10
+      intValue: 440
+      isAllowed: 0
+    - value: Joystick5Button11
+      intValue: 441
+      isAllowed: 0
+    - value: Joystick5Button12
+      intValue: 442
+      isAllowed: 0
+    - value: Joystick5Button13
+      intValue: 443
+      isAllowed: 0
+    - value: Joystick5Button14
+      intValue: 444
+      isAllowed: 0
+    - value: Joystick5Button15
+      intValue: 445
+      isAllowed: 0
+    - value: Joystick5Button16
+      intValue: 446
+      isAllowed: 0
+    - value: Joystick5Button17
+      intValue: 447
+      isAllowed: 0
+    - value: Joystick5Button18
+      intValue: 448
+      isAllowed: 0
+    - value: Joystick5Button19
+      intValue: 449
+      isAllowed: 0
+    - value: Joystick6Button0
+      intValue: 450
+      isAllowed: 0
+    - value: Joystick6Button1
+      intValue: 451
+      isAllowed: 0
+    - value: Joystick6Button2
+      intValue: 452
+      isAllowed: 0
+    - value: Joystick6Button3
+      intValue: 453
+      isAllowed: 0
+    - value: Joystick6Button4
+      intValue: 454
+      isAllowed: 0
+    - value: Joystick6Button5
+      intValue: 455
+      isAllowed: 0
+    - value: Joystick6Button6
+      intValue: 456
+      isAllowed: 0
+    - value: Joystick6Button7
+      intValue: 457
+      isAllowed: 0
+    - value: Joystick6Button8
+      intValue: 458
+      isAllowed: 0
+    - value: Joystick6Button9
+      intValue: 459
+      isAllowed: 0
+    - value: Joystick6Button10
+      intValue: 460
+      isAllowed: 0
+    - value: Joystick6Button11
+      intValue: 461
+      isAllowed: 0
+    - value: Joystick6Button12
+      intValue: 462
+      isAllowed: 0
+    - value: Joystick6Button13
+      intValue: 463
+      isAllowed: 0
+    - value: Joystick6Button14
+      intValue: 464
+      isAllowed: 0
+    - value: Joystick6Button15
+      intValue: 465
+      isAllowed: 0
+    - value: Joystick6Button16
+      intValue: 466
+      isAllowed: 0
+    - value: Joystick6Button17
+      intValue: 467
+      isAllowed: 0
+    - value: Joystick6Button18
+      intValue: 468
+      isAllowed: 0
+    - value: Joystick6Button19
+      intValue: 469
+      isAllowed: 0
+    - value: Joystick7Button0
+      intValue: 470
+      isAllowed: 0
+    - value: Joystick7Button1
+      intValue: 471
+      isAllowed: 0
+    - value: Joystick7Button2
+      intValue: 472
+      isAllowed: 0
+    - value: Joystick7Button3
+      intValue: 473
+      isAllowed: 0
+    - value: Joystick7Button4
+      intValue: 474
+      isAllowed: 0
+    - value: Joystick7Button5
+      intValue: 475
+      isAllowed: 0
+    - value: Joystick7Button6
+      intValue: 476
+      isAllowed: 0
+    - value: Joystick7Button7
+      intValue: 477
+      isAllowed: 0
+    - value: Joystick7Button8
+      intValue: 478
+      isAllowed: 0
+    - value: Joystick7Button9
+      intValue: 479
+      isAllowed: 0
+    - value: Joystick7Button10
+      intValue: 480
+      isAllowed: 0
+    - value: Joystick7Button11
+      intValue: 481
+      isAllowed: 0
+    - value: Joystick7Button12
+      intValue: 482
+      isAllowed: 0
+    - value: Joystick7Button13
+      intValue: 483
+      isAllowed: 0
+    - value: Joystick7Button14
+      intValue: 484
+      isAllowed: 0
+    - value: Joystick7Button15
+      intValue: 485
+      isAllowed: 0
+    - value: Joystick7Button16
+      intValue: 486
+      isAllowed: 0
+    - value: Joystick7Button17
+      intValue: 487
+      isAllowed: 0
+    - value: Joystick7Button18
+      intValue: 488
+      isAllowed: 0
+    - value: Joystick7Button19
+      intValue: 489
+      isAllowed: 0
+    - value: Joystick8Button0
+      intValue: 490
+      isAllowed: 0
+    - value: Joystick8Button1
+      intValue: 491
+      isAllowed: 0
+    - value: Joystick8Button2
+      intValue: 492
+      isAllowed: 0
+    - value: Joystick8Button3
+      intValue: 493
+      isAllowed: 0
+    - value: Joystick8Button4
+      intValue: 494
+      isAllowed: 0
+    - value: Joystick8Button5
+      intValue: 495
+      isAllowed: 0
+    - value: Joystick8Button6
+      intValue: 496
+      isAllowed: 0
+    - value: Joystick8Button7
+      intValue: 497
+      isAllowed: 0
+    - value: Joystick8Button8
+      intValue: 498
+      isAllowed: 0
+    - value: Joystick8Button9
+      intValue: 499
+      isAllowed: 0
+    - value: Joystick8Button10
+      intValue: 500
+      isAllowed: 0
+    - value: Joystick8Button11
+      intValue: 501
+      isAllowed: 0
+    - value: Joystick8Button12
+      intValue: 502
+      isAllowed: 0
+    - value: Joystick8Button13
+      intValue: 503
+      isAllowed: 0
+    - value: Joystick8Button14
+      intValue: 504
+      isAllowed: 0
+    - value: Joystick8Button15
+      intValue: 505
+      isAllowed: 0
+    - value: Joystick8Button16
+      intValue: 506
+      isAllowed: 0
+    - value: Joystick8Button17
+      intValue: 507
+      isAllowed: 0
+    - value: Joystick8Button18
+      intValue: 508
+      isAllowed: 0
+    - value: Joystick8Button19
+      intValue: 509
+      isAllowed: 0
+    - value: F16
+      intValue: 670
+      isAllowed: 0
+    - value: F17
+      intValue: 671
+      isAllowed: 0
+    - value: F18
+      intValue: 672
+      isAllowed: 0
+    - value: F19
+      intValue: 673
+      isAllowed: 0
+    - value: F20
+      intValue: 674
+      isAllowed: 0
+    - value: F21
+      intValue: 675
+      isAllowed: 0
+    - value: F22
+      intValue: 676
+      isAllowed: 0
+    - value: F23
+      intValue: 677
+      isAllowed: 0
+    - value: F24
+      intValue: 678
+      isAllowed: 0

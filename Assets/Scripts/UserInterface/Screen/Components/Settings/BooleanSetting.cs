@@ -1,4 +1,5 @@
 ﻿using System;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +28,7 @@ namespace UserInterface.Screen.Components.Settings
         [Header("Settings")]
         [SerializeField] private bool isOn;
         [SerializeField] private bool wasChanged;
-
+        
         public Transform GetConditionalParent() => conditionalSettingsContentParent;
 
         public override void Initialize(
@@ -38,11 +39,11 @@ namespace UserInterface.Screen.Components.Settings
             UIComponentState defaultState)
         {
             base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
-
+            
             wasChanged = false;
-            isOn = asset.BoolDefaultValue;
+            isOn = SettingsManager.GetIntSetting(asset.fullName, asset.BoolDefaultValue ? 1 : 0) == 1;
 
-            if (isOn && asset.ConditionalItems != null && asset.ConditionalItems.Count > 0)
+            if (isOn && asset.ConditionalItems is { Count: > 0 })
             {
                 conditionalSettingsObject.SetActive(true);
             }
