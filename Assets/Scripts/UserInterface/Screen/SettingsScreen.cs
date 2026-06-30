@@ -50,6 +50,10 @@ namespace UserInterface.Screen
         private int _activePageIndex;
         private string _selectedItem;
         
+        [Header("Cached Changes")]
+        private Dictionary<string, int> cachedIntChanges = new();
+        private Dictionary<string, float> cachedFloatChanges = new();
+        private Dictionary<string, string> cachedStringChanges = new();
 
         public override void Activate(bool instant, Action onActivate = null)
         {
@@ -92,8 +96,16 @@ namespace UserInterface.Screen
             InitializePageButtons();
             InitializeScreenContent(force);
             InitializePageItemList();
+            CleanCache();
 
             pagesInitialized = Application.isPlaying;
+        }
+
+        private void CleanCache()
+        {
+            cachedIntChanges.Clear();
+            cachedFloatChanges.Clear();
+            cachedStringChanges.Clear();
         }
 
         private void InitializePageItemList()
@@ -216,7 +228,13 @@ namespace UserInterface.Screen
             
             var go = Instantiate(prefab, parent);
             var comp = go.GetComponent<ISettingItem>();
-            comp.Initialize(itemAsset, ChangeSelected);
+
+            comp.Initialize(
+                itemAsset,
+                ChangeSelected,
+                CacheChange,
+                RemoveCachedChange);
+
             _settingItems.Add(comp.GetId(), comp);
 
             if (itemAsset.itemType != SettingsItemType.Boolean)
@@ -271,6 +289,8 @@ namespace UserInterface.Screen
             {
                 viewParent.GetChild(i).gameObject.SetActive(true);
             }
+            
+            ChangeSelected("");
         }
         
         private void ChangeSelected(string id)
@@ -283,6 +303,46 @@ namespace UserInterface.Screen
                 }
             }
             _selectedItem = id;
+        }
+
+        private void CacheChange(string key, object value)
+        {
+            switch (value)
+            {
+                case int intValue:
+                    cachedIntChanges[key] = intValue;
+                    break;
+
+                case float floatValue:
+                    cachedFloatChanges[key] = floatValue;
+                    break;
+
+                case string stringValue:
+                    cachedStringChanges[key] = stringValue;
+                    break;
+
+                default:
+                    Debug.LogWarning($"Unsupported setting type: {value.GetType()}");
+                    break;
+            }
+        }
+
+        private void RemoveCachedChange(string key, object value)
+        {
+            switch (value)
+            {
+                case int:
+                    cachedIntChanges.Remove(key);
+                    break;
+
+                case float:
+                    cachedFloatChanges.Remove(key);
+                    break;
+
+                case string:
+                    cachedStringChanges.Remove(key);
+                    break;
+            }
         }
         
         #region UI STACK

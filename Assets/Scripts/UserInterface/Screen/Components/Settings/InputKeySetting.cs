@@ -8,7 +8,7 @@ using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings
 {
-    public class InputKeySetting : SettingBase
+    public class InputKeySetting : SettingBase<string>
     {
         [Header("Object References")] 
         [SerializeField] private Transform container;
@@ -18,10 +18,15 @@ namespace UserInterface.Screen.Components.Settings
         [Header("Prefabs")]
         [SerializeField] private GameObject buttonPrefab;
 
-        public override void Initialize(SettingsPageItemSO asset, Action<string> onSelect, UIComponentState defaultState)
+        public override void Initialize(
+            SettingsPageItemSO asset, 
+            Action<string> onSelect,  
+            Action<(string key, string value)> onValueChange,
+            Action<(string key, string value)> onValueReset, 
+            UIComponentState defaultState)
         {
             InitializePreview(asset.AllowSecondaryInput);
-            base.Initialize(asset, onSelect, defaultState);
+            base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
         }
 
         private void InitializePreview(bool allowSecondaryInput)

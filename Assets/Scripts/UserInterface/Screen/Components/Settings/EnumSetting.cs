@@ -11,7 +11,7 @@ using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings
 {
-    public class EnumSetting : SettingBase
+    public class EnumSetting : SettingBase<int>
     {
         [Header("Object References")] 
         [SerializeField] private Button leftButton;
@@ -32,7 +32,12 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private List<string> availableValues;
         [SerializeField] private int selectedIndex;
         
-        public override void Initialize(SettingsPageItemSO asset, Action<string> onSelect, UIComponentState defaultState)
+        public override void Initialize(
+            SettingsPageItemSO asset, 
+            Action<string> onSelect,  
+            Action<(string key, int value)> onValueChange,
+            Action<(string key, int value)> onValueReset, 
+            UIComponentState defaultState)
         {
             var enumType = Type.GetType(asset.EnumTypeName);
 
@@ -45,7 +50,7 @@ namespace UserInterface.Screen.Components.Settings
             selectedIndex = availableValues.IndexOf(FormatEnumValue(asset.EnumDefaultValue));
             
             InitializePreview();
-            base.Initialize(asset, onSelect, defaultState);
+            base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
             
             leftButton.interactable = selectedIndex != 0;
             rightButton.interactable = selectedIndex != availableValues.Count - 1;

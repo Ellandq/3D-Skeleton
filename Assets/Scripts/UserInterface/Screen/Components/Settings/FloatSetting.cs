@@ -10,7 +10,7 @@ using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings
 {
-    public class FloatSetting : SettingBase
+    public class FloatSetting : SettingBase<float>
     {
         [Header("Object References")]
         [SerializeField] private Image handleBackground;
@@ -26,9 +26,14 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private float maxValue;
         [SerializeField] private float step;
         
-        public override void Initialize(SettingsPageItemSO asset, Action<string> onSelect, UIComponentState defaultState)
+        public override void Initialize(
+            SettingsPageItemSO asset, 
+            Action<string> onSelect,  
+            Action<(string key, float value)> onValueChange,
+            Action<(string key, float value)> onValueReset, 
+            UIComponentState defaultState)
         {
-            base.Initialize(asset, onSelect, defaultState);
+            base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
             slider.minValue = minValue = asset.MinValue;
             slider.maxValue = maxValue = asset.MaxValue;
             slider.value = value = asset.FloatDefaultValue;

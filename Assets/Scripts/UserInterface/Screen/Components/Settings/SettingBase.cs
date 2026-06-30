@@ -11,7 +11,7 @@ using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings
 {
-    public abstract class SettingBase : MonoBehaviour, ISettingItem
+    public abstract class SettingBase<T> : MonoBehaviour, ISettingItem<T>
     {
         [Header("Object References")]
         [SerializeField] protected TMP_Text settingName;
@@ -23,10 +23,17 @@ namespace UserInterface.Screen.Components.Settings
 
         [Header("Event")] 
         private Action<string> _onSelect;
+        protected Action<(string key, T value)> _onValueChange;
+        protected Action<(string key, T value)> _onValueReset;
 
         public string GetId() => id;
         
-        public virtual void Initialize(SettingsPageItemSO asset, Action<string> onSelect, UIComponentState defaultState)
+        public virtual void Initialize(
+            SettingsPageItemSO asset, 
+            Action<string> onSelect, 
+            Action<(string key, T value)> onValueChange,
+            Action<(string key, T value)> onValueReset, 
+            UIComponentState defaultState)
         {
             id = string.IsNullOrEmpty(asset.uniqueId)
                 ? GUID.Generate().ToString()
@@ -36,6 +43,21 @@ namespace UserInterface.Screen.Components.Settings
             settingName.text = asset.settingName;
 
             ChangeState(defaultState);
+        }
+        
+        void ISettingItem.Initialize(
+            SettingsPageItemSO asset,
+            Action<string> onSelect,
+            Action<string, object> onValueChange,
+            Action<string, object> onValueReset,
+            UIComponentState defaultState)
+        {
+            Initialize(
+                asset,
+                onSelect,
+                x => onValueChange(x.key, x.value),
+                x => onValueReset(x.key, x.value),
+                defaultState);
         }
 
         public virtual void ChangeState(UIComponentState newState)
@@ -57,6 +79,10 @@ namespace UserInterface.Screen.Components.Settings
 
         public virtual void DeselectItem()
         {
+            if (State == UIComponentState.Disabled)
+            {
+                return;
+            }
             ChangeState(UIComponentState.Enabled);
         }
         

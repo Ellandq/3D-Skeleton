@@ -10,7 +10,7 @@ using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings.Custom
 {
-    public class MonitorSetting : SettingBase, ICustomSettingItem
+    public class MonitorSetting : SettingBase<int>, ICustomSettingItem
     {
         public NamedCustomSetting GetSettingType() => NamedCustomSetting.Monitor;
 
@@ -30,7 +30,12 @@ namespace UserInterface.Screen.Components.Settings.Custom
         [SerializeField] private List<string> availableValues;
         [SerializeField] private int selectedIndex;
 
-        public override void Initialize(SettingsPageItemSO asset, Action<string> onSelect, UIComponentState defaultState)
+        public override void Initialize(
+            SettingsPageItemSO asset, 
+            Action<string> onSelect,  
+            Action<(string key, int value)> onValueChange,
+            Action<(string key, int value)> onValueReset, 
+            UIComponentState defaultState)
         {
             availableValues = GetMonitors();
 
@@ -40,7 +45,7 @@ namespace UserInterface.Screen.Components.Settings.Custom
             selectedIndex = 0;
 
             InitializePreview();
-            base.Initialize(asset, onSelect, defaultState);
+            base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
 
             leftButton.interactable = selectedIndex > 0;
             rightButton.interactable = selectedIndex < availableValues.Count - 1;

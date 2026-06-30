@@ -9,7 +9,7 @@ using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings
 {
-    public class BooleanSetting : SettingBase
+    public class BooleanSetting : SettingBase<int>
     {
         [Header("Object References")]
         [SerializeField] private GameObject conditionalSettingsObject;
@@ -29,9 +29,14 @@ namespace UserInterface.Screen.Components.Settings
         
         public Transform GetConditionalParent() => conditionalSettingsContentParent;
 
-        public override void Initialize(SettingsPageItemSO asset, Action<string> onSelect, UIComponentState defaultState)
+        public override void Initialize(
+            SettingsPageItemSO asset, 
+            Action<string> onSelect, 
+            Action<(string key, int value)> onValueChange,
+            Action<(string key, int value)> onValueReset, 
+            UIComponentState defaultState)
         {
-            base.Initialize(asset, onSelect, defaultState);
+            base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
             isOn = asset.BoolDefaultValue;
             UpdateStatus();
             if (isOn)
