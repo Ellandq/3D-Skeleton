@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 539e5d33ad425994eb46c165548caf3e
   settingName: Resolution
+  fullName: Video/Display/Resolution
   itemType: 1
   strValue: enum/Utils.Enum.Settings.ResolutionSetting/R1920_1080

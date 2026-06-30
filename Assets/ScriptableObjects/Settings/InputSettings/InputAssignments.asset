@@ -12,117 +12,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df60e329ac5e4a1492762a9f153372cc, type: 3}
   m_Name: InputAssignments
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.InputAssignments
-  settingNames:
-  - Action1
-  - Action1_Alt
-  - Action2
-  - Action2_Alt
-  - Action3
-  - Action3_Alt
-  - Action4
-  - Action4_Alt
-  - Action5
-  - Action5_Alt
-  - MoveLeft
-  - MoveLeft_Alt
-  - MoveRight
-  - MoveRight_Alt
-  - MoveForwards
-  - MoveForwards_Alt
-  - MoveBackwards
-  - MoveBackwards_Alt
-  - Jump
-  - Jump_Alt
-  - Sprint
-  - Sprint_Alt
-  - Crouch
-  - Crouch_Alt
-  - Prone
-  - Prone_Alt
-  - Walk
-  - Walk_Alt
-  - Interaction
-  - Interaction_Alt
-  - Inventory
-  - Inventory_Alt
-  - ItemSlot1
-  - ItemSlot1_Alt
-  - ItemSlot2
-  - ItemSlot2_Alt
-  - ItemSlot3
-  - ItemSlot3_Alt
-  - ItemSlot4
-  - ItemSlot4_Alt
-  - ItemSlot5
-  - ItemSlot5_Alt
-  - ItemSlot6
-  - ItemSlot6_Alt
-  - ItemSlot7
-  - ItemSlot7_Alt
-  - ItemSlot8
-  - ItemSlot8_Alt
-  - ItemSlot9
-  - ItemSlot9_Alt
-  - Escape
-  - Escape_Alt
-  - QuickSave
-  - QuickSave_Alt
-  - QuickLoad
-  - QuickLoad_Alt
-  defaultValues:
-  - Mouse0
-  - None
-  - Mouse1
-  - None
-  - Q
-  - None
-  - F
-  - None
-  - R
-  - None
-  - A
-  - LeftArrow
-  - D
-  - RightArrow
-  - W
-  - UpArrow
-  - S
-  - DownArrow
-  - Space
-  - None
-  - Shift
-  - 
-  - LeftControl
-  - C
-  - Z
-  - None
-  - Alt
-  - None
-  - E
-  - None
-  - Tab
-  - I
-  - 0
-  - 
-  - Alpha2
-  - 
-  - Alpha3
-  - Keypad3
-  - Alpha4
-  - Keypad4
-  - Alpha5
-  - Keypad5
-  - Alpha6
-  - Keypad6
-  - Alpha7
-  - Keypad7
-  - Alpha8
-  - Keypad8
-  - Alpha9
-  - Keypad9
-  - Escape
-  - None
-  - F5
-  - 
-  - F9
-  - 
+  assignments:
+  - settingName: Quick Save
+    action: 26
+    baseValue: F5
+    altValue: 
+  - settingName: Quick Load
+    action: 27
+    baseValue: F9
+    altValue: 
+  - settingName: Escape
+    action: 25
+    baseValue: Escape
+    altValue: 
+  - settingName: Move Forward
+    action: 7
+    baseValue: W
+    altValue: UpArrow
+  - settingName: Move Backward
+    action: 8
+    baseValue: S
+    altValue: DownArrow
+  - settingName: Move Left
+    action: 5
+    baseValue: A
+    altValue: LeftArrow
+  - settingName: Move Right
+    action: 6
+    baseValue: D
+    altValue: RightArrow
+  - settingName: Jump / Surface
+    action: 9
+    baseValue: Space
+    altValue: 
+  - settingName: Sprint / Fast Swim
+    action: 10
+    baseValue: LeftShift
+    altValue: 
+  - settingName: Toggle Prone
+    action: 12
+    baseValue: Z
+    altValue: 
+  - settingName: Crouch / Dive
+    action: 11
+    baseValue: LeftControl
+    altValue: 

@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 10162d28abd9d5d498b0685c63ff1946
   settingName: Quick Preset
+  fullName: Graphics/Quick Preset/Quick Preset
   itemType: 1
   strValue: enum/Utils.Enum.Settings.LowToHighSetting/Medium

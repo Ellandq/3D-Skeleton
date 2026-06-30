@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 71be446f1e22d3544959acb841f5648d
   settingName: Maximum FPS
+  fullName: Video/Display/Maximum FPS
   itemType: 2
   strValue: boolean/{"value":false,"conditional":false,"children":[]}

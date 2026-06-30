@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 8cb913d0a4101c54c8149d7f00bf46a5
   settingName: SFX Volume
+  fullName: Sound/Volume/SFX Volume
   itemType: 0
   strValue: float/100/0/100/1

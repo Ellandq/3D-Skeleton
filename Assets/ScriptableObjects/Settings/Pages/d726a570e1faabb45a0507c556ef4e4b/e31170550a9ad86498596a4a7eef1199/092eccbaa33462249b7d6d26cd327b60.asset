@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 092eccbaa33462249b7d6d26cd327b60
   settingName: Contact Shadows
+  fullName: Graphics/Advanced/Contact Shadows
   itemType: 2
   strValue: boolean/{"value":false,"conditional":false,"children":[]}

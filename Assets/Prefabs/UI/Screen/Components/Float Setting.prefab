@@ -537,14 +537,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Screen.Components.Settings.FloatSetting
   settingName: {fileID: 5616981934452753502}
   highlight: {fileID: 7587467732129705643}
-  state: 0
   id: 
+  fullName: 
   handleBackground: {fileID: 5661421922322375788}
   handleFrame: {fileID: 4442465904295182806}
   handleText: {fileID: 689752294742006104}
   fill: {fileID: 5117795142972150482}
   sliderBackground: {fileID: 8989138711101267837}
   slider: {fileID: 5600949526750235364}
+  releaseListener: {fileID: 5545855862419119381}
+  startValue: 0
+  wasChanged: 0
   value: 0
   minValue: 0
   maxValue: 0
@@ -577,6 +580,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onPointerEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onPointerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3368968814438250600
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,6 +920,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7188650966155502976}
   - component: {fileID: 5600949526750235364}
+  - component: {fileID: 5545855862419119381}
   m_Layer: 0
   m_Name: Slider
   m_TagString: Untagged
@@ -1004,3 +1014,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5545855862419119381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302853601236193384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2290bacb3aa4a3887f451cfb6d79063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Components.SliderReleaseListener

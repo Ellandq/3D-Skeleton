@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 8a2b97099e39c0d4ea4221c0822d5e5e
   settingName: VSync
+  fullName: Video/Display/VSync
   itemType: 2
   strValue: boolean/{"value":false,"conditional":false,"children":[]}

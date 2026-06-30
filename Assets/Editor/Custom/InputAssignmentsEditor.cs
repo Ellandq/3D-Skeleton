@@ -5,6 +5,8 @@ using GameInput;
 using UnityEditor;
 using UnityEngine;
 using Utils.SO.Settings;
+using Utils.SO.Settings.Screen;
+using Utils.SO.Settings.Utils.SO.Settings;
 
 namespace Editor.Custom
 {
@@ -17,34 +19,46 @@ namespace Editor.Custom
 
         private const float MinColumnWidth = 80f;
 
+
         private void OnEnable()
         {
             _target = (InputAssignments)target;
-            _allKeys = Enum.GetNames(typeof(PlayerAction));
+
+            _allKeys = FindInputSettings();
 
             _categories = new Dictionary<string, string[]>
             {
                 { nameof(MouseKey), Enum.GetNames(typeof(MouseKey)) },
 
-                { "KeyCode/Letters",
+                {
+                    "KeyCode/Letters",
                     Enumerable.Range('A', 26)
-                        .Select(i => ((KeyCode)((int)KeyCode.A + (i - 'A'))).ToString())
+                        .Select(i =>
+                            ((KeyCode)((int)KeyCode.A + (i - 'A')))
+                            .ToString())
                         .ToArray()
                 },
 
-                { "KeyCode/Numbers",
+                {
+                    "KeyCode/Numbers",
                     Enumerable.Range(0, 10)
-                        .Select(i => ((KeyCode)((int)KeyCode.Alpha0 + i)).ToString())
+                        .Select(i =>
+                            ((KeyCode)((int)KeyCode.Alpha0 + i))
+                            .ToString())
                         .ToArray()
                 },
 
-                { "KeyCode/FKeys",
+                {
+                    "KeyCode/FKeys",
                     Enumerable.Range(1, 12)
-                        .Select(i => ((KeyCode)((int)KeyCode.F1 + (i - 1))).ToString())
+                        .Select(i =>
+                            ((KeyCode)((int)KeyCode.F1 + (i - 1)))
+                            .ToString())
                         .ToArray()
                 },
 
-                { "KeyCode/Common",
+                {
+                    "KeyCode/Common",
                     new[]
                     {
                         nameof(KeyCode.Space),
@@ -61,15 +75,27 @@ namespace Editor.Custom
                     }
                 },
 
-                { "KeyCode/Other",
+                {
+                    "KeyCode/Other",
                     Enum.GetNames(typeof(KeyCode))
                         .Except(Enum.GetNames(typeof(MouseKey)))
-                        .Except(Enumerable.Range('A',26)
-                            .Select(i => ((KeyCode)((int)KeyCode.A + (i - 'A'))).ToString()))
-                        .Except(Enumerable.Range(0,10)
-                            .Select(i => ((KeyCode)((int)KeyCode.Alpha0 + i)).ToString()))
-                        .Except(Enumerable.Range(1,12)
-                            .Select(i => ((KeyCode)((int)KeyCode.F1 + (i - 1))).ToString()))
+                        .Except(
+                            Enumerable.Range('A', 26)
+                                .Select(i =>
+                                    ((KeyCode)((int)KeyCode.A +
+                                    (i - 'A')))
+                                    .ToString()))
+                        .Except(
+                            Enumerable.Range(0, 10)
+                                .Select(i =>
+                                    ((KeyCode)((int)KeyCode.Alpha0 + i))
+                                    .ToString()))
+                        .Except(
+                            Enumerable.Range(1, 12)
+                                .Select(i =>
+                                    ((KeyCode)((int)KeyCode.F1 +
+                                    (i - 1)))
+                                    .ToString()))
                         .Except(new[]
                         {
                             nameof(KeyCode.Space),
@@ -89,22 +115,46 @@ namespace Editor.Custom
             };
         }
 
+
         public override void OnInspectorGUI()
         {
-            _target.settingNames ??= new List<string>();
-            _target.defaultValues ??= new List<string>();
+            _target.assignments ??= new List<InputAssignmentEntry>();
 
-            var rowCount = _allKeys.Length;
-            while (_target.settingNames.Count < rowCount * 2)
+            var existing = _target.assignments
+                .ToDictionary(
+                    x => x.settingName,
+                    x => x);
+
+            var rebuilt = new List<InputAssignmentEntry>();
+
+            foreach (var key in _allKeys)
             {
-                _target.settingNames.Add("");
-                _target.defaultValues.Add("");
+                if (existing.TryGetValue(key, out var entry))
+                {
+                    rebuilt.Add(entry);
+                }
+                else
+                {
+                    rebuilt.Add(new InputAssignmentEntry
+                    {
+                        settingName = key,
+                        action = PlayerAction.Action1,
+                        baseValue = "",
+                        altValue = ""
+                    });
+                }
             }
 
-            EditorGUILayout.Space();
+            _target.assignments = rebuilt;
+
 
             var totalWidth = EditorGUIUtility.currentViewWidth - 40f;
-            var columnWidth = Mathf.Max(MinColumnWidth, totalWidth / 3f);
+
+            var columnWidth =
+                Mathf.Max(
+                    MinColumnWidth,
+                    totalWidth / 4f);
+
 
             var headerStyle = new GUIStyle(EditorStyles.boldLabel)
             {
@@ -112,75 +162,180 @@ namespace Editor.Custom
                 alignment = TextAnchor.MiddleCenter
             };
 
+
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Key", headerStyle, GUILayout.Width(columnWidth));
-            EditorGUILayout.LabelField("Base", headerStyle, GUILayout.Width(columnWidth));
-            EditorGUILayout.LabelField("Alt", headerStyle, GUILayout.Width(columnWidth));
+
+            EditorGUILayout.LabelField(
+                "Setting",
+                headerStyle,
+                GUILayout.Width(columnWidth));
+
+            EditorGUILayout.LabelField(
+                "Action",
+                headerStyle,
+                GUILayout.Width(columnWidth));
+
+            EditorGUILayout.LabelField(
+                "Base",
+                headerStyle,
+                GUILayout.Width(columnWidth));
+
+            EditorGUILayout.LabelField(
+                "Alt",
+                headerStyle,
+                GUILayout.Width(columnWidth));
+
             EditorGUILayout.EndHorizontal();
+
 
             EditorGUILayout.Space(4);
 
-            EditorGUILayout.BeginVertical(GUI.skin.box);
-            GUI.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
 
-            for (var i = 0; i < rowCount; i++)
+            for (var i = 0; i < _allKeys.Length; i++)
             {
-                var key = _allKeys[i];
-                _target.settingNames[i * 2] = key;
-                _target.settingNames[i * 2 + 1] = key + "_Alt";
+                var entry = _target.assignments[i];
 
+                entry.settingName = _allKeys[i];
+                
                 EditorGUILayout.BeginHorizontal(GUI.skin.box);
-                GUI.backgroundColor = Color.white;
+                
+                EditorGUILayout.LabelField(
+                    entry.settingName,
+                    GUILayout.Width(columnWidth));
 
-                EditorGUILayout.LabelField(key, GUILayout.Width(columnWidth));
 
-                _target.defaultValues[i * 2] = DrawCustomDropdown(i * 2, columnWidth);
-                _target.defaultValues[i * 2 + 1] = DrawCustomDropdown(i * 2 + 1, columnWidth);
+                var newAction = (PlayerAction)EditorGUILayout.EnumPopup(
+                    entry.action,
+                    GUILayout.Width(columnWidth));
+
+                if (newAction != entry.action)
+                {
+                    Undo.RecordObject(_target, "Change Input Action");
+                    entry.action = newAction;
+                    EditorUtility.SetDirty(_target);
+                }
+
+
+                DrawCustomDropdown(
+                    entry.baseValue,
+                    columnWidth,
+                    value => entry.baseValue = value);
+
+                DrawCustomDropdown(
+                    entry.altValue,
+                    columnWidth,
+                    value => entry.altValue = value);
+
 
                 EditorGUILayout.EndHorizontal();
+
                 EditorGUILayout.Space(2);
             }
 
-            EditorGUILayout.EndVertical();
-            GUI.backgroundColor = Color.white;
 
-            if (GUI.changed)
-                EditorUtility.SetDirty(_target);
+            if (!GUI.changed) return;
+            Undo.RecordObject(_target, "Modify Input Assignments");
+            EditorUtility.SetDirty(_target);
         }
 
-        private string DrawCustomDropdown(int index, float width)
-        {
-            var current = _target.defaultValues[index];
-            var rect = GUILayoutUtility.GetRect(width, EditorGUIUtility.singleLineHeight);
 
-            if (!GUI.Button(rect, string.IsNullOrEmpty(current) ? "None" : current, EditorStyles.popup))
-                return _target.defaultValues[index];
+        private void DrawCustomDropdown(
+            string current,
+            float width,
+            Action<string> onChanged)
+        {
+            var rect = GUILayoutUtility.GetRect(
+                width,
+                EditorGUIUtility.singleLineHeight);
+
+            if (!GUI.Button(
+                    rect,
+                    string.IsNullOrEmpty(current) ? "None" : current,
+                    EditorStyles.popup))
+            {
+                return;
+            }
+
             var menu = new GenericMenu();
 
-            menu.AddItem(new GUIContent("None"), string.IsNullOrEmpty(current), () =>
-            {
-                _target.defaultValues[index] = "";
-                EditorUtility.SetDirty(_target);
-            });
+            menu.AddItem(
+                new GUIContent("None"),
+                string.IsNullOrEmpty(current),
+                () =>
+                {
+                    Undo.RecordObject(_target, "Clear Input Assignment");
+
+                    onChanged("");
+
+                    EditorUtility.SetDirty(_target);
+                    AssetDatabase.SaveAssets();
+                });
 
             foreach (var category in _categories)
             {
                 foreach (var option in category.Value)
                 {
-                    var selectedOption = option;
-                    var path = category.Key + "/" + option;
+                    var selected = option;
 
-                    menu.AddItem(new GUIContent(path), option == current, () =>
-                    {
-                        _target.defaultValues[index] = selectedOption;
-                        EditorUtility.SetDirty(_target);
-                    });
+                    menu.AddItem(
+                        new GUIContent($"{category.Key}/{option}"),
+                        option == current,
+                        () =>
+                        {
+                            Undo.RecordObject(_target, "Change Input Assignment");
+
+                            onChanged(selected);
+
+                            EditorUtility.SetDirty(_target);
+                            AssetDatabase.SaveAssets();
+                        });
                 }
             }
 
             menu.DropDown(rect);
+        }
 
-            return _target.defaultValues[index];
+
+        private string[] FindInputSettings()
+        {
+            const string root =
+                "Assets/ScriptableObjects/Settings/Pages";
+
+
+            var pages =
+                AssetDatabase.FindAssets(
+                        "t:SettingsPageSO",
+                        new[] { root })
+                    .Select(AssetDatabase.GUIDToAssetPath)
+                    .Select(
+                        AssetDatabase
+                            .LoadAssetAtPath<SettingsPageSO>)
+                    .Where(x => x != null);
+
+
+            var keyBindingPage =
+                pages.FirstOrDefault(
+                    x => x.pageName.Equals(
+                        "Key Bindings",
+                        StringComparison.OrdinalIgnoreCase));
+
+
+            if (keyBindingPage != null)
+            {
+                return keyBindingPage.categories
+                    .SelectMany(x => x.items)
+                    .Where(x => x != null)
+                    .Select(x => x.settingName)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct()
+                    .ToArray();
+            }
+
+
+            Debug.LogWarning(
+                "Could not find Key Bindings settings page.");
+
+            return Array.Empty<string>();
         }
     }
 }

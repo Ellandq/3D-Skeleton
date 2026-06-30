@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 4cd9fecab5302b84bbddb9ef68d8ec47
   settingName: Distant Shadows Resolution
+  fullName: Graphics/Advanced/Distant Shadows Resolution
   itemType: 1
   strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

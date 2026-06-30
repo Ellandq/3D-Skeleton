@@ -26,6 +26,7 @@ namespace UserInterface.Screen.Components.Settings
 
         [Header("Settings")] 
         [SerializeField] private bool isOn;
+        [SerializeField] private bool wasChanged;
         
         public Transform GetConditionalParent() => conditionalSettingsContentParent;
 
@@ -37,6 +38,7 @@ namespace UserInterface.Screen.Components.Settings
             UIComponentState defaultState)
         {
             base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
+            wasChanged = false;
             isOn = asset.BoolDefaultValue;
             UpdateStatus();
             if (isOn)
@@ -90,6 +92,17 @@ namespace UserInterface.Screen.Components.Settings
             if (_rootLayout)
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(_rootLayout);
+            }
+
+            if (wasChanged)
+            {
+                wasChanged = false;
+                _onValueReset?.Invoke((fullName, isOn ? 1 : 0));
+            }
+            else
+            {
+                _onValueChange?.Invoke((fullName, isOn ? 1 : 0));
+                wasChanged = true;
             }
         }
         

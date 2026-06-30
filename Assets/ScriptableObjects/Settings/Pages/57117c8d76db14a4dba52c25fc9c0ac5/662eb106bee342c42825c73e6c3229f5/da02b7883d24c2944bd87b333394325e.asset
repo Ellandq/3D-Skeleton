@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: da02b7883d24c2944bd87b333394325e
   settingName: Toggle Prone
+  fullName: Input/Toggle Prone
   itemType: 3
   strValue: inputKey/Prone/True

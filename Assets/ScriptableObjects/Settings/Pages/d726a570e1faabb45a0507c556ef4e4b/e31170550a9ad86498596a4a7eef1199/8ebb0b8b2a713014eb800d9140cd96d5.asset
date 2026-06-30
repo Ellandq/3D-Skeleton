@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 8ebb0b8b2a713014eb800d9140cd96d5
   settingName: Ambient Occlusion
+  fullName: Graphics/Advanced/Ambient Occlusion
   itemType: 1
   strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

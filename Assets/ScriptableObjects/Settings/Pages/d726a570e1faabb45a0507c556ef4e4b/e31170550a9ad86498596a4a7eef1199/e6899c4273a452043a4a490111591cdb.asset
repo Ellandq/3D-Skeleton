@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: e6899c4273a452043a4a490111591cdb
   settingName: Level of Detail (LOD)
+  fullName: Graphics/Advanced/Level of Detail (LOD)
   itemType: 1
   strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

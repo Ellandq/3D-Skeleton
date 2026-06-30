@@ -51,9 +51,9 @@ namespace UserInterface.Screen
         private string _selectedItem;
         
         [Header("Cached Changes")]
-        private Dictionary<string, int> cachedIntChanges = new();
-        private Dictionary<string, float> cachedFloatChanges = new();
-        private Dictionary<string, string> cachedStringChanges = new();
+        private readonly Dictionary<string, int> cachedIntChanges = new();
+        private readonly Dictionary<string, float> cachedFloatChanges = new();
+        private readonly Dictionary<string, string> cachedStringChanges = new();
 
         public override void Activate(bool instant, Action onActivate = null)
         {

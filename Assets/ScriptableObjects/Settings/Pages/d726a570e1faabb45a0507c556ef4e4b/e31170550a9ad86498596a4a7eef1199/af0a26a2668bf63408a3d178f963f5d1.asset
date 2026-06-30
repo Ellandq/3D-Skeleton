@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: af0a26a2668bf63408a3d178f963f5d1
   settingName: Max Dynamic Decals
+  fullName: Graphics/Advanced/Max Dynamic Decals
   itemType: 1
   strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

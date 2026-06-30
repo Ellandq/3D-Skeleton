@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: c2d7b6f39f4999e4d8c80d82bf0b8ec8
   settingName: Subsurface Scattering Quality
+  fullName: Graphics/Advanced/Subsurface Scattering Quality
   itemType: 1
   strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

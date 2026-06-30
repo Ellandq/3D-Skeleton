@@ -1,52 +1,82 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GameInput;
 using UnityEngine;
 
 namespace Utils.SO.Settings
 {
-    [CreateAssetMenu(menuName = "Settings/Input Assignments")]
-    public class InputAssignments : SettingSO<string>
+    namespace Utils.SO.Settings
     {
-        public Dictionary<string, string> AsDictionary() => settingNames
-                .Select((setting, index) => new
+        [CreateAssetMenu(menuName = "Settings/Input Assignments")]
+        public class InputAssignments : ScriptableObject
+        {
+            public List<InputAssignmentEntry> assignments = new();
+
+            public Dictionary<string, string> AsDictionary()
+            {
+                var dict = new Dictionary<string, string>();
+
+                foreach (var assignment in assignments)
                 {
-                    Setting = setting,
-                    Value = defaultValues[index]
-                })
-                .ToDictionary(kvp => kvp.Setting, kvp => kvp.Value);
+                    dict[assignment.settingName] = assignment.baseValue;
+                    dict[assignment.settingName + "_Alt"] = assignment.altValue;
+                }
 
-        public void FromDictionary(Dictionary<string, string> dict)
-        {
-            settingNames.Clear();
-            defaultValues.Clear();
-
-            foreach (var kvp in dict)
-            {
-                settingNames.Add(kvp.Key);
-                defaultValues.Add(kvp.Value);
-            }
-        }
-        
-        public Dictionary<PlayerAction, (string baseValue, string altValue)> AsSimpleDictionary()
-        {
-            var dict = AsDictionary();
-
-            var simpleDict = new Dictionary<PlayerAction, (string baseValue, string altValue)>();
-
-            foreach (var (key, baseValue) in dict)
-            {
-                if (key.EndsWith("_Alt"))
-                    continue;
-
-                dict.TryGetValue(key + "_Alt", out var altValue);
-
-                System.Enum.TryParse<PlayerAction>(key, out var enumKey);
-
-                simpleDict[enumKey] = (baseValue, altValue);
+                return dict;
             }
 
-            return simpleDict;
+            public Dictionary<PlayerAction, (string baseValue, string altValue)> AsSimpleDictionary()
+            {
+                return assignments
+                    .Where(x => x.action != default)
+                    .ToDictionary(
+                        x => x.action,
+                        x => (x.baseValue, x.altValue)
+                    );
+            }
+
+            public Dictionary<string, PlayerAction> ActionDictionary()
+            {
+                return assignments
+                    .Where(x => x.action != default)
+                    .ToDictionary(
+                        x => x.settingName,
+                        x => x.action
+                    );
+            }
+
+            public void ApplyDictionary(Dictionary<string, string> dict)
+            {
+                foreach (var assignment in assignments)
+                {
+                    if (dict.TryGetValue(
+                            assignment.settingName,
+                            out var baseValue))
+                    {
+                        assignment.baseValue = baseValue;
+                    }
+
+                    if (dict.TryGetValue(
+                            assignment.settingName + "_Alt",
+                            out var altValue))
+                    {
+                        assignment.altValue = altValue;
+                    }
+                }
+            }
         }
     }
+
+    
+    [Serializable]
+    public class InputAssignmentEntry
+    {
+        public string settingName;
+        public PlayerAction action = PlayerAction.Action1;
+
+        public string baseValue = "";
+        public string altValue = "";
+    }
+    
 }

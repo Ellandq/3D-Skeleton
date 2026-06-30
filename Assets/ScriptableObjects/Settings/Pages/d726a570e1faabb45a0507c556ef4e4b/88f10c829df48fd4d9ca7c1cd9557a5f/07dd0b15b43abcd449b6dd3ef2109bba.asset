@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 07dd0b15b43abcd449b6dd3ef2109bba
   settingName: Lens Flare
+  fullName: Graphics/Basic/Lens Flare
   itemType: 2
   strValue: boolean/{"value":false,"conditional":false,"children":[]}

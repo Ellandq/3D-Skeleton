@@ -704,6 +704,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 348729421}
   m_CullTransparentMesh: 1
+--- !u!1 &427961305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 427961306}
+  - component: {fileID: 427961307}
+  m_Layer: 0
+  m_Name: SETTINGS-MANAGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &427961306
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427961305}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1815864725}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &427961307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427961305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c0463ac0f64c239db3d1d68d570b56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.SettingsManager
 --- !u!1 &438275676
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,7 +904,7 @@ GameObject:
   - component: {fileID: 502676258}
   - component: {fileID: 502676259}
   m_Layer: 0
-  m_Name: SPRITE MANAGER
+  m_Name: SPRITE-MANAGER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1059,6 +1103,7 @@ MonoBehaviour:
       value: {fileID: 21300000, guid: 1f039151943fbc540ba0a03bcdebc550, type: 3}
     - key: BackQuote
       value: {fileID: 21300000, guid: 19391ce6da495bf4fa71c25068a2d634, type: 3}
+  defaultSprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &575189973
 GameObject:
   m_ObjectHideFlags: 0
@@ -3481,6 +3526,7 @@ Transform:
   - {fileID: 602441965}
   - {fileID: 2111537316}
   - {fileID: 502676258}
+  - {fileID: 427961306}
   - {fileID: 1167241864}
   - {fileID: 1789753968}
   - {fileID: 1638362684}

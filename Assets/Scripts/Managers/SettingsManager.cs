@@ -1,14 +1,71 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Settings;
 using UnityEngine;
 
 namespace Managers
 {
     public class SettingsManager : ManagerBase<SettingsManager>
     {
+        [Header("Enforcers")]
+        private List<ISettingEnforcer> _enforcers;
+        private Dictionary<string, ISettingEnforcer> _enforcerLookup;
+        
         [Header("Cached Settings")]
-        private Dictionary<string, int> cachedIntChanges = new();
-        private Dictionary<string, float> cachedFloatChanges = new();
-        private Dictionary<string, string> cachedStringChanges = new();
+        private readonly Dictionary<string, int> cachedIntChanges = new();
+        private readonly Dictionary<string, float> cachedFloatChanges = new();
+        private readonly Dictionary<string, string> cachedStringChanges = new();
+#if UNITY_EDITOR
+        public IReadOnlyDictionary<string, int> DebugInts => cachedIntChanges;
+        public IReadOnlyDictionary<string, float> DebugFloats => cachedFloatChanges;
+        public IReadOnlyDictionary<string, string> DebugStrings => cachedStringChanges;
+#endif
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            SettingEnforcerRegistry.Initialize();
+
+            _enforcers =
+                SettingEnforcerRegistry.Enforcers
+                    .ToList();
+
+            _enforcerLookup =
+                _enforcers.ToDictionary(
+                    x => x.GetKey(),
+                    x => x);
+        }
+        
+        private ISettingEnforcer FindEnforcer(string fullName)
+        {
+            if (_enforcerLookup.TryGetValue(
+                    fullName,
+                    out var exact))
+            {
+                return exact;
+            }
+
+
+            var parts =
+                fullName.Split('/');
+
+
+            if (parts.Length < 3) return parts.Length < 1 ? null : _enforcerLookup.GetValueOrDefault(parts[0]);
+            var category =
+                $"{parts[0]}/{parts[1]}";
+
+
+            if (_enforcerLookup.TryGetValue(
+                    category,
+                    out var categoryEnforcer))
+            {
+                return categoryEnforcer;
+            }
+
+
+            return parts.Length < 1 ? null : _enforcerLookup.GetValueOrDefault(parts[0]);
+        }
 
         public static int GetIntSetting(string key, int defaultValue) => Instance.GetInt(key, defaultValue);
         private int GetInt(string key, int defaultValue)
@@ -33,10 +90,17 @@ namespace Managers
         public static string GetStringSetting(string key, string defaultValue) => Instance.GetString(key, defaultValue);
         private string GetString(string key, string defaultValue)
         {
-            if (cachedStringChanges.TryGetValue(key, out var v)) return v;
+            if (cachedStringChanges.TryGetValue(key, out var v))
+                return v;
+
             var value = PlayerPrefs.GetString(key, defaultValue);
+
+            if (string.IsNullOrWhiteSpace(value))
+                value = defaultValue;
+
             cachedStringChanges.Add(key, value);
             PlayerPrefs.SetString(key, value);
+
             return value;
         }
         
@@ -48,7 +112,16 @@ namespace Managers
         private void SaveInt(string key, int value)
         {
             cachedIntChanges[key] = value;
-            PlayerPrefs.SetInt(key, value);
+
+            PlayerPrefs.SetInt(
+                key,
+                value);
+
+
+            FindEnforcer(key)?
+                .Enforce(
+                    key,
+                    value);
         }
 
 
@@ -60,7 +133,16 @@ namespace Managers
         private void SaveFloat(string key, float value)
         {
             cachedFloatChanges[key] = value;
-            PlayerPrefs.SetFloat(key, value);
+
+            PlayerPrefs.SetFloat(
+                key,
+                value);
+
+
+            FindEnforcer(key)?
+                .Enforce(
+                    key,
+                    value);
         }
 
         public static void SaveStringSetting(string key, string value)
@@ -71,7 +153,16 @@ namespace Managers
         private void SaveString(string key, string value)
         {
             cachedStringChanges[key] = value;
-            PlayerPrefs.SetString(key, value);
+
+            PlayerPrefs.SetString(
+                key,
+                value);
+
+
+            FindEnforcer(key)?
+                .Enforce(
+                    key,
+                    value);
         }
 
         public static void SaveSettings(
@@ -90,19 +181,46 @@ namespace Managers
             foreach (var pair in intSettings)
             {
                 cachedIntChanges[pair.Key] = pair.Value;
-                PlayerPrefs.SetInt(pair.Key, pair.Value);
+
+                PlayerPrefs.SetInt(
+                    pair.Key,
+                    pair.Value);
+
+
+                FindEnforcer(pair.Key)?
+                    .Enforce(
+                        pair.Key,
+                        pair.Value);
             }
 
             foreach (var pair in floatSettings)
             {
                 cachedFloatChanges[pair.Key] = pair.Value;
-                PlayerPrefs.SetFloat(pair.Key, pair.Value);
+
+                PlayerPrefs.SetFloat(
+                    pair.Key,
+                    pair.Value);
+
+
+                FindEnforcer(pair.Key)?
+                    .Enforce(
+                        pair.Key,
+                        pair.Value);
             }
 
             foreach (var pair in stringSettings)
             {
                 cachedStringChanges[pair.Key] = pair.Value;
-                PlayerPrefs.SetString(pair.Key, pair.Value);
+
+                PlayerPrefs.SetString(
+                    pair.Key,
+                    pair.Value);
+
+
+                FindEnforcer(pair.Key)?
+                    .Enforce(
+                        pair.Key,
+                        pair.Value);
             }
 
             PlayerPrefs.Save();

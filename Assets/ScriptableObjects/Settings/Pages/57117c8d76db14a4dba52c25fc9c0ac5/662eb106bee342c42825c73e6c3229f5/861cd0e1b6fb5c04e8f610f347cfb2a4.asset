@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 861cd0e1b6fb5c04e8f610f347cfb2a4
   settingName: Move Right
+  fullName: Input/Move Right
   itemType: 3
   strValue: inputKey/MoveRight/True

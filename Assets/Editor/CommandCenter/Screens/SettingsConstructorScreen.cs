@@ -368,21 +368,43 @@ namespace Editor.CommandCenter.Screens
             EnsureFolder(catFolder);
 
             foreach (var item in cat.items)
-                SaveItem(catFolder, item);
+                SaveItem(page, cat, item, catFolder);
         }
 
-        private void SaveItem(string folder, SettingsPageItemSO item)
+        private void SaveItem(
+            SettingsPageSO page,
+            SettingsPageCategorySO category,
+            SettingsPageItemSO item,
+            string folder)
         {
             if (string.IsNullOrEmpty(item.uniqueId))
                 item.uniqueId = GUID.Generate().ToString();
+
+
             item.name = item.uniqueId;
+
+
+            item.fullName = item.itemType == SettingsItemType.InputKey
+                ? $"Input/{item.settingName}"
+                : $"{page.pageName}/{category.categoryName}/{item.settingName}";
+
             item.ConvertToString();
+
+
             var path = $"{folder}/{item.uniqueId}.asset";
-            var existingItem = AssetDatabase.LoadAssetAtPath<SettingsPageItemSO>(path);
+
+            var existingItem =
+                AssetDatabase.LoadAssetAtPath<SettingsPageItemSO>(path);
+
+
             if (!existingItem)
+            {
                 AssetDatabase.CreateAsset(item, path);
+            }
             else
+            {
                 EditorUtility.CopySerialized(item, existingItem);
+            }
         }
 
         private void RemoveOrphanedAssets()

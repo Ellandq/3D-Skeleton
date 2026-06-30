@@ -20,6 +20,7 @@ namespace UserInterface.Screen.Components.Settings
         [Header("Settings")] 
         protected UIComponentState State;
         [SerializeField] protected string id;
+        [SerializeField] protected string fullName;
 
         [Header("Event")] 
         private Action<string> _onSelect;
@@ -41,6 +42,10 @@ namespace UserInterface.Screen.Components.Settings
 
             _onSelect = onSelect;
             settingName.text = asset.settingName;
+            fullName = asset.fullName;
+            
+            _onValueChange = onValueChange;
+            _onValueReset = onValueReset;
 
             ChangeState(defaultState);
         }

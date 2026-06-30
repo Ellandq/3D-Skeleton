@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 2c8a66393782b184ca98035a88c7d540
   settingName: Move Backward
+  fullName: Input/Move Backward
   itemType: 3
   strValue: inputKey/MoveBackwards/True

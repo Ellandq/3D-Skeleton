@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 8945dfdbc1fd96f47956010cb26db80d
   settingName: Move Forward
+  fullName: Input/Move Forward
   itemType: 3
   strValue: inputKey/MoveForwards/True

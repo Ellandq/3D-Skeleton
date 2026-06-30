@@ -9,38 +9,53 @@ namespace UserInterface.Screen.Components.Settings
 {
     public class InputKeyButton : MonoBehaviour
     {
-        [SerializeField] private UIComponentState state;
-        
-        [Header("Object References")]
         [SerializeField] private Button button;
+
+        [Header("Visuals")]
         [SerializeField] private Image background;
         [SerializeField] private Image frame;
         [SerializeField] private Image icon;
 
+        private UIComponentState state;
+
+
         private void Awake()
-        { 
-            button.onClick.AddListener(() => UIManager.Instance.ActivateComponent(NamedWindow.InputAssignment));
+        {
+            button.onClick.AddListener(
+                () =>
+                    UIManager.Instance.ActivateComponent(
+                        NamedWindow.InputAssignment));
         }
+
 
         public void Initialize(InputKeySetting parent)
         {
-            button.onClick.AddListener(parent.SelectItem);
+            button.onClick.AddListener(
+                parent.SelectItem);
         }
+
 
         public void ChangeState(UIComponentState newState)
         {
-            if (newState == state)
-                return;
             state = newState;
-            var colors = UITheme.GetColors(state);
-            var lighterC = colors[UIColorType.Lighter];
-            var darkerC = colors[UIColorType.Darker];
-            
-            background.color = darkerC;
-            frame.color = lighterC;
-            icon.color = lighterC;
+
+            var colors =
+                UITheme.GetColors(state);
+
+            background.color =
+                colors[UIColorType.Darker];
+
+            frame.color =
+                colors[UIColorType.Lighter];
+
+            icon.color =
+                colors[UIColorType.Lighter];
+
+            button.interactable =
+                state != UIComponentState.Disabled;
         }
-        
+
+
         public void UpdateIcon(Sprite sprite)
         {
             icon.sprite = sprite;

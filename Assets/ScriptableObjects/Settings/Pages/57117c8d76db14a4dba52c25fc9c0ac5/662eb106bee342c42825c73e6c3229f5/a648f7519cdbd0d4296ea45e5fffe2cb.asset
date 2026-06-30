@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: a648f7519cdbd0d4296ea45e5fffe2cb
   settingName: Sprint / Fast Swim
+  fullName: Input/Sprint / Fast Swim
   itemType: 3
   strValue: inputKey/Sprint/True

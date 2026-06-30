@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: d3b98b429ac163145ae39189453090a9
   settingName: Monitor
+  fullName: Video/Display/Monitor
   itemType: 4
   strValue: custom

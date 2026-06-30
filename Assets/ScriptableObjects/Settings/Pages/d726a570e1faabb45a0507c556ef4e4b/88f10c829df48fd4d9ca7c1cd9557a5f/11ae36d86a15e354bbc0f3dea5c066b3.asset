@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 11ae36d86a15e354bbc0f3dea5c066b3
   settingName: Vignette
+  fullName: Graphics/Basic/Vignette
   itemType: 2
   strValue: boolean/{"value":false,"conditional":false,"children":[]}

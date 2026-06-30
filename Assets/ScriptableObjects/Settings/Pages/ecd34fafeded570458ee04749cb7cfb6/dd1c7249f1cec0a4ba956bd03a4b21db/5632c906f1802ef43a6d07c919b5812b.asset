@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 5632c906f1802ef43a6d07c919b5812b
   settingName: Dialogue Volume
+  fullName: Sound/Volume/Dialogue Volume
   itemType: 0
   strValue: float/100/0/100/1

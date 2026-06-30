@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 7274a5c4f36b7244e960b0c07deea1ce
   settingName: Volumetric Cloud Quality
+  fullName: Graphics/Advanced/Volumetric Cloud Quality
   itemType: 1
   strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low

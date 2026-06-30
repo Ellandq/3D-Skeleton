@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 3f90856a15661ef41827c86c99667edb
   settingName: Ambience Volume
+  fullName: Sound/Volume/Ambience Volume
   itemType: 0
   strValue: float/100/0/100/1

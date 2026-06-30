@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 416ba9fd5cd454047b934f04125b062c
   settingName: Chromatic Aberration
+  fullName: Graphics/Basic/Chromatic Aberration
   itemType: 2
   strValue: boolean/{"value":false,"conditional":false,"children":[]}

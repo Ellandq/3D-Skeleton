@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: e790f807b53b5bf48a8a25ec8c7d6674
   settingName: Depth of Field
+  fullName: Graphics/Basic/Depth of Field
   itemType: 2
   strValue: boolean/{"value":false,"conditional":false,"children":[]}

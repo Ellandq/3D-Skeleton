@@ -10,6 +10,7 @@ namespace Utils.SO.Settings.Screen
     {
         public string uniqueId;
         public string settingName;
+        public string fullName;
         public SettingsItemType itemType;
         public string strValue;
 

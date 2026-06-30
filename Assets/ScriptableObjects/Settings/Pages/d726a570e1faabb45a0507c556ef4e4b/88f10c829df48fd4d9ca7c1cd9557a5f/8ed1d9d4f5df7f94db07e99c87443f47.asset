@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 8ed1d9d4f5df7f94db07e99c87443f47
   settingName: Field of View
+  fullName: Graphics/Basic/Field of View
   itemType: 0
   strValue: float/90/60/120/5

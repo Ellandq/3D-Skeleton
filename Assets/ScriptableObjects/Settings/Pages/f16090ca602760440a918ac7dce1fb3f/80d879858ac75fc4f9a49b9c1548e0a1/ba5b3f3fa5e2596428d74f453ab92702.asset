@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: ba5b3f3fa5e2596428d74f453ab92702
   settingName: Interface
+  fullName: Language/Text/Interface
   itemType: 1
   strValue: enum/Utils.Enum.Settings.TextLanguageSetting/English

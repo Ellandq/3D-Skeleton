@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 527fb7b9c8228dd429f5e8c4c8c59f5b
   settingName: Anisotropy
+  fullName: Graphics/Advanced/Anisotropy
   itemType: 1
   strValue: enum/Utils.Enum.Settings.AnisotropySetting/X4

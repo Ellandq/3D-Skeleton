@@ -31,6 +31,8 @@ namespace UserInterface.Screen.Components.Settings
         [Header("Settings")] 
         [SerializeField] private List<string> availableValues;
         [SerializeField] private int selectedIndex;
+        [SerializeField] private int startingValue;
+        [SerializeField] private bool wasChanged;
         
         public override void Initialize(
             SettingsPageItemSO asset, 
@@ -39,6 +41,7 @@ namespace UserInterface.Screen.Components.Settings
             Action<(string key, int value)> onValueReset, 
             UIComponentState defaultState)
         {
+            wasChanged = false;
             var enumType = Type.GetType(asset.EnumTypeName);
 
             if (enumType is not { IsEnum: true })
@@ -55,6 +58,7 @@ namespace UserInterface.Screen.Components.Settings
             leftButton.interactable = selectedIndex != 0;
             rightButton.interactable = selectedIndex != availableValues.Count - 1;
             optionName.text = availableValues[selectedIndex];
+            startingValue = selectedIndex;
         }
 
         private void InitializePreview()
@@ -118,6 +122,17 @@ namespace UserInterface.Screen.Components.Settings
             leftButton.interactable = selectedIndex != 0;
             rightButton.interactable = selectedIndex != availableValues.Count - 1;
             optionName.text = availableValues[selectedIndex];
+
+            if (startingValue == selectedIndex && wasChanged)
+            {
+                _onValueReset?.Invoke((fullName, selectedIndex));
+                wasChanged = false;
+            }
+            else if (startingValue != selectedIndex)
+            {
+                _onValueChange?.Invoke((fullName, selectedIndex));
+                wasChanged = true;
+            }
         }
         
         private static string FormatEnumValue(string enumValue)

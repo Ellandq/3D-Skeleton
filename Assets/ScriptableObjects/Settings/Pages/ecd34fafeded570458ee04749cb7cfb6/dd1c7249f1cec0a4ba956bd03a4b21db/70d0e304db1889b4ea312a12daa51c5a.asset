@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 70d0e304db1889b4ea312a12daa51c5a
   settingName: Music Volume
+  fullName: Sound/Volume/Music Volume
   itemType: 0
   strValue: float/100/0/100/1

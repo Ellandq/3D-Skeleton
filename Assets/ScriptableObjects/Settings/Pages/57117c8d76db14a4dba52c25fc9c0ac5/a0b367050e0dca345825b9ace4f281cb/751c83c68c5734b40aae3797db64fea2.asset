@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageItemSO
   uniqueId: 751c83c68c5734b40aae3797db64fea2
   settingName: Quick Load
+  fullName: Input/Quick Load
   itemType: 3
   strValue: inputKey/QuickLoad/True

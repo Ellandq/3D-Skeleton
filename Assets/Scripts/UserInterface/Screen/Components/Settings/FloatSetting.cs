@@ -3,7 +3,9 @@ using System.Globalization;
 using Managers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UserInterface.Components;
 using Utils.Enum;
 using Utils.SO;
 using Utils.SO.Settings.Screen;
@@ -19,8 +21,11 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private Image fill;
         [SerializeField] private Image sliderBackground;
         [SerializeField] private Slider slider;
+        [SerializeField] private SliderReleaseListener releaseListener;
 
         [Header("Settings")] 
+        [SerializeField] private float startValue;
+        [SerializeField] private bool wasChanged;
         [SerializeField] private float value;
         [SerializeField] private float minValue;
         [SerializeField] private float maxValue;
@@ -33,6 +38,7 @@ namespace UserInterface.Screen.Components.Settings
             Action<(string key, float value)> onValueReset, 
             UIComponentState defaultState)
         {
+            wasChanged = false;
             base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
             slider.minValue = minValue = asset.MinValue;
             slider.maxValue = maxValue = asset.MaxValue;
@@ -40,6 +46,7 @@ namespace UserInterface.Screen.Components.Settings
             handleText.text = value.ToString(CultureInfo.InvariantCulture);
             step = asset.MinIncrement;
             slider.onValueChanged.AddListener(UpdateValue);
+            releaseListener.onReleased += NotifyValueChanged;
         }
 
         public override void ChangeState(UIComponentState newState)
@@ -64,6 +71,22 @@ namespace UserInterface.Screen.Components.Settings
             value = Mathf.Round(newValue / step) * step;
             slider.SetValueWithoutNotify(value);
             handleText.text = value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void NotifyValueChanged()
+        {
+            if (Mathf.Approximately(value, startValue))
+            {
+                if (!wasChanged)
+                    return;
+
+                _onValueReset?.Invoke((fullName, value));
+                wasChanged = false;
+                return;
+            }
+
+            _onValueChange?.Invoke((fullName, value));
+            wasChanged = true;
         }
     }
 }
