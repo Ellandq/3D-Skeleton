@@ -23,7 +23,7 @@ namespace UserInterface.Screen.Components.Settings
     public interface ISettingItem<T> : ISettingItem
     {
         void Initialize(
-            SettingsPageItemSO asset,
+            SettingsPageItemSO itemAsset,
             Action<string> onSelect,
             Action<(string key, T value)> onValueChange,
             Action<(string key, T value)> onValueReset,

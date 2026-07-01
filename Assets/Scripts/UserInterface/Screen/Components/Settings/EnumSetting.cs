@@ -36,7 +36,7 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private bool wasChanged;
 
         public override void Initialize(
-            SettingsPageItemSO asset,
+            SettingsPageItemSO itemAsset,
             Action<string> onSelect,
             Action<(string key, int value)> onValueChange,
             Action<(string key, int value)> onValueReset,
@@ -44,16 +44,16 @@ namespace UserInterface.Screen.Components.Settings
         {
             wasChanged = false;
 
-            var enumType = Type.GetType(asset.EnumTypeName);
+            var enumType = Type.GetType(itemAsset.EnumTypeName);
             if (enumType is not { IsEnum: true })
             {
-                throw new ArgumentException($"Invalid enum type name: {asset.EnumTypeName}");
+                throw new ArgumentException($"Invalid enum type name: {itemAsset.EnumTypeName}");
             }
 
-            var defaultEnumValue = (Enum)Enum.Parse(enumType, asset.EnumDefaultValue);
-            
+            var defaultEnumValue = (Enum)Enum.Parse(enumType, itemAsset.EnumDefaultValue);
+
             startingValue = SettingsManager.GetIntSetting(
-                asset.fullName,
+                itemAsset.fullName,
                 Convert.ToInt32(defaultEnumValue)
             );
             
@@ -65,10 +65,9 @@ namespace UserInterface.Screen.Components.Settings
 
             InitializePreview();
 
-            base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
+            base.Initialize(itemAsset, onSelect, onValueChange, onValueReset, defaultState);
 
             UpdateSelectionUI();
-            startingValue = selectedIndex;
         }
 
         private void InitializePreview()
@@ -193,6 +192,16 @@ namespace UserInterface.Screen.Components.Settings
             }
 
             return result.ToString();
+        }
+        
+        public override void ResetSetting(bool toDefault = false)
+        {
+            var newValue = toDefault ? Convert.ToInt32(asset.EnumDefaultValue) : startingValue;
+            if (newValue == selectedIndex)
+                return;
+            selectedIndex = newValue;
+            UpdateSelectionUI();
+            _onValueChange?.Invoke((fullName, selectedIndex));
         }
     }
 }

@@ -31,7 +31,7 @@ namespace UserInterface.Screen.Components.Settings.Custom
         [SerializeField] private int selectedIndex;
 
         public override void Initialize(
-            SettingsPageItemSO asset, 
+            SettingsPageItemSO itemAsset, 
             Action<string> onSelect,  
             Action<(string key, int value)> onValueChange,
             Action<(string key, int value)> onValueReset, 
@@ -45,7 +45,7 @@ namespace UserInterface.Screen.Components.Settings.Custom
             selectedIndex = 0;
 
             InitializePreview();
-            base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
+            base.Initialize(itemAsset, onSelect, onValueChange, onValueReset, defaultState);
 
             leftButton.interactable = selectedIndex > 0;
             rightButton.interactable = selectedIndex < availableValues.Count - 1;

@@ -29,7 +29,7 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private float step;
 
         public override void Initialize(
-            SettingsPageItemSO asset,
+            SettingsPageItemSO itemAsset,
             Action<string> onSelect,
             Action<(string key, float value)> onValueChange,
             Action<(string key, float value)> onValueReset,
@@ -37,12 +37,12 @@ namespace UserInterface.Screen.Components.Settings
         {
             wasChanged = false;
 
-            base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
+            base.Initialize(itemAsset, onSelect, onValueChange, onValueReset, defaultState);
 
-            slider.minValue = asset.MinValue;
-            slider.maxValue = asset.MaxValue;
-            slider.value = value = SettingsManager.GetFloatSetting(asset.fullName, asset.FloatDefaultValue);
-            step = asset.MinIncrement;
+            slider.minValue = itemAsset.MinValue;
+            slider.maxValue = itemAsset.MaxValue;
+            slider.value = value = SettingsManager.GetFloatSetting(itemAsset.fullName, itemAsset.FloatDefaultValue);
+            step = itemAsset.MinIncrement;
 
             handleText.text = value.ToString(CultureInfo.InvariantCulture);
 
@@ -84,6 +84,15 @@ namespace UserInterface.Screen.Components.Settings
 
             _onValueChange?.Invoke((fullName, value));
             wasChanged = true;
+        }
+        
+        public override void ResetSetting(bool toDefault = false)
+        {
+            var newValue = toDefault ? asset.FloatDefaultValue : startValue;
+            if (Mathf.Approximately(value, newValue))
+                return;
+            UpdateValue(newValue);
+            _onValueChange?.Invoke((fullName, value));
         }
     }
 }

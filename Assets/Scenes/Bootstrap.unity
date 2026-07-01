@@ -506,11 +506,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4631305595060612453, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.83439696
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5799068510135519421, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 4710.0586
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 6572982594910763145, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       propertyPath: m_SizeDelta.x
@@ -565,7 +565,31 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6572982594910763145, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       insertIndex: -1
       addedObject: {fileID: 129356631}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7840184398221710984, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3319644968643642157, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5336218964950985162, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5657901302351415202, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5774671102258918462, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4060551802454168488, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4341606325795956207, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7849489267253556123, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
 --- !u!1 &348729421
 GameObject:
@@ -748,6 +772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8c0463ac0f64c239db3d1d68d570b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.SettingsManager
+  defaultInputSettings: {fileID: 0}
 --- !u!1 &438275676
 GameObject:
   m_ObjectHideFlags: 0

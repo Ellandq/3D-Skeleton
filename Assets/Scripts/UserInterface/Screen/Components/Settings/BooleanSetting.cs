@@ -32,18 +32,18 @@ namespace UserInterface.Screen.Components.Settings
         public Transform GetConditionalParent() => conditionalSettingsContentParent;
 
         public override void Initialize(
-            SettingsPageItemSO asset,
+            SettingsPageItemSO itemAsset,
             Action<string> onSelect,
             Action<(string key, int value)> onValueChange,
             Action<(string key, int value)> onValueReset,
             UIComponentState defaultState)
         {
-            base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
+            base.Initialize(itemAsset, onSelect, onValueChange, onValueReset, defaultState);
             
             wasChanged = false;
-            isOn = SettingsManager.GetIntSetting(asset.fullName, asset.BoolDefaultValue ? 1 : 0) == 1;
+            isOn = SettingsManager.GetIntSetting(itemAsset.fullName, itemAsset.BoolDefaultValue ? 1 : 0) == 1;
 
-            if (isOn && asset.ConditionalItems is { Count: > 0 })
+            if (isOn && itemAsset.ConditionalItems is { Count: > 0 })
             {
                 conditionalSettingsObject.SetActive(true);
             }
@@ -103,6 +103,15 @@ namespace UserInterface.Screen.Components.Settings
         public void SetRootLayout(RectTransform root)
         {
             _rootLayout = root;
+        }
+        
+        public override void ResetSetting(bool toDefault = false)
+        {
+            var newValue = toDefault ? asset.BoolDefaultValue : wasChanged ? !isOn : isOn;
+            if (isOn == newValue)
+                return;
+            UpdateStatus();
+            _onValueChange?.Invoke((fullName, isOn ? 1 : 0));
         }
     }
 }
