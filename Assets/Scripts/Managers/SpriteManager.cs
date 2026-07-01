@@ -11,6 +11,7 @@ namespace Managers
 
         public static Sprite GetInputSprite(string key)
         {
+            if (key == null) return Instance.defaultSprite;
             return Instance.inputKeySpriteDictionary.TryGetValue(key, out var sprite) ? sprite : Instance.defaultSprite;
         }
     }

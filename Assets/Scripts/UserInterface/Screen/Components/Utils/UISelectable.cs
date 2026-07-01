@@ -1,7 +1,5 @@
 ﻿using System;
-using UnityEditor;
 using UnityEngine;
-using Utils.Enum;
 using Utils.Enum.UI;
 
 namespace UserInterface.Screen.Components.Utils

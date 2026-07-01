@@ -1,9 +1,7 @@
-using Settings;
-
 namespace Settings.Enforcers
 {
     public class SoundEnforcer :
-        ISettingEnforcer<string>
+        ISettingEnforcer<float>
     {
         public string GetKey()
         {
@@ -13,7 +11,7 @@ namespace Settings.Enforcers
 
         public void Enforce(
             string fullName,
-            string value)
+            float value)
         {
         }
 
@@ -23,7 +21,7 @@ namespace Settings.Enforcers
         {
             Enforce(
                 fullName,
-                (string)value);
+                (float)value);
         }
     }
 }

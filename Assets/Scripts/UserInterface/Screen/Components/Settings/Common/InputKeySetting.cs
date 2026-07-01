@@ -55,17 +55,16 @@ namespace UserInterface.Screen.Components.Settings.Common
 
             defaultBaseValue = SettingsManager.GetDefaultInputSetting(fullName);
             currentBaseValue = startingBaseValue = SettingsManager.GetStringSetting(fullName, "");
+            baseButton.UpdateIcon(SpriteManager.GetInputSprite(currentBaseValue));
 
             if (!allowSecondaryInput)
-            {
-                ResetSetting();
                 return;
-            }
+            
             alternateButton = CreateButton(true);
 
             defaultAltValue = SettingsManager.GetDefaultInputSetting(fullName + "_Alt");
             currentAltValue = startingAltValue = SettingsManager.GetStringSetting(fullName + "_Alt", "");
-            ResetSetting();
+            alternateButton.UpdateIcon(SpriteManager.GetInputSprite(currentAltValue));
         }
 
         private InputKeyButton CreateButton(bool isAlt = false)
@@ -116,7 +115,7 @@ namespace UserInterface.Screen.Components.Settings.Common
 
         public void SettingChanged(string newValue, bool alt = false)
         {
-            UIManager.Instance.DeactivateComponent(NamedWindow.InputAssignment);
+            UIManager.DeactivateComponent(NamedWindow.InputAssignment);
             var sprite = SpriteManager.GetInputSprite(newValue);
 
             if (!alt)
@@ -145,24 +144,28 @@ namespace UserInterface.Screen.Components.Settings.Common
 
         public override void ResetSetting(bool toDefault = false)
         {
-            var newValue = toDefault ? defaultBaseValue : startingBaseValue;
+            var newBaseValue = toDefault ? defaultBaseValue : startingBaseValue;
 
-            if (newValue != currentBaseValue)
+            if (newBaseValue != currentBaseValue)
             {
-                currentBaseValue = newValue;
-                baseButton.UpdateIcon(SpriteManager.GetInputSprite(newValue));
-                _onValueChange?.Invoke((fullName, newValue));
+                currentBaseValue = newBaseValue;
+                baseButton.UpdateIcon(SpriteManager.GetInputSprite(newBaseValue));
             }
+
+            _onValueReset?.Invoke((fullName, newBaseValue));
 
             if (!alternateButton)
                 return;
 
-            newValue = toDefault ? defaultAltValue : startingAltValue;
+            var newAltValue = toDefault ? defaultAltValue : startingAltValue;
 
-            if (newValue == currentAltValue) return;
-            currentAltValue = newValue;
-            alternateButton.UpdateIcon(SpriteManager.GetInputSprite(newValue));
-            _onValueChange?.Invoke((fullName + "_Alt", newValue));
+            if (newAltValue != currentAltValue)
+            {
+                currentAltValue = newAltValue;
+                alternateButton.UpdateIcon(SpriteManager.GetInputSprite(newAltValue));
+            }
+
+            _onValueReset?.Invoke((fullName + "_Alt", newAltValue));
         }
     }
 }

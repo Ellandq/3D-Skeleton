@@ -12,7 +12,6 @@ using UserInterface.Screen;
 using UserInterface.Windows;
 using Utils.Collections;
 using Utils.Contract;
-using Utils.Enum;
 using Utils.SO;
 
 namespace Managers
@@ -41,9 +40,9 @@ namespace Managers
         
         [Header("Utils")]
         [SerializeField] private OutsideClickDetector outsideClickDetector;
-        public OutsideClickDetector OutsideClickDetectorRef => outsideClickDetector;
+        public static OutsideClickDetector OutsideClickDetectorRef => Instance.outsideClickDetector;
         [SerializeField] private BackgroundDim backgroundDim;
-        public BackgroundDim BackgroundDim => backgroundDim;
+        public static BackgroundDim BackgroundDim => Instance.backgroundDim;
 
         [Header("UI Stack")] 
         private readonly Stack<IUIStackable> _uiStack = new ();
@@ -75,7 +74,7 @@ namespace Managers
             );
         }
 
-        public void Start()
+        private void Start()
         {
             InputManager.Instance.Subscribe(PlayerAction.Escape, state =>
             {
@@ -108,7 +107,6 @@ namespace Managers
 
         private void PushToUIStack(IUIStackable stackable, bool instant, Action onActivate = null)
         {
-
             if (_uiStack.TryPeek(out var component))
             {
                 component.OnPushOther();
@@ -124,9 +122,9 @@ namespace Managers
                 return;
             if (_uiStack.TryPeek(out var component))
             {
+                _transitionLocked = true;
                 onDeactivate += () => OnFinishPop(component);
                 component.OnPop(instant, onDeactivate);
-                _transitionLocked = true;
             }
             else
             {
@@ -134,7 +132,12 @@ namespace Managers
             }
         }
 
-        public void OnFinishPop(IUIStackable stackable)
+        public static void CancelPop()
+        {
+            Instance._transitionLocked = false;
+        }
+
+        private void OnFinishPop(IUIStackable stackable)
         {
             _transitionLocked = false;
             if (_uiStack.TryPeek(out var component) && component == stackable)
@@ -148,44 +151,50 @@ namespace Managers
             }
         }
         
-        public void SetOnEmptyStackExitCallback(Action action)
+        public static void SetOnEmptyStackExitCallback(Action action)
         {
-            _onEmptyStackExit = action;
+            Instance._onEmptyStackExit = action;
         }
 
         #endregion
 
         #region COMPONENT CONTROL
 
-        public IUIComponent GetComponent<T>(T type) where T : Enum
+        public static TC GetUIComponent<TE, TC>(TE type) where TE : Enum where TC : class, IUIComponent =>
+            Instance.GetDeclaredUIComponent<TE, TC>(type);
+        
+        private TC GetDeclaredUIComponent<TE, TC>(TE type)
+            where TE : Enum
+            where TC : class, IUIComponent
         {
-            if (typeof(T) == typeof(NamedHUD))
+            if (typeof(TE) == typeof(NamedHUD))
             {
                 var key = (NamedHUD)(object)type;
-                return _huds.GetValueOrDefault(key);
+                return _huds.GetValueOrDefault(key) as TC;
             }
 
-            if (typeof(T) == typeof(NamedOverlay))
+            if (typeof(TE) == typeof(NamedOverlay))
             {
                 var key = (NamedOverlay)(object)type;
-                return _overlays.GetValueOrDefault(key);
+                return _overlays.GetValueOrDefault(key) as TC;
             }
 
-            if (typeof(T) != typeof(NamedScreen)) throw new ArgumentException("Unsupported enum type: " + typeof(T));
+            if (typeof(TE) != typeof(NamedScreen)) throw new ArgumentException("Unsupported enum type: " + typeof(TE));
             {
                 var key = (NamedScreen)(object)type;
-                return _screens.GetValueOrDefault(key);
+                return _screens.GetValueOrDefault(key) as TC;
             }
+
         }
 
-        public void ActivateComponent<T>(T type, bool instant = false, Action onActivate = null) where T : Enum
+        public static void ActivateComponent<T>(T type, bool instant = false, Action onActivate = null) where T : Enum
         {
-            ChangeComponentState(type, true, instant, onActivate);
+            Instance.ChangeComponentState(type, true, instant, onActivate);
         }
 
-        public void DeactivateComponent<T>(T type, bool instant = false, Action onDeactivate = null) where T : Enum
+        public static void DeactivateComponent<T>(T type, bool instant = false, Action onDeactivate = null) where T : Enum
         {
-            ChangeComponentState(type, false, instant, onDeactivate);
+            Instance.ChangeComponentState(type, false, instant, onDeactivate);
         }
 
         private void ChangeComponentState<T>(T type, bool active, bool instant = false, Action onFinish = null) where T : Enum
@@ -280,7 +289,7 @@ namespace Managers
             SortScreensByPriority();
         }
         
-        private async static Task AddComponents<TEnum, TComp>(
+        private static async Task AddComponents<TEnum, TComp>(
             List<TEnum> desiredKeys,
             Dictionary<TEnum, TComp> currentDict,
             Transform parent,

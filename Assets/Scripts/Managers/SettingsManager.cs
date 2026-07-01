@@ -111,14 +111,6 @@ namespace Managers
             return value;
         }
         
-        public static string GetDefaultInputSetting(string key) => Instance.GetDefaultInput(key);
-
-        private string GetDefaultInput(string key)
-        {
-            _defaultInputDict.TryGetValue(key, out var value);
-            return value;
-        }
-        
         public static void SaveIntSetting(string key, int value)
         {
             Instance.SaveInt(key, value);
@@ -138,8 +130,7 @@ namespace Managers
                     key,
                     value);
         }
-
-
+        
         public static void SaveFloatSetting(string key, float value)
         {
             Instance.SaveFloat(key, value);
@@ -239,6 +230,14 @@ namespace Managers
             }
 
             PlayerPrefs.Save();
+        }
+        
+        public static string GetDefaultInputSetting(string key) => Instance.GetDefaultInput(key);
+
+        private string GetDefaultInput(string key)
+        {
+            _defaultInputDict.TryGetValue(key, out var value);
+            return value;
         }
     }
 }

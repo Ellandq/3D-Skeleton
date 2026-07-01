@@ -41,7 +41,7 @@ namespace UserInterface.Screen.Components.Settings.Common
 
             slider.minValue = itemAsset.MinValue;
             slider.maxValue = itemAsset.MaxValue;
-            slider.value = value = SettingsManager.GetFloatSetting(itemAsset.fullName, itemAsset.FloatDefaultValue);
+            slider.value = value = startValue = SettingsManager.GetFloatSetting(itemAsset.fullName, itemAsset.FloatDefaultValue);
             step = itemAsset.MinIncrement;
 
             handleText.text = value.ToString(CultureInfo.InvariantCulture);

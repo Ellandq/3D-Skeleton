@@ -1,6 +1,4 @@
-﻿using UserInterface.Screen;
-
-namespace UserInterface.Windows
+﻿namespace UserInterface.Windows
 {
     public abstract class WindowBase : UIComponentBase, IWindow
     {

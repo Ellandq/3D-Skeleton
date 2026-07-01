@@ -19,8 +19,8 @@ namespace UserInterface.Screen
 
         private void Awake()
         {
-            settingsButton.onClick.AddListener(() => UIManager.Instance.ActivateComponent(NamedScreen.Settings));
-            quitButton.onClick.AddListener(() => UIManager.Instance.ActivateComponent(NamedWindow.ExitConfirmation));
+            settingsButton.onClick.AddListener(() => UIManager.ActivateComponent(NamedScreen.Settings));
+            quitButton.onClick.AddListener(() => UIManager.ActivateComponent(NamedWindow.ExitConfirmation));
         }
     }
 }

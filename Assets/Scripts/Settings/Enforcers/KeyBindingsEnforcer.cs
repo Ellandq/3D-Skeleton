@@ -1,5 +1,3 @@
-using Settings;
-
 namespace Settings.Enforcers
 {
     public class KeyBindingsEnforcer :

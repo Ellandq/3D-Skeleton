@@ -1,6 +1,5 @@
 ﻿using System;
 using Managers;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Components;
@@ -23,11 +22,15 @@ namespace UserInterface.Windows.Settings
         
         private void Awake()
         {
-            _outsideClickAction = () => UIManager.Instance.DeactivateComponent(Name);
-            outsideClickDetector = UIManager.Instance.OutsideClickDetectorRef;
-            var settingsScreen = UIManager.Instance.GetComponent<SettingsScreen>();
-            confirmButton.onClick.AddListener(() => settingsScreen.ResetSettings(true));
-            cancelButton.onClick.AddListener(() => UIManager.Instance.DeactivateComponent(Name));
+            _outsideClickAction = () => UIManager.DeactivateComponent(Name);
+            outsideClickDetector = UIManager.OutsideClickDetectorRef;
+            var settingsScreen = UIManager.GetUIComponent<NamedScreen, SettingsScreen>(NamedScreen.Settings);
+            confirmButton.onClick.AddListener(() =>
+            {
+                settingsScreen.ResetSettings(true);
+                UIManager.DeactivateComponent(Name);
+            });
+            cancelButton.onClick.AddListener(() => UIManager.DeactivateComponent(Name));
         }
         
         public override void Activate(bool instant, Action onActivate = null)
@@ -83,14 +86,6 @@ namespace UserInterface.Windows.Settings
         public void OnPopOther()
         {
             EnableInteractions();
-        }
-
-        protected override void ChangeComponentState(bool active)
-        {
-            base.ChangeComponentState(active);
-            if (active)
-                return;
-            UIManager.Instance.OnFinishPop(this);
         }
 
         #endregion

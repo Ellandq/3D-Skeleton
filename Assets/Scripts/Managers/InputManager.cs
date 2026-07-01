@@ -49,6 +49,9 @@ namespace Managers
 
         private void Update()
         {
+            foreach (var wrapper in _buttonInfoDict.Values)
+                wrapper.UpdateState();
+            
             if (!isWaitingForInput)
                 return;
 
@@ -71,9 +74,6 @@ namespace Managers
                 _listener?.Invoke(kvp.Value);
                 return;
             }
-            
-            foreach (var wrapper in _buttonInfoDict.Values)
-                wrapper.UpdateState();
         }
 
         public void Subscribe(

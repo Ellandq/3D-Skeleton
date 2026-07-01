@@ -5468,7 +5468,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2065994161066818799}
         m_TargetAssemblyTypeName: UserInterface.Screen.SettingsScreen, Assembly-CSharp
         m_MethodName: ApplySettings
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -1,17 +1,12 @@
 ﻿using System;
-using Managers;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using UserInterface.Components;
-using UserInterface.Screen.Components.Settings.Common;
-using Utils.Enum;
 using Utils.Enum.UI;
 using Utils.SO;
 using Utils.SO.Settings.Screen;
 
-namespace UserInterface.Screen.Components.Settings
+namespace UserInterface.Screen.Components.Settings.Common
 {
     public abstract class SettingBase<T> : MonoBehaviour, ISettingItem<T>
     {
@@ -97,7 +92,7 @@ namespace UserInterface.Screen.Components.Settings
 
         public virtual void ResetSetting(bool toDefault = false)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

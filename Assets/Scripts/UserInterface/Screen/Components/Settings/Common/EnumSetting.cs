@@ -34,6 +34,7 @@ namespace UserInterface.Screen.Components.Settings.Common
         [SerializeField] private int selectedIndex;
         [SerializeField] private int startingValue;
         [SerializeField] private bool wasChanged;
+        private Enum defaultEnumValue;
 
         public override void Initialize(
             SettingsPageItemSO itemAsset,
@@ -50,7 +51,7 @@ namespace UserInterface.Screen.Components.Settings.Common
                 throw new ArgumentException($"Invalid enum type name: {itemAsset.EnumTypeName}");
             }
 
-            var defaultEnumValue = (Enum)Enum.Parse(enumType, itemAsset.EnumDefaultValue);
+            defaultEnumValue = (Enum)Enum.Parse(enumType, itemAsset.EnumDefaultValue);
 
             startingValue = SettingsManager.GetIntSetting(
                 itemAsset.fullName,
@@ -196,7 +197,7 @@ namespace UserInterface.Screen.Components.Settings.Common
         
         public override void ResetSetting(bool toDefault = false)
         {
-            var newValue = toDefault ? Convert.ToInt32(asset.EnumDefaultValue) : startingValue;
+            var newValue = toDefault ? Convert.ToInt32(defaultEnumValue) : startingValue;
             if (newValue == selectedIndex)
                 return;
             selectedIndex = newValue;

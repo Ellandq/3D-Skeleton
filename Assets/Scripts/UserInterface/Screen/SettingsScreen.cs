@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Managers;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UserInterface.Screen.Components.Settings;
 using UserInterface.Screen.Components.Settings.Buttons;
@@ -323,26 +322,28 @@ namespace UserInterface.Screen
 
         public void ResetSettings(bool force)
         {
-            if (force)
+            if (!force)
             {
-                UIManager.Instance.ActivateComponent(NamedWindow.RestoreDefaultSettings);
+                UIManager.ActivateComponent(NamedWindow.RestoreDefaultSettings);
                 return;
             }
-            CleanCache();
+            
             foreach (var kvp in _settingItems)
             {
                 kvp.Value.ResetSetting();
             }
+            
+            CleanCache();
         }
 
         public void RestoreDefaults(bool force)
         {
-            if (force)
+            if (!force)
             {
-                UIManager.Instance.ActivateComponent(NamedWindow.RestoreDefaultSettings);
+                UIManager.ActivateComponent(NamedWindow.RestoreDefaultSettings);
                 return;
             }
-            CleanCache();
+            
             foreach (var kvp in _settingItems)
             {
                 kvp.Value.ResetSetting(true);
@@ -359,14 +360,14 @@ namespace UserInterface.Screen
         {
             ApplySettings();
             waitingToExit = true;
-            UIManager.Instance.DeactivateComponent(Name);
+            UIManager.DeactivateComponent(Name);
         }
 
         public void DiscardAndExit()
         {
             CleanCache();
             waitingToExit = true;
-            UIManager.Instance.DeactivateComponent(Name);
+            UIManager.DeactivateComponent(Name);
         }
 
         #region CHANGES
@@ -395,7 +396,7 @@ namespace UserInterface.Screen
                     break;
 
                 default:
-                    Debug.LogWarning($"Unsupported setting type: {value.GetType()}");
+                    // ignore
                     break;
             }
         }
@@ -488,13 +489,13 @@ namespace UserInterface.Screen
 
         public void OnPush(bool instant, Action onActivate = null)
         {
+            EnableInteractions();
             if (!IsClosing)
             {
                 Activate(instant, onActivate);
                 return;
             }
             Activate(true, onActivate);
-            EnableInteractions();
         }
 
         public void OnPushOther()
@@ -504,6 +505,12 @@ namespace UserInterface.Screen
 
         public void OnPop(bool instant, Action onDeactivate = null)
         {
+            if (cachedFloatChanges.Count != 0 || cachedIntChanges.Count != 0 || cachedStringChanges.Count != 0)
+            {
+                UIManager.CancelPop();
+                UIManager.ActivateComponent(NamedWindow.SettingsScreenExitConfirmation);
+                return;
+            }
             if (!IsClosing)
             {
                 Deactivate(instant, onDeactivate);
@@ -517,7 +524,7 @@ namespace UserInterface.Screen
             if (waitingToExit)
             {
                 ResetSettings(true);
-                UIManager.Instance.DeactivateComponent(Name);
+                UIManager.DeactivateComponent(Name);
                 waitingToExit = false;
                 return;
             }

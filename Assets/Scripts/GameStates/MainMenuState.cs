@@ -22,10 +22,9 @@ namespace GameStates
                 NamedScene.MainMenu,
                 () =>
                 {
-                    var uiManager = UIManager.Instance;
-                    uiManager.DeactivateComponent(NamedScreen.Loading, false, Resume);
-                    uiManager.ActivateComponent(NamedScreen.MainMenu);
-                    uiManager.SetOnEmptyStackExitCallback(() => uiManager.ActivateComponent(NamedWindow.ExitConfirmation));
+                    UIManager.DeactivateComponent(NamedScreen.Loading, false, Resume);
+                    UIManager.ActivateComponent(NamedScreen.MainMenu);
+                    UIManager.SetOnEmptyStackExitCallback(() => UIManager.ActivateComponent(NamedWindow.ExitConfirmation));
                 }
             );
         }

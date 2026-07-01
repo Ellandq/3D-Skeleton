@@ -31,7 +31,7 @@ namespace UserInterface.Screen.Components.Settings.Common
                 parent.SelectItem);
             
             button.onClick.AddListener(
-                () => UIManager.Instance.ActivateComponent(NamedWindow.InputAssignment, false, StartAssignment)
+                () => UIManager.ActivateComponent(NamedWindow.InputAssignment, false, StartAssignment)
             );
         }
 
@@ -63,9 +63,6 @@ namespace UserInterface.Screen.Components.Settings.Common
             button.interactable =
                 state != UIComponentState.Disabled;
         }
-        
-        
-
 
         public void UpdateIcon(Sprite sprite)
         {

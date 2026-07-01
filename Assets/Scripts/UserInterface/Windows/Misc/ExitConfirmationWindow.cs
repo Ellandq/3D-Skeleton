@@ -1,6 +1,5 @@
 ﻿using System;
 using Managers;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Components;
@@ -22,10 +21,10 @@ namespace UserInterface.Windows.Misc
 
         private void Awake()
         {
-            _outsideClickAction = () => UIManager.Instance.DeactivateComponent(Name);
-            outsideClickDetector = UIManager.Instance.OutsideClickDetectorRef;
+            _outsideClickAction = () => UIManager.DeactivateComponent(Name);
+            outsideClickDetector = UIManager.OutsideClickDetectorRef;
             confirmButton.onClick.AddListener(Application.Quit);
-            cancelButton.onClick.AddListener(() => UIManager.Instance.DeactivateComponent(Name));
+            cancelButton.onClick.AddListener(() => UIManager.DeactivateComponent(Name));
         }
 
         public override void Activate(bool instant, Action onActivate = null)
@@ -81,14 +80,6 @@ namespace UserInterface.Windows.Misc
         public void OnPopOther()
         {
             EnableInteractions();
-        }
-
-        protected override void ChangeComponentState(bool active)
-        {
-            base.ChangeComponentState(active);
-            if (active)
-                return;
-            UIManager.Instance.OnFinishPop(this);
         }
 
         #endregion

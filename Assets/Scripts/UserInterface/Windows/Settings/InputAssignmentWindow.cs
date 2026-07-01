@@ -48,7 +48,7 @@ namespace UserInterface.Windows.Settings
                 return;
             }
             Activate(true, onActivate);
-            UIManager.Instance.BackgroundDim.Activate(false);
+            UIManager.BackgroundDim.Activate(false);
             EnableInteractions();
         }
 
@@ -66,19 +66,12 @@ namespace UserInterface.Windows.Settings
                 return;
             }
             Deactivate(true, onDeactivate);
-            UIManager.Instance.BackgroundDim.Deactivate(false);
+            UIManager.BackgroundDim.Deactivate(false);
         }
 
         public void OnPopOther()
         {
             EnableInteractions();
-        }
-        
-        protected override void ChangeComponentState(bool active)
-        {
-            base.ChangeComponentState(active);
-            if (!active)
-                UIManager.Instance.OnFinishPop(this);
         }
 
         #endregion
