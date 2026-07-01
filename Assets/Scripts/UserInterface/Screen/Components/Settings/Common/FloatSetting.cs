@@ -24,7 +24,6 @@ namespace UserInterface.Screen.Components.Settings.Common
 
         [Header("Settings")]
         [SerializeField] private float startValue;
-        [SerializeField] private bool wasChanged;
         [SerializeField] private float value;
         [SerializeField] private float step;
 
@@ -35,8 +34,6 @@ namespace UserInterface.Screen.Components.Settings.Common
             Action<(string key, float value)> onValueReset,
             UIComponentState defaultState)
         {
-            wasChanged = false;
-
             base.Initialize(itemAsset, onSelect, onValueChange, onValueReset, defaultState);
 
             slider.minValue = itemAsset.MinValue;
@@ -72,18 +69,7 @@ namespace UserInterface.Screen.Components.Settings.Common
 
         private void NotifyValueChanged()
         {
-            if (Mathf.Approximately(value, startValue))
-            {
-                if (!wasChanged)
-                    return;
-
-                _onValueReset?.Invoke((fullName, value));
-                wasChanged = false;
-                return;
-            }
-
-            _onValueChange?.Invoke((fullName, value));
-            wasChanged = true;
+            NotifyValueChanged(value, startValue);
         }
         
         public override void ResetSetting(bool toDefault = false)
@@ -92,7 +78,17 @@ namespace UserInterface.Screen.Components.Settings.Common
             if (Mathf.Approximately(value, newValue))
                 return;
             UpdateValue(newValue);
-            _onValueChange?.Invoke((fullName, value));
+            NotifyValueChanged();
+        }
+
+        public override void UpdateStartValue()
+        {
+            startValue = value;
+        }
+        
+        protected override bool ValuesEqual(float a, float b)
+        {
+            return Mathf.Approximately(a, b);
         }
     }
 }

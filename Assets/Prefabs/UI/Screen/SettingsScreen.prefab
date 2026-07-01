@@ -1137,6 +1137,8 @@ MonoBehaviour:
   headerLeftButton: {fileID: 9145562031352076272}
   headerRightButton: {fileID: 7988331253754396608}
   headerScrollRect: {fileID: 7748173071724587956}
+  resetButton: {fileID: 2553855839402642795}
+  applyButton: {fileID: 5440714615696489810}
   viewParent: {fileID: 5799068510135519421}
   pageAssets:
   - {fileID: 11400000, guid: f190e2d07b3d0fc4cbd04648caedd8b3, type: 2}
@@ -2587,7 +2589,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2088986349781657175
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5362,7 +5364,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4799093819734871186
 RectTransform:
   m_ObjectHideFlags: 0

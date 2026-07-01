@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Components;
@@ -20,6 +21,11 @@ namespace UserInterface.Screen.Components.Settings.Buttons
             base.ChangeState(newState);
             text.color = UITheme.GetColor(state, UIColorType.Lighter);
             background.color = UITheme.GetColor(state, UIColorType.Light);
+        }
+
+        public void OnDisable()
+        {
+            ChangeState(UIComponentState.Enabled);
         }
     }
 }

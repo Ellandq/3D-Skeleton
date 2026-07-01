@@ -33,7 +33,6 @@ namespace UserInterface.Screen.Components.Settings.Common
         [SerializeField] private List<string> availableValues;
         [SerializeField] private int selectedIndex;
         [SerializeField] private int startingValue;
-        [SerializeField] private bool wasChanged;
         private Enum defaultEnumValue;
 
         public override void Initialize(
@@ -43,8 +42,6 @@ namespace UserInterface.Screen.Components.Settings.Common
             Action<(string key, int value)> onValueReset,
             UIComponentState defaultState)
         {
-            wasChanged = false;
-
             var enumType = Type.GetType(itemAsset.EnumTypeName);
             if (enumType is not { IsEnum: true })
             {
@@ -141,16 +138,7 @@ namespace UserInterface.Screen.Components.Settings.Common
 
             UpdateSelectionUI();
 
-            if (startingValue == selectedIndex && wasChanged)
-            {
-                _onValueReset?.Invoke((fullName, selectedIndex));
-                wasChanged = false;
-            }
-            else if (startingValue != selectedIndex)
-            {
-                _onValueChange?.Invoke((fullName, selectedIndex));
-                wasChanged = true;
-            }
+            NotifyValueChanged(selectedIndex, startingValue);
         }
 
         private void UpdateSelectionUI()
@@ -195,14 +183,36 @@ namespace UserInterface.Screen.Components.Settings.Common
             return result.ToString();
         }
         
+        private void UpdatePreview()
+        {
+            for (var i = 0; i < previewItems.Count; i++)
+            {
+                previewItems[i].color =
+                    i == selectedIndex
+                        ? UITheme.GetColor(State, UIColorType.Lighter)
+                        : UITheme.GetColor(State, UIColorType.Light);
+            }
+        }
+        
         public override void ResetSetting(bool toDefault = false)
         {
-            var newValue = toDefault ? Convert.ToInt32(defaultEnumValue) : startingValue;
+            var newValue = toDefault
+                ? Convert.ToInt32(defaultEnumValue)
+                : startingValue;
+
             if (newValue == selectedIndex)
                 return;
+
             selectedIndex = newValue;
+
             UpdateSelectionUI();
-            _onValueChange?.Invoke((fullName, selectedIndex));
+            UpdatePreview();
+            NotifyValueChanged(selectedIndex, startingValue);
+        }
+        
+        public override void UpdateStartValue()
+        {
+            startingValue = selectedIndex;
         }
     }
 }

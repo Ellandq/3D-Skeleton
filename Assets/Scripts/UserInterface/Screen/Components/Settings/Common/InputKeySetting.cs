@@ -121,23 +121,13 @@ namespace UserInterface.Screen.Components.Settings.Common
             if (!alt)
             {
                 currentBaseValue = newValue;
-
-                if (newValue == startingBaseValue)
-                    _onValueReset?.Invoke((fullName, newValue));
-                else
-                    _onValueChange?.Invoke((fullName, newValue));
-
+                NotifyValueChanged(currentBaseValue, startingBaseValue);
                 baseButton.UpdateIcon(sprite);
             }
             else
             {
                 currentAltValue = newValue;
-
-                if (newValue == startingAltValue)
-                    _onValueReset?.Invoke((fullName + "_Alt", newValue));
-                else
-                    _onValueChange?.Invoke((fullName + "_Alt", newValue));
-
+                NotifyValueChanged(currentAltValue, startingAltValue);
                 alternateButton.UpdateIcon(sprite);
             }
         }
@@ -150,22 +140,28 @@ namespace UserInterface.Screen.Components.Settings.Common
             {
                 currentBaseValue = newBaseValue;
                 baseButton.UpdateIcon(SpriteManager.GetInputSprite(newBaseValue));
+                NotifyValueChanged(currentBaseValue, startingBaseValue);
             }
-
-            _onValueReset?.Invoke((fullName, newBaseValue));
 
             if (!alternateButton)
                 return;
 
             var newAltValue = toDefault ? defaultAltValue : startingAltValue;
 
-            if (newAltValue != currentAltValue)
-            {
-                currentAltValue = newAltValue;
-                alternateButton.UpdateIcon(SpriteManager.GetInputSprite(newAltValue));
-            }
+            if (newAltValue == currentAltValue) return;
+            currentAltValue = newAltValue;
+            alternateButton.UpdateIcon(SpriteManager.GetInputSprite(newAltValue));
+            NotifyValueChanged(currentAltValue, startingAltValue);
+        }
+        
+        public override void UpdateStartValue()
+        {
+            startingBaseValue = currentBaseValue;
 
-            _onValueReset?.Invoke((fullName + "_Alt", newAltValue));
+            if (alternateButton)
+            {
+                startingAltValue = currentAltValue;
+            }
         }
     }
 }

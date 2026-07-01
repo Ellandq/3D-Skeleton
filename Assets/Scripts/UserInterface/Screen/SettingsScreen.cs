@@ -39,6 +39,10 @@ namespace UserInterface.Screen
         [SerializeField] private Button headerLeftButton;
         [SerializeField] private Button headerRightButton;
         [SerializeField] private ScrollRect headerScrollRect;
+        
+        [Header("Object References - Side Panel")]
+        [SerializeField] private GameObject resetButton;
+        [SerializeField] private GameObject applyButton;
 
         [Header("Object References - View")] 
         [SerializeField] private Transform viewParent;
@@ -92,6 +96,12 @@ namespace UserInterface.Screen
             
             Initialize();
             base.Activate(instant, onActivate);
+            StartCoroutine(SelectInitialPage());
+        }
+        
+        private IEnumerator SelectInitialPage()
+        {
+            yield return null;
             SetActivePage(0);
         }
 
@@ -324,7 +334,7 @@ namespace UserInterface.Screen
         {
             if (!force)
             {
-                UIManager.ActivateComponent(NamedWindow.RestoreDefaultSettings);
+                UIManager.ActivateComponent(NamedWindow.ResetSettings);
                 return;
             }
             
@@ -353,6 +363,10 @@ namespace UserInterface.Screen
         public void ApplySettings()
         {
             SettingsManager.SaveSettings(cachedIntChanges, cachedFloatChanges, cachedStringChanges);
+            foreach (var kvp in _settingItems)
+            {
+                kvp.Value.UpdateStartValue();
+            }
             CleanCache();
         }
 
@@ -372,11 +386,19 @@ namespace UserInterface.Screen
 
         #region CHANGES
 
+        private void SetSideButtonsActive(bool active)
+        {
+            applyButton.SetActive(active);
+            resetButton.SetActive(active);
+        }
+
         private void CleanCache()
         {
             cachedIntChanges.Clear();
             cachedFloatChanges.Clear();
             cachedStringChanges.Clear();
+            
+            SetSideButtonsActive(false);
         }
 
         private void CacheChange(string key, object value)
@@ -399,6 +421,9 @@ namespace UserInterface.Screen
                     // ignore
                     break;
             }
+
+            if (resetButton.activeSelf) return;
+            SetSideButtonsActive(true);
         }
 
         private void RemoveCachedChange(string key, object value)
@@ -417,6 +442,9 @@ namespace UserInterface.Screen
                     cachedStringChanges.Remove(key);
                     break;
             }
+            
+            if (!resetButton.activeSelf && (cachedFloatChanges.Count != 0 || cachedIntChanges.Count != 0 || cachedStringChanges.Count != 0)) return;
+            SetSideButtonsActive(false);
         }
 
         #endregion

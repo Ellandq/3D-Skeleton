@@ -236,7 +236,7 @@ namespace Managers
 
         private string GetDefaultInput(string key)
         {
-            _defaultInputDict.TryGetValue(key, out var value);
+            _defaultInputDict.TryGetValue(key.Replace("Input/", ""), out var value);
             return value;
         }
     }

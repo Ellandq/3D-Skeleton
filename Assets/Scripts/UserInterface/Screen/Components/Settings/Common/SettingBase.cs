@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,6 +64,23 @@ namespace UserInterface.Screen.Components.Settings.Common
                 x => onValueReset(x.key, x.value),
                 defaultState);
         }
+        
+        protected void NotifyValueChanged(T currentValue, T startingValue)
+        {
+            if (ValuesEqual(currentValue, startingValue))
+            {
+                _onValueReset?.Invoke((fullName, currentValue));
+            }
+            else
+            {
+                _onValueChange?.Invoke((fullName, currentValue));
+            }
+        }
+
+        protected virtual bool ValuesEqual(T a, T b)
+        {
+            return EqualityComparer<T>.Default.Equals(a, b);
+        }
 
         public virtual void ChangeState(UIComponentState newState)
         {
@@ -91,6 +109,11 @@ namespace UserInterface.Screen.Components.Settings.Common
         }
 
         public virtual void ResetSetting(bool toDefault = false)
+        {
+            
+        }
+
+        public virtual void UpdateStartValue()
         {
             
         }

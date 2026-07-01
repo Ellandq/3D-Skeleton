@@ -19,6 +19,7 @@ namespace UserInterface.Screen.Components.Settings.Common
         void SelectItem();
         void DeselectItem();
         void ResetSetting(bool toDefault = false);
+        void UpdateStartValue();
     }
 
     public interface ISettingItem<T> : ISettingItem

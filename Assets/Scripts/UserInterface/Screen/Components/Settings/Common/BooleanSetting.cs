@@ -27,7 +27,7 @@ namespace UserInterface.Screen.Components.Settings.Common
 
         [Header("Settings")]
         [SerializeField] private bool isOn;
-        [SerializeField] private bool wasChanged;
+        private int startingValue;
         
         public Transform GetConditionalParent() => conditionalSettingsContentParent;
 
@@ -40,8 +40,8 @@ namespace UserInterface.Screen.Components.Settings.Common
         {
             base.Initialize(itemAsset, onSelect, onValueChange, onValueReset, defaultState);
             
-            wasChanged = false;
-            isOn = SettingsManager.GetIntSetting(itemAsset.fullName, itemAsset.BoolDefaultValue ? 1 : 0) == 1;
+            startingValue = SettingsManager.GetIntSetting(itemAsset.fullName, itemAsset.BoolDefaultValue ? 1 : 0);
+            isOn = startingValue == 1;
 
             if (isOn && itemAsset.ConditionalItems is { Count: > 0 })
             {
@@ -78,26 +78,17 @@ namespace UserInterface.Screen.Components.Settings.Common
             isOn = !isOn;
             UpdateStatus();
 
-            if (conditionalSettingsContentParent.childCount == 0)
-                return;
-
-            conditionalSettingsObject.SetActive(isOn);
-
-            if (_rootLayout)
+            if (conditionalSettingsContentParent.childCount > 0)
             {
-                LayoutRebuilder.ForceRebuildLayoutImmediate(_rootLayout);
+                conditionalSettingsObject.SetActive(isOn);
+
+                if (_rootLayout)
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(_rootLayout);
+                }
             }
 
-            if (wasChanged)
-            {
-                wasChanged = false;
-                _onValueReset?.Invoke((fullName, isOn ? 1 : 0));
-            }
-            else
-            {
-                _onValueChange?.Invoke((fullName, isOn ? 1 : 0));
-                wasChanged = true;
-            }
+            NotifyValueChanged(isOn ? 1 : 0, startingValue);
         }
 
         public void SetRootLayout(RectTransform root)
@@ -107,11 +98,31 @@ namespace UserInterface.Screen.Components.Settings.Common
         
         public override void ResetSetting(bool toDefault = false)
         {
-            var newValue = toDefault ? asset.BoolDefaultValue : wasChanged ? !isOn : isOn;
+            var newValue = toDefault
+                ? asset.BoolDefaultValue
+                : startingValue == 1;
+
             if (isOn == newValue)
                 return;
+
+            isOn = newValue;
+
             UpdateStatus();
-            _onValueChange?.Invoke((fullName, isOn ? 1 : 0));
+
+            if (conditionalSettingsContentParent.childCount > 0)
+            {
+                conditionalSettingsObject.SetActive(isOn);
+
+                if (_rootLayout)
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(_rootLayout);
+            }
+
+            NotifyValueChanged(isOn ? 1 : 0, startingValue);
+        }
+        
+        public override void UpdateStartValue()
+        {
+            startingValue = isOn ? 1 : 0;
         }
     }
 }

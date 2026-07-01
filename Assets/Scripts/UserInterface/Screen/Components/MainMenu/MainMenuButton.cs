@@ -20,7 +20,12 @@ namespace UserInterface.Screen.Components.MainMenu
             base.ChangeState(newState);
             frame.color = UITheme.GetColor(state, UIColorType.Lighter);
             frameOffset.color = UITheme.GetColor(state, UIColorType.Darker);
-            background.color = UITheme.GetColor(state, UIColorType.Darker);
+            var a = background.color.a;
+
+            var color = UITheme.GetColor(state, UIColorType.Darker);
+            color.a = a;
+
+            background.color = color;
         }
     }
 }
