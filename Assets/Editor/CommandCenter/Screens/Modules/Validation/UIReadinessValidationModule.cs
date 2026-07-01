@@ -1,0 +1,242 @@
+﻿using System;
+using System.Linq;
+using Editor.CommandCenter.Utils;
+using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings.GroupSchemas;
+using UnityEngine;
+using UnityEngine.UIElements;
+using UserInterface.HUD;
+using UserInterface.Overlay;
+using UserInterface.Screen;
+using UserInterface.Windows;
+
+namespace Editor.CommandCenter.Screens.Modules.Validation
+{
+    public class UIReadinessValidationModule : IEditorValidationModule
+    {
+        public string ModuleName => "UI Readiness";
+        public ModuleStatus Status { get; private set; } = ModuleStatus.Unknown;
+
+        private ICommandCenterLogger _logger;
+
+        private const string PrefabRoot = "Assets/Prefabs/UI/";
+        private const string ScreenEnumPath = "Assets/Scripts/UserInterface/Screen/NamedScreen.cs";
+        private const string HUDEnumPath = "Assets/Scripts/UserInterface/HUD/NamedHUD.cs";
+        private const string OverlayEnumPath = "Assets/Scripts/UserInterface/Overlay/NamedOverlay.cs";
+        private const string WindowEnumPath = "Assets/Scripts/UserInterface/Windows/NamedWindow.cs";
+
+        public void Initialize(ICommandCenterLogger logger) => _logger = logger;
+
+        public VisualElement CreateContent() => new Label("Validates UI enums, prefabs, and addressables.");
+
+        #region PUBLIC
+
+        public void Validate()
+        {
+            Status = ModuleStatus.Valid;
+
+            ValidateCategory(typeof(IScreen), typeof(NamedScreen), "Screen");
+            ValidateCategory(typeof(IHUD), typeof(NamedHUD), "HUD");
+            ValidateCategory(typeof(IOverlay), typeof(NamedOverlay), "Overlay");
+            ValidateCategory(typeof(IWindow), typeof(NamedWindow), "Window");
+        }
+
+        public void Enforce()
+        {
+            Status = ModuleStatus.Valid;
+
+            EnforceCategory(typeof(IScreen), ScreenEnumPath, "UserInterface.Screen", "NamedScreen", "Screen");
+            EnforceCategory(typeof(IHUD), HUDEnumPath, "UserInterface.HUD", "NamedHUD", "HUD");
+            EnforceCategory(typeof(IOverlay), OverlayEnumPath, "UserInterface.Overlay", "NamedOverlay", "Overlay");
+            EnforceCategory(typeof(IWindow), WindowEnumPath, "UserInterface.Windows", "NamedWindow", "Window");
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        #endregion
+
+        #region VALIDATION
+
+        private void ValidateCategory(Type baseType, Type enumType, string folder)
+        {
+            var implementations = GetImplementations(baseType);
+
+            var enumNames = Enum.GetNames(enumType).ToList();
+
+            foreach (var impl in implementations)
+            {
+                var enumName = impl.Name;
+                var prefabName = impl.Name;
+
+                if (folder.Equals("Screen", StringComparison.OrdinalIgnoreCase) && enumName.EndsWith("Screen"))
+                    enumName = enumName[..^"Screen".Length];
+                else if (folder.Equals("HUD", StringComparison.OrdinalIgnoreCase) && enumName.EndsWith("HUD"))
+                    enumName = enumName[..^"HUD".Length];
+                else if (folder.Equals("Overlay", StringComparison.OrdinalIgnoreCase) && enumName.EndsWith("Overlay"))
+                    enumName = enumName[..^"Overlay".Length];
+                else if (folder.Equals("Window", StringComparison.OrdinalIgnoreCase) && enumName.EndsWith("Window"))
+                    enumName = enumName[..^"Window".Length];
+
+                if (!enumNames.Contains(enumName))
+                {
+                    _logger.LogError($"{folder}: Missing enum for {enumName}");
+                    Status = ModuleStatus.Error;
+                }
+
+                var prefabPath = $"{PrefabRoot}{folder}/{prefabName}.prefab";
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                if (!prefab)
+                {
+                    _logger.LogWarning($"{folder}: Missing prefab {prefabPath}");
+                    if (Status != ModuleStatus.Error)
+                        Status = ModuleStatus.Warning;
+                    continue;
+                }
+
+                var settings = AddressableAssetSettingsDefaultObject.Settings;
+                if (!settings) continue;
+
+                var guid = AssetDatabase.AssetPathToGUID(prefabPath);
+                var entry = settings.FindAssetEntry(guid);
+
+                if (entry == null)
+                {
+                    _logger.LogWarning($"{folder}: Prefab exists but is NOT marked as Addressable ({prefabName})");
+                    if (Status != ModuleStatus.Error)
+                        Status = ModuleStatus.Warning;
+                }
+                else if (entry.address != enumName)
+                {
+                    _logger.LogWarning($"{folder}: Addressable has wrong address ({entry.address}, expected {enumName})");
+                    if (Status != ModuleStatus.Error)
+                        Status = ModuleStatus.Warning;
+                }
+            }
+        }
+
+        #endregion
+
+        #region ENFORCEMENT
+
+        private void EnforceCategory(Type baseType, string enumPath, string enumNamespace, string enumName, string folder)
+        {
+            var types = GetImplementations(baseType)
+                .Select(t =>
+                {
+                    var strippedEnumName = t.Name;
+                    var fullPrefabName = t.Name;
+
+                    if (folder.Equals("Screen", StringComparison.OrdinalIgnoreCase) && strippedEnumName.EndsWith("Screen"))
+                        strippedEnumName = strippedEnumName[..^"Screen".Length];
+                    else if (folder.Equals("HUD", StringComparison.OrdinalIgnoreCase) && strippedEnumName.EndsWith("HUD"))
+                        strippedEnumName = strippedEnumName[..^"HUD".Length];
+                    else if (folder.Equals("Overlay", StringComparison.OrdinalIgnoreCase) && strippedEnumName.EndsWith("Overlay"))
+                        strippedEnumName = strippedEnumName[..^"Overlay".Length];
+                    else if (folder.Equals("Window", StringComparison.OrdinalIgnoreCase) && strippedEnumName.EndsWith("Window"))
+                        strippedEnumName = strippedEnumName[..^"Window".Length];
+
+                    return new { EnumName = strippedEnumName, PrefabName = fullPrefabName };
+                })
+                .OrderBy(x => x.EnumName)
+                .ToArray();
+
+            EnumSynchronizer.Synchronize(enumPath, enumNamespace, enumName, types.Select(x => x.EnumName).ToArray(), _logger);
+
+            foreach (var entry in types)
+            {
+                var prefabPath = $"{PrefabRoot}{folder}/{entry.PrefabName}.prefab";
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                if (!prefab)
+                {
+                    _logger.LogWarning($"{folder}: Missing prefab {prefabPath}");
+                    Status = ModuleStatus.Warning;
+                    continue;
+                }
+
+                EnsureAddressableExists(prefabPath, entry.EnumName, folder);
+            }
+
+            _logger.Log($"{folder}: Enum synchronized and addressables ensured.");
+        }
+
+        #endregion
+
+        #region ADDRESSABLE
+
+        private void EnsureAddressableExists(string prefabPath, string address, string folder)
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            if (!settings)
+            {
+                _logger.LogWarning("Addressable not configured.");
+                Status = ModuleStatus.Warning;
+                return;
+            }
+
+            var groupName = folder switch
+            {
+                "Screen" => "NamedScreen",
+                "HUD" => "NamedHUD",
+                "Overlay" => "NamedOverlay",
+                "Window" => "NamedWindow",
+                _ => "Default"
+            };
+
+            var group = settings.groups.FirstOrDefault(g => g.Name == groupName);
+            if (!group)
+            {
+                group = settings.CreateGroup(groupName, false, false, false, null, typeof(BundledAssetGroupSchema));
+                _logger.Log($"Created Addressable group '{groupName}' for folder {folder}");
+            }
+
+            var guid = AssetDatabase.AssetPathToGUID(prefabPath);
+            var entry = settings.FindAssetEntry(guid);
+
+            if (entry == null)
+            {
+                entry = settings.CreateOrMoveEntry(guid, group);
+                entry.address = address;
+                _logger.Log($"{folder}: Marked Addressable {address} in group {groupName}");
+            }
+            else
+            {
+                if (entry.address != address)
+                {
+                    entry.address = address;
+                    _logger.Log($"{folder}: Fixed address {address}");
+                }
+
+                if (entry.parentGroup == group) return;
+                settings.MoveEntry(entry, group, false, false);
+                _logger.Log($"{folder}: Moved prefab to Addressable group {groupName}");
+            }
+        }
+
+        #endregion
+        
+        private static Type[] GetImplementations(Type baseType)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a =>
+                {
+                    try { return a.GetTypes(); }
+                    catch { return Array.Empty<Type>(); }
+                })
+                .Where(t =>
+                {
+                    if (t.IsAbstract || t.IsInterface)
+                        return false;
+
+                    if (baseType.IsInterface)
+                    {
+                        return baseType.IsAssignableFrom(t);
+                    }
+
+                    return baseType.IsAssignableFrom(t) && t != baseType;
+                })
+                .ToArray();
+        }
+    }
+}

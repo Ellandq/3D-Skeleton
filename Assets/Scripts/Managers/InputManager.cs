@@ -1,129 +1,232 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameInput;
 using UnityEngine;
-using Utils.SO.Settings;
+using Utils.SO.Input;
+using Utils.SO.Settings.Utils.SO.Settings;
 
 namespace Managers
 {
     public class InputManager : ManagerBase<InputManager>
     {
         [Header("Input Settings")]
+        [SerializeField] private AllowedInputKeys allowedInputKeys;
         [SerializeField] public InputAssignments defaultInputAssignments;
-        
-        [Header("Runtime Dictionary")]
+        private InputAssignments inputAssignments;
+
+        [Header("Runtime")]
         private Dictionary<PlayerAction, ButtonInformationWrapper> _buttonInfoDict = new();
-        
+        private Dictionary<MouseKey, string> _allowedMouseButtons = new();
+        private Dictionary<KeyCode, string> _allowedKeyboardButtons = new();
+        private bool isWaitingForInput;
+        private Action<string> _listener;
+
+        [Header("Metadata info")]
+        private const string InputPrefix = "Input/";
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            inputAssignments = Instantiate(defaultInputAssignments);
+            
+            _allowedMouseButtons = allowedInputKeys.categories
+                .Where(c => c.type == InputKeyType.MouseKey)
+                .SelectMany(c => c.keys)
+                .Where(e => e.isAllowed)
+                .ToDictionary(e => (MouseKey)e.intValue, e => e.value);
+            
+            _allowedKeyboardButtons = allowedInputKeys.categories
+                .Where(c => c.type == InputKeyType.KeyCode)
+                .SelectMany(c => c.keys)
+                .Where(e => e.isAllowed)
+                .Where(e => e.intValue != (int)KeyCode.Escape)
+                .ToDictionary(e => (KeyCode)e.intValue, e => e.value);
+
+            LoadSettings();
+        }
+
         private void Update()
         {
             foreach (var wrapper in _buttonInfoDict.Values)
-            {
                 wrapper.UpdateState();
+            
+            if (!isWaitingForInput)
+                return;
+
+            foreach (var kvp in from kvp in _allowedMouseButtons
+                     let state = Input.GetMouseButtonDown((int)kvp.Key)
+                     where state
+                     select kvp)
+            {
+                isWaitingForInput = false;
+                _listener?.Invoke(kvp.Value);
+                return;
+            }
+            
+            foreach (var kvp in from kvp in _allowedKeyboardButtons
+                     let state = Input.GetKeyDown(kvp.Key)
+                     where state
+                     select kvp)
+            {
+                isWaitingForInput = false;
+                _listener?.Invoke(kvp.Value);
+                return;
             }
         }
 
-        public void Subscribe(PlayerAction action, Action<ButtonState> listener) =>
-            _buttonInfoDict[action].Subscribe(listener);
+        public void Subscribe(
+            PlayerAction action,
+            Action<ButtonState> listener)
+        {
+            if (_buttonInfoDict.TryGetValue(action, out var wrapper))
+                wrapper.Subscribe(listener);
+        }
+
+        public void Unsubscribe(
+            PlayerAction action,
+            Action<ButtonState> listener)
+        {
+            if (_buttonInfoDict.TryGetValue(action, out var wrapper))
+                wrapper.Unsubscribe(listener);
+        }
+
+        public void WaitForInput(Action<string> listener)
+        {
+            isWaitingForInput = true;
+            _listener = listener;
+        }
         
-        public void Unsubscribe(PlayerAction action, Action<ButtonState> listenerToRemove) =>
-            _buttonInfoDict[action].Unsubscribe(listenerToRemove);
-
-        #region SETTINGS
-
-        public void SaveSettings(Dictionary<string, string> dict)
+        public void StopWaitingForInput()
         {
-            foreach (var kvp in dict)
-            {
-                PlayerPrefs.SetString(kvp.Key, kvp.Value);
-            } 
-            defaultInputAssignments.FromDictionary(dict);
-            AssignSettings();
+            isWaitingForInput = false;
+            _listener = null;
         }
 
-        public void LoadSettings()
+
+        private void LoadSettings()
         {
-            var defaultDict = defaultInputAssignments.AsDictionary();
-            var newDict = new Dictionary<string, string>();
-            
-            foreach (string key in Enum.GetValues(typeof(PlayerAction)))
+            var loaded = new Dictionary<string, string>();
+
+            foreach (var assignment in inputAssignments.assignments)
             {
-                var altKey = key + "_Alt";
-                newDict.Add(key, PlayerPrefs.GetString(key, defaultDict[key]));
-                newDict.Add(altKey, PlayerPrefs.GetString(altKey, defaultDict[altKey]));
+                var baseKey = InputPrefix + assignment.settingName;
+                var altKey = InputPrefix + assignment.settingName + "_Alt";
+
+                assignment.baseValue =
+                    SettingsManager.GetStringSetting(
+                        baseKey,
+                        assignment.baseValue);
+
+                assignment.altValue =
+                    SettingsManager.GetStringSetting(
+                        altKey,
+                        assignment.altValue);
             }
-            
-            defaultInputAssignments.FromDictionary(newDict);
+
             AssignSettings();
         }
+
 
         private void AssignSettings()
         {
-            var dict = defaultInputAssignments.AsSimpleDictionary();
             var newDict = new Dictionary<PlayerAction, ButtonInformationWrapper>();
 
-            foreach (var kvp in dict)
+            foreach (var assignment in inputAssignments.assignments)
             {
-                var newButtonInfo = new ButtonInformationWrapper(
-                    kvp.Value.baseValue, 
-                    kvp.Value.altValue, 
-                    _buttonInfoDict.GetValueOrDefault(kvp.Key, null)
-                );
-                newDict.Add(kvp.Key, newButtonInfo);
+                if (assignment.action == default)
+                    continue;
+
+                var old =
+                    _buttonInfoDict.GetValueOrDefault(
+                        assignment.action);
+
+                newDict[assignment.action] =
+                    new ButtonInformationWrapper(
+                        assignment.baseValue,
+                        assignment.altValue,
+                        old);
             }
-            _buttonInfoDict.Clear();
+
             _buttonInfoDict = newDict;
         }
-
-        #endregion
     }
+
 
     internal class ButtonInformationWrapper
     {
         private bool _buttonState;
-        
-        private Action<ButtonState> _onInputChangeAction;
+
+        private Action<ButtonState> _listeners;
 
         private readonly Func<bool> _inputCheckFunc;
 
+
         public ButtonInformationWrapper(
-            string newBaseValue,
-            string newAltValue,
-            ButtonInformationWrapper original = null
-        )
+            string baseKey,
+            string altKey,
+            ButtonInformationWrapper old = null)
         {
-            var baseInfo = new ButtonInformation(newBaseValue);
-            var altInfo = new ButtonInformation(newAltValue);
-            _buttonState = original?._buttonState ?? false;
-            _onInputChangeAction = original?._onInputChangeAction;
-            _inputCheckFunc = CreateInputCheckFunc(baseInfo, altInfo);
+            var baseInfo = new ButtonInformation(baseKey);
+            var altInfo = new ButtonInformation(altKey);
+
+            _buttonState =
+                old?._buttonState ?? false;
+
+            _listeners =
+                old?._listeners;
+
+            _inputCheckFunc =
+                CreateInputCheckFunc(baseInfo, altInfo);
         }
 
-        private static Func<bool> CreateInputCheckFunc(ButtonInformation baseInfo, ButtonInformation altInfo)
+
+        private static Func<bool> CreateInputCheckFunc(
+            ButtonInformation baseInfo,
+            ButtonInformation altInfo)
         {
             return () =>
-                (baseInfo.IsValid && (baseInfo.IsKeyboard
+                (baseInfo.IsValid &&
+                 (baseInfo.IsKeyboard
                     ? Input.GetKey((KeyCode)baseInfo.KeyValue)
                     : Input.GetMouseButton(baseInfo.KeyValue)))
-                || (altInfo.IsValid && (altInfo.IsKeyboard
+                ||
+                (altInfo.IsValid &&
+                 (altInfo.IsKeyboard
                     ? Input.GetKey((KeyCode)altInfo.KeyValue)
                     : Input.GetMouseButton(altInfo.KeyValue)));
         }
 
+
         public void UpdateState()
         {
-            var oldState = _buttonState;
+            var old = _buttonState;
+
             _buttonState = _inputCheckFunc();
 
-            if (oldState ^ _buttonState)
+            if (old != _buttonState)
             {
-                Invoke(oldState ? ButtonState.Up : ButtonState.Down);
+                _listeners?.Invoke(
+                    old
+                        ? ButtonState.Up
+                        : ButtonState.Down);
             }
         }
 
-        private void Invoke(ButtonState state) => _onInputChangeAction?.Invoke(state);
-        public void Subscribe(Action<ButtonState> listener) => _onInputChangeAction += listener;
-        public void Unsubscribe(Action<ButtonState> listenerToRemove) => _onInputChangeAction -= listenerToRemove;
+
+        public void Subscribe(Action<ButtonState> listener)
+        {
+            _listeners += listener;
+        }
+
+
+        public void Unsubscribe(Action<ButtonState> listener)
+        {
+            _listeners -= listener;
+        }
     }
+
 
     internal struct ButtonInformation
     {
@@ -131,26 +234,25 @@ namespace Managers
         public readonly int KeyValue;
         public readonly bool IsValid;
 
+
         public ButtonInformation(string key)
         {
-            var isKeyboard = true;
-            var keyValue = 0;
+            IsKeyboard = true;
+            KeyValue = 0;
             IsValid = false;
 
-            if (Enum.TryParse<KeyCode>(key, out var keyboardKey))
-            {
-                keyValue = (int)keyboardKey;
-                IsValid = true;
-            }
-            else if (Enum.TryParse<MouseKey>(key, out var mouseKey))
-            {
-                isKeyboard = false;
-                keyValue = (int)mouseKey;
-                IsValid = true;
-            }
 
-            IsKeyboard = isKeyboard;
-            KeyValue = keyValue;
+            if (Enum.TryParse<KeyCode>(key, out var keyboard))
+            {
+                KeyValue = (int)keyboard;
+                IsValid = true;
+            }
+            else if (Enum.TryParse<MouseKey>(key, out var mouse))
+            {
+                IsKeyboard = false;
+                KeyValue = (int)mouse;
+                IsValid = true;
+            }
         }
     }
 }

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b50eadcc35f44c6391bb4d46e889f586, type: 3}
+  m_Name: dd1c7249f1cec0a4ba956bd03a4b21db
+  m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Settings.Screen.SettingsPageCategorySO
+  uniqueId: dd1c7249f1cec0a4ba956bd03a4b21db
+  categoryName: Volume
+  items:
+  - {fileID: 11400000, guid: 25644d7aa013fc4499f77854ddc6b110, type: 2}
+  - {fileID: 11400000, guid: 8b0e57b0f0de17b469ced895d5295937, type: 2}
+  - {fileID: 11400000, guid: b39189c5faeee2240a634b6cfd1f77f0, type: 2}
+  - {fileID: 11400000, guid: f515e91bf1042ab46976b85fc4819e09, type: 2}
+  - {fileID: 11400000, guid: f7939b46fe0833f4cb5d927b3cc275d4, type: 2}

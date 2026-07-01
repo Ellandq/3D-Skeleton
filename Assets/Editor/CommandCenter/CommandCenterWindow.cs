@@ -5,21 +5,21 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Editor.CommandCenter.Modules;
-using Editor.CommandCenter.Utils;
 
 namespace Editor.CommandCenter
 {
     public class CommandCenterWindow : EditorWindow, ICommandCenterLogger
     {
-        private readonly List<IEditorModule> _modules = new();
-        private readonly Dictionary<IEditorModule, Label> _statusIndicators = new();
-        private static readonly List<(string message, Color color)> _logHistory = new();
+        private readonly List<ICommandCenterScreen> _screens = new();
+        private ICommandCenterScreen _activeScreen;
+        
+        private static readonly List<(string message, Color color)> LOGHistory = new();
+
+        private VisualElement _screenContainer;
+        private VisualElement _screenButtonBar;
         
         private ScrollView _moduleScroll;
         private ScrollView _consoleScroll;
-
-        private const string FoldoutPrefsKey = "CommandCenter_Foldout_";
 
         [MenuItem("Tools/Command Center")]
         public static void OpenWindow()
@@ -36,34 +36,13 @@ namespace Editor.CommandCenter
             rootVisualElement.style.backgroundColor = new Color(0.18f, 0.18f, 0.18f);
 
             CreateHeader();
-            CreateModuleArea();
+            CreateScreenContainer();
             CreateConsole();
-            foreach (var entry in _logHistory)
-            {
-                AppendLogToUI(entry.message, entry.color);
-            }
-            DiscoverModules();
-            RunAutoValidation();
-        }
-        
-        [InitializeOnLoadMethod]
-        private static void OnDomainReload()
-        {
-            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
-            EditorApplication.delayCall += () =>
-            {
-                var window = GetWindow<CommandCenterWindow>();
-                window?.RunAutoValidation();
-            };
-        }
-        
-        private void RunAutoValidation()
-        {
-            if (EditorApplication.isPlayingOrWillChangePlaymode) return;
-            foreach (var module in _modules)
-                module.Validate();
 
-            RefreshStatuses();
+            foreach (var entry in LOGHistory)
+                AppendLogToUI(entry.message, entry.color);
+
+            DiscoverScreens();
         }
 
         #region Header
@@ -74,14 +53,23 @@ namespace Editor.CommandCenter
             {
                 style =
                 {
+                    flexDirection = FlexDirection.Column,
+                    backgroundColor = new Color(0.22f, 0.22f, 0.22f),
+                    borderBottomWidth = 1,
+                    borderBottomColor = new Color(0.1f, 0.1f, 0.1f),
+                    flexShrink = 0
+                }
+            };
+
+            var titleRow = new VisualElement
+            {
+                style =
+                {
                     flexDirection = FlexDirection.Row,
                     paddingLeft = 10,
                     paddingRight = 10,
                     paddingTop = 6,
-                    paddingBottom = 6,
-                    backgroundColor = new Color(0.22f, 0.22f, 0.22f),
-                    borderBottomWidth = 1,
-                    borderBottomColor = new Color(0.1f, 0.1f, 0.1f)
+                    paddingBottom = 4
                 }
             };
 
@@ -91,228 +79,99 @@ namespace Editor.CommandCenter
                 {
                     unityFontStyleAndWeight = FontStyle.Bold,
                     flexGrow = 1,
-                    unityTextAlign = TextAnchor.MiddleLeft
+                    fontSize = 16
                 }
             };
 
-            var validateAll = new Button(() =>
-            {
-                foreach (var m in _modules)
-                    m.Validate();
-                RefreshStatuses();
-            })
-            { text = "Validate All" };
+            titleRow.Add(label);
 
-            var enforceAll = new Button(() =>
-            {
-                HierarchyStateHelper.PreserveHierarchy(() =>
-                {
-                    foreach (var m in _modules)
-                        m.Enforce();
-                });
-                RefreshStatuses();
-            }) { text = "Enforce All" };
-
-            validateAll.style.marginRight = 6;
-
-            header.Add(label);
-            header.Add(validateAll);
-            header.Add(enforceAll);
-
-            rootVisualElement.Add(header);
-        }
-
-        #endregion
-
-        #region Module Area
-
-        private void CreateModuleArea()
-        {
-            _moduleScroll = new ScrollView
-            {
-                style =
-                {
-                    flexGrow = 1,
-                    paddingLeft = 10,
-                    paddingRight = 10,
-                    paddingTop = 8
-                }
-            };
-
-            rootVisualElement.Add(_moduleScroll);
-        }
-
-        private void DiscoverModules()
-        {
-            _modules.Clear();
-            _moduleScroll.Clear();
-
-            var moduleTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(t =>
-                    typeof(IEditorModule).IsAssignableFrom(t) &&
-                    !t.IsInterface &&
-                    !t.IsAbstract);
-
-            foreach (var type in moduleTypes)
-            {
-                var module = (IEditorModule)Activator.CreateInstance(type);
-                module.Initialize(this);
-                _modules.Add(module);
-
-                _moduleScroll.Add(CreateModuleUI(module));
-            }
-        }
-
-        private VisualElement CreateModuleUI(IEditorModule module)
-        {
-            var card = new VisualElement
-            {
-                style =
-                {
-                    marginBottom = 12,
-                    backgroundColor = new Color(0.24f, 0.24f, 0.24f),
-                    borderTopWidth = 1,
-                    borderBottomWidth = 1,
-                    borderLeftWidth = 1,
-                    borderRightWidth = 1,
-                    borderTopColor = new Color(0.1f, 0.1f, 0.1f),
-                    borderBottomColor = new Color(0.1f, 0.1f, 0.1f),
-                    borderLeftColor = new Color(0.1f, 0.1f, 0.1f),
-                    borderRightColor = new Color(0.1f, 0.1f, 0.1f)
-                }
-            };
-
-            var isOpen = EditorPrefs.GetBool(FoldoutPrefsKey + module.ModuleName, true);
-
-            var header = new VisualElement
+            _screenButtonBar = new VisualElement
             {
                 style =
                 {
                     flexDirection = FlexDirection.Row,
-                    alignItems = Align.Center,
-                    paddingLeft = 10,
-                    paddingRight = 10,
-                    paddingTop = 6,
+                    flexWrap = Wrap.Wrap,
+                    paddingLeft = 6,
                     paddingBottom = 6,
-                    backgroundColor = new Color(0.2f, 0.2f, 0.2f),
-                    borderBottomWidth = 1,
-                    borderBottomColor = new Color(0.1f, 0.1f, 0.1f)
-                }
-            };
-
-            var label = new Label(module.ModuleName)
-            {
-                style =
-                {
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    flexGrow = 1
-                }
-            };
-
-            var statusDot = new Label("●")
-            {
-                style =
-                {
-                    unityFontStyleAndWeight = FontStyle.Bold
-                }
-            };
-
-            void UpdateIndicator()
-            {
-                statusDot.style.color = GetStatusColor(module.Status);
-            }
-
-            _statusIndicators[module] = statusDot;
-            UpdateIndicator();
-
-            header.Add(label);
-            header.Add(statusDot);
-
-            var contentContainer = new VisualElement
-            {
-                style =
-                {
-                    display = isOpen ? DisplayStyle.Flex : DisplayStyle.None,
-                    paddingLeft = 12,
-                    paddingRight = 12,
-                    paddingTop = 10,
-                    paddingBottom = 12,
                     marginTop = 4
                 }
             };
 
-            var scroll = new ScrollView
-            {
-                style =
-                {
-                    maxHeight = 300
-                }
-            };
-            scroll.Add(module.CreateContent());
+            header.Add(titleRow);
+            header.Add(_screenButtonBar);
 
-            contentContainer.Add(scroll);
-
-            var buttonRow = new VisualElement
-            {
-                style =
-                {
-                    flexDirection = FlexDirection.Row,
-                    marginTop = 6
-                }
-            };
-
-            var validate = new Button(() =>
-            {
-                module.Validate();
-                UpdateIndicator();
-            }) { text = "Validate" };
-
-            var enforce = new Button(() =>
-            {
-                HierarchyStateHelper.PreserveHierarchy(module.Enforce);
-                UpdateIndicator();
-            }) { text = "Enforce" };
-
-            validate.style.marginRight = 4;
-
-            buttonRow.Add(validate);
-            buttonRow.Add(enforce);
-            contentContainer.Add(buttonRow);
-
-            header.RegisterCallback<ClickEvent>(_ =>
-            {
-                isOpen = !isOpen;
-                contentContainer.style.display = isOpen ? DisplayStyle.Flex : DisplayStyle.None;
-                EditorPrefs.SetBool(FoldoutPrefsKey + module.ModuleName, isOpen);
-            });
-
-            card.Add(header);
-            card.Add(contentContainer);
-
-            return card;
+            rootVisualElement.Add(header);
         }
-                
-        private void RefreshStatuses()
-        {
-            foreach (var pair in _statusIndicators)
-            {
-                pair.Value.style.color = GetStatusColor(pair.Key.Status);
-            }
-        }
-
-        private Color GetStatusColor(ModuleStatus status)
-        {
-            return status switch
-            {
-                ModuleStatus.Valid => new Color(0.3f, 0.8f, 0.3f),
-                ModuleStatus.Warning => new Color(0.9f, 0.7f, 0.2f),
-                ModuleStatus.Error => new Color(0.9f, 0.3f, 0.3f),
-                _ => new Color(0.5f, 0.5f, 0.5f)
-            };
-        }
-
+        
         #endregion
+        
+        private void CreateScreenContainer()
+        {
+            _screenContainer = new VisualElement
+            {
+                style = { flexGrow = 1 }
+            };
+
+            rootVisualElement.Add(_screenContainer);
+        }
+        
+        private void DiscoverScreens()
+        {
+            _screens.Clear();
+            _screenButtonBar.Clear();
+
+            var screenTypes = Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(t =>
+                    typeof(ICommandCenterScreen).IsAssignableFrom(t) &&
+                    !t.IsInterface &&
+                    !t.IsAbstract);
+
+            foreach (var type in screenTypes)
+            {
+                var screen = (ICommandCenterScreen)Activator.CreateInstance(type);
+                screen.Initialize(this);
+
+                _screens.Add(screen);
+
+                var button = new Button(() => ShowScreen(screen))
+                {
+                    text = screen.ScreenName,
+                    style =
+                    {
+                        marginRight = 6,
+                        marginBottom = 6,
+                        paddingLeft = 12,
+                        paddingRight = 12,
+                        paddingTop = 6,
+                        paddingBottom = 6,
+                        fontSize = 14,
+                        unityTextAlign = TextAnchor.MiddleCenter,
+                        backgroundColor = new Color(0.33f, 0.33f, 0.33f),
+                        color = Color.white,
+                        unityFontStyleAndWeight = FontStyle.Bold,
+                    }
+                };
+
+                button.RegisterCallback<MouseEnterEvent>(_ => button.style.backgroundColor = new Color(0.35f, 0.35f, 0.35f));
+                button.RegisterCallback<MouseLeaveEvent>(_ => button.style.backgroundColor = new Color(0.25f, 0.25f, 0.25f));
+
+                _screenButtonBar.Add(button);
+            }
+
+            if (_screens.Count > 0)
+                ShowScreen(_screens[0]);
+        }
+        
+        private void ShowScreen(ICommandCenterScreen screen)
+        {
+            _screenContainer.Clear();
+
+            var content = screen.CreateContent();
+            _screenContainer.Add(content);
+
+            _activeScreen = screen;
+        }
 
         #region Console
 
@@ -373,7 +232,7 @@ namespace Editor.CommandCenter
 
         private void AddLog(string message, Color color)
         {
-            _logHistory.Add((message, color));
+            LOGHistory.Add((message, color));
             AppendLogToUI(message, color);
         }
         
@@ -391,15 +250,6 @@ namespace Editor.CommandCenter
                 _consoleScroll.verticalScroller.value =
                     _consoleScroll.verticalScroller.highValue;
             });
-        }
-        
-        private void ScrollConsoleToBottom()
-        {
-            _consoleScroll.schedule.Execute(() =>
-            {
-                _consoleScroll.verticalScroller.value =
-                    _consoleScroll.verticalScroller.highValue;
-            }).ExecuteLater(1);
         }
 
         #endregion

@@ -402,6 +402,7 @@ GameObject:
   - component: {fileID: 8101720746069585393}
   - component: {fileID: 7260705582026373656}
   - component: {fileID: 2793946075658373275}
+  - component: {fileID: 9186231027171694598}
   m_Layer: 0
   m_Name: LoadingScreen
   m_TagString: Untagged
@@ -445,12 +446,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Screen.LoadingScreen
   canvasGroup: {fileID: 2793946075658373275}
+  animator: {fileID: 9186231027171694598}
+  openState: Open
+  closeState: Close
   loadingBar: {fileID: 6262033557523816783}
   loadingIcon: {fileID: 1364509813434484148}
   messageDisplay: {fileID: 3831344984586080164}
   minWidth: 0
   maxWidth: 0
   rotationSpeed: 90
+  barMoveSpeed: 2
 --- !u!225 &2793946075658373275
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -463,6 +468,28 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!95 &9186231027171694598
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5689478382848321421}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7acdedaac467a9a4a95863b43cc995b5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6468107604822151295
 GameObject:
   m_ObjectHideFlags: 0

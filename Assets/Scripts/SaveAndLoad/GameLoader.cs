@@ -42,8 +42,8 @@ namespace SaveAndLoad
 
                 if (profile.useLoadScreen)
                 {
-                    var loadingScreen = (LoadingScreen)uiManager.GetComponent(NamedScreen.Loading);
-                    uiManager.ActivateComponent(NamedScreen.Loading);
+                    var loadingScreen = UIManager.GetUIComponent<NamedScreen, LoadingScreen>(NamedScreen.Loading);
+                    UIManager.ActivateComponent(NamedScreen.Loading);
                     loadingScreen.Bind(_loadQueue);
                 }
 

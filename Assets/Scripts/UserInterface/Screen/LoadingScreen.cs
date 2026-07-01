@@ -9,6 +9,7 @@ namespace UserInterface.Screen
     public class LoadingScreen : ScreenBase
     {
         public override NamedScreen Name => NamedScreen.Loading;
+        public override UIPriority Priority => UIPriority.High;
 
         [Header("Components")]
         [SerializeField] private RectTransform loadingBar;

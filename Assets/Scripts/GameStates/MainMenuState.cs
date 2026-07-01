@@ -2,6 +2,7 @@
 using Managers;
 using UnityEngine;
 using UserInterface.Screen;
+using UserInterface.Windows;
 using Utils.Enum;
 
 namespace GameStates
@@ -19,7 +20,12 @@ namespace GameStates
         {
             await GameManager.LoadHandle.LoadGame(
                 NamedScene.MainMenu,
-                () => UIManager.Instance.DeactivateComponent(NamedScreen.Loading, false, Resume)
+                () =>
+                {
+                    UIManager.DeactivateComponent(NamedScreen.Loading, false, Resume);
+                    UIManager.ActivateComponent(NamedScreen.MainMenu);
+                    UIManager.SetOnEmptyStackExitCallback(() => UIManager.ActivateComponent(NamedWindow.ExitConfirmation));
+                }
             );
         }
 
