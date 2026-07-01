@@ -19,6 +19,9 @@ namespace SaveAndLoad
         [Header("Setup Steps")] 
         private LoadQueue _loadQueue;
 
+        [Header("Runtime")] 
+        private bool readyToLoad;
+
         private void Awake()
         {
             _profiles = sceneProfiles.ToDictionary(
@@ -33,6 +36,7 @@ namespace SaveAndLoad
             {
                 var profile = _profiles[sceneName];
                 var uiManager = UIManager.Instance;
+                readyToLoad = !profile.useLoadScreen;
 
                 _loadQueue = new LoadQueue(
                     onFinishLoad,
@@ -43,9 +47,11 @@ namespace SaveAndLoad
                 if (profile.useLoadScreen)
                 {
                     var loadingScreen = UIManager.GetUIComponent<NamedScreen, LoadingScreen>(NamedScreen.Loading);
-                    UIManager.ActivateComponent(NamedScreen.Loading);
+                    UIManager.ActivateComponent(NamedScreen.Loading, false, () => readyToLoad = true);
                     loadingScreen.Bind(_loadQueue);
                 }
+
+                while (!readyToLoad) await Task.Yield();
 
                 await _loadQueue.StartLoad(profile);
             }

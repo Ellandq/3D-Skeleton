@@ -7,6 +7,7 @@ namespace Utils.Enum
     public enum NamedScene
     {
         Bootstrap,
+        Gameplay,
         MainMenu
     }
 }

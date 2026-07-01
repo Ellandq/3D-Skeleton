@@ -259,7 +259,7 @@ Transform:
   m_GameObject: {fileID: 49053494}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.08, y: 17.16, z: 45}
+  m_LocalPosition: {x: 0, y: 15.5, z: 45}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -627,6 +627,7 @@ GameObject:
   - component: {fileID: 756116890}
   - component: {fileID: 756116889}
   - component: {fileID: 756116892}
+  - component: {fileID: 756116893}
   m_Layer: 0
   m_Name: Cube - Dynamic
   m_TagString: Untagged
@@ -754,6 +755,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &756116893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756116887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b066316fee6f48058417b2ed68292318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Test.PhysicsPatrol
+  pointA: {x: -35, y: 13, z: 45}
+  pointB: {x: 35, y: 13, z: 45}
+  speed: 10
+  arriveDistance: 1
+  acceleration: 4
 --- !u!1 &977634011
 GameObject:
   m_ObjectHideFlags: 0

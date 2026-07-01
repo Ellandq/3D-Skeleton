@@ -13,6 +13,7 @@ namespace GameStates
         {
             return state switch
             {
+                NamedState.Gameplay => new GameplayState(),
                 NamedState.MainMenu => new MainMenuState(),
                 _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
             };

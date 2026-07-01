@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7514ced35940414da64b803c1e40f1e3, type: 3}
   m_Name: MainMenu
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.SceneProfile
-  sceneName: 1
+  sceneName: 2
   subScenes: 
   useLoadScreen: 1
   hudKeys: 

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7514ced35940414da64b803c1e40f1e3, type: 3}
   m_Name: Gameplay
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.SceneProfile
-  sceneName: 0
+  sceneName: 1
   subScenes: 
-  useLoadScreen: 0
+  useLoadScreen: 1
   hudKeys: 
   overlayKeys: 
-  screenKeys: 00000000
-  windowKeys: 
+  screenKeys: 0000000002000000
+  windowKeys: 04000000010000000200000003000000
