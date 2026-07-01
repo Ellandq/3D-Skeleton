@@ -7,6 +7,9 @@ namespace UserInterface.Windows
     public enum NamedWindow
     {
         ExitConfirmation,
-        InputAssignment
+        InputAssignment,
+        ResetSettings,
+        RestoreDefaultSettings,
+        SettingsScreenExitConfirmation
     }
 }

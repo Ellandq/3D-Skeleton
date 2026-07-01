@@ -1,9 +1,8 @@
 ﻿using System;
 using Managers;
-using UnityEngine;
 using Utils.Contract;
 
-namespace UserInterface.Windows
+namespace UserInterface.Windows.Settings
 {
     public class InputAssignmentWindow : WindowBase, IUIStackable
     {

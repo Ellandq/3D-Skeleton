@@ -15,6 +15,26 @@ MonoBehaviour:
   m_GroupName: NamedWindow
   m_GUID: 1a0ae53bcb3177342980ad15e11764c1
   m_SerializeEntries:
+  - m_GUID: 60f8372bdb1c990428e872fee5b5bab1
+    m_Address: InputAssignment
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64630ed3105598e43ba3656d1450b941
+    m_Address: RestoreDefaultSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 956da4224b2a8c447a5de5f0aeb9a7e5
+    m_Address: SettingsScreenExitConfirmation
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5bd0c7c4fd9140439c4cb395ed941f0
+    m_Address: ResetSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f0bb7323fbda93d468c96eaba5759df4
     m_Address: ExitConfirmation
     m_ReadOnly: 0

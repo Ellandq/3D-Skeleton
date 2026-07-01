@@ -1,4 +1,4 @@
-﻿namespace UserInterface.Screen
+﻿namespace UserInterface
 {
     public enum UIPriority
     {

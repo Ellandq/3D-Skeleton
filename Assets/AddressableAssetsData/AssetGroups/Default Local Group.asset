@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 4dff9d4005c81f84a81190a90e5d68c8
   m_SerializeEntries:
-  - m_GUID: 60f8372bdb1c990428e872fee5b5bab1
-    m_Address: InputAssignment
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ebeb4afa6cf7bd6479ae110435504124
     m_Address: AllowedInputKeys
     m_ReadOnly: 0

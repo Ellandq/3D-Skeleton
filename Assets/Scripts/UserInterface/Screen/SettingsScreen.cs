@@ -2,12 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Managers;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UserInterface.Screen.Components.Settings;
+using UserInterface.Screen.Components.Settings.Buttons;
+using UserInterface.Screen.Components.Settings.Common;
+using UserInterface.Screen.Components.Settings.Custom;
+using UserInterface.Windows;
 using Utils.Contract;
 using Utils.Enum;
+using Utils.Enum.UI;
 using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen
@@ -51,12 +57,15 @@ namespace UserInterface.Screen
         private List<(int startIndex, int endIndex)> _pageItemsIndexList = new();
         private int _activePageIndex;
         private string _selectedItem;
+        private bool waitingToExit;
         
         [Header("Cached Changes")]
         private readonly Dictionary<string, int> cachedIntChanges = new();
         private readonly Dictionary<string, float> cachedFloatChanges = new();
         private readonly Dictionary<string, string> cachedStringChanges = new();
-        
+
+        #region INITIALIZATION
+
         private void Awake()
         {
             headerScrollRect.onValueChanged.AddListener(_ => UpdateScrollButtons());
@@ -111,13 +120,6 @@ namespace UserInterface.Screen
             CleanCache();
 
             pagesInitialized = Application.isPlaying;
-        }
-
-        private void CleanCache()
-        {
-            cachedIntChanges.Clear();
-            cachedFloatChanges.Clear();
-            cachedStringChanges.Clear();
         }
 
         private void InitializePageItemList()
@@ -182,6 +184,8 @@ namespace UserInterface.Screen
                 
             CreatePageAssets();
         }
+
+        #endregion
         
         #region ASSET CREATION
 
@@ -317,6 +321,63 @@ namespace UserInterface.Screen
             _selectedItem = id;
         }
 
+        public void ResetSettings(bool force)
+        {
+            if (force)
+            {
+                UIManager.Instance.ActivateComponent(NamedWindow.RestoreDefaultSettings);
+                return;
+            }
+            CleanCache();
+            foreach (var kvp in _settingItems)
+            {
+                kvp.Value.ResetSetting();
+            }
+        }
+
+        public void RestoreDefaults(bool force)
+        {
+            if (force)
+            {
+                UIManager.Instance.ActivateComponent(NamedWindow.RestoreDefaultSettings);
+                return;
+            }
+            CleanCache();
+            foreach (var kvp in _settingItems)
+            {
+                kvp.Value.ResetSetting(true);
+            }
+        }
+
+        public void ApplySettings()
+        {
+            SettingsManager.SaveSettings(cachedIntChanges, cachedFloatChanges, cachedStringChanges);
+            CleanCache();
+        }
+
+        public void ApplyAndExit()
+        {
+            ApplySettings();
+            waitingToExit = true;
+            UIManager.Instance.DeactivateComponent(Name);
+        }
+
+        public void DiscardAndExit()
+        {
+            CleanCache();
+            waitingToExit = true;
+            UIManager.Instance.DeactivateComponent(Name);
+        }
+
+        #region CHANGES
+
+        private void CleanCache()
+        {
+            cachedIntChanges.Clear();
+            cachedFloatChanges.Clear();
+            cachedStringChanges.Clear();
+        }
+
         private void CacheChange(string key, object value)
         {
             switch (value)
@@ -356,6 +417,8 @@ namespace UserInterface.Screen
                     break;
             }
         }
+
+        #endregion
 
         #region HEADER
 
@@ -451,6 +514,13 @@ namespace UserInterface.Screen
 
         public void OnPopOther()
         {
+            if (waitingToExit)
+            {
+                ResetSettings(true);
+                UIManager.Instance.DeactivateComponent(Name);
+                waitingToExit = false;
+                return;
+            }
             EnableInteractions();
         }
 

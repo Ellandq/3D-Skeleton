@@ -1,12 +1,11 @@
 ﻿using System;
-using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Enum;
+using Utils.Enum.UI;
 using Utils.SO;
 
-namespace UserInterface.Screen.Components.Settings
+namespace UserInterface.Screen.Components.Settings.Buttons
 {
     public class PageButton : MonoBehaviour
     {

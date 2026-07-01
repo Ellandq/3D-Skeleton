@@ -5,7 +5,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Components;
+using UserInterface.Screen.Components.Settings.Common;
 using Utils.Enum;
+using Utils.Enum.UI;
 using Utils.SO;
 using Utils.SO.Settings.Screen;
 
@@ -37,6 +39,7 @@ namespace UserInterface.Screen.Components.Settings
             Action<(string key, T value)> onValueReset, 
             UIComponentState defaultState)
         {
+            asset = itemAsset;
             id = string.IsNullOrEmpty(asset.uniqueId)
                 ? GUID.Generate().ToString()
                 : asset.uniqueId;
@@ -49,8 +52,6 @@ namespace UserInterface.Screen.Components.Settings
             _onValueReset = onValueReset;
 
             ChangeState(defaultState);
-
-            asset = itemAsset;
         }
         
         void ISettingItem.Initialize(

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UserInterface.Components;
 using UserInterface.Screen.Components.Utils;
 using Utils.Enum;
+using Utils.Enum.UI;
 using Utils.SO;
 
 namespace UserInterface.Screen.Components.MainMenu

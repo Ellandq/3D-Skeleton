@@ -1,7 +1,7 @@
 ﻿
 using Utils.Enum;
 
-namespace UserInterface.Screen.Components.Settings
+namespace UserInterface.Screen.Components.Settings.Custom
 {
     public interface ICustomSettingItem
     {

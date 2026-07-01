@@ -1,11 +1,11 @@
-﻿namespace UserInterface.Screen.Components.Settings
-{
-    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace UserInterface.Screen.Components.Settings
+{
+    namespace UserInterface.Screen.Components.Settings
 {
     [Serializable]
     public class InputKeySpriteDictionary

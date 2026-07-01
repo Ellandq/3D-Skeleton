@@ -1,4 +1,4 @@
-﻿namespace Utils.Enum
+﻿namespace Utils.Enum.UI
 {
     public enum UIColorType
     {

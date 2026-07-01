@@ -3,11 +3,11 @@ using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Enum;
+using Utils.Enum.UI;
 using Utils.SO;
 using Utils.SO.Settings.Screen;
 
-namespace UserInterface.Screen.Components.Settings
+namespace UserInterface.Screen.Components.Settings.Common
 {
     public class BooleanSetting : SettingBase<int>
     {

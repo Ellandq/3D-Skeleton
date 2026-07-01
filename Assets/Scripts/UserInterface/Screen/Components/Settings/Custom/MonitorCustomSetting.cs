@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.Enum;
+using Utils.Enum.UI;
 using Utils.SO;
 using Utils.SO.Settings.Screen;
 

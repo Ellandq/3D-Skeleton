@@ -7,11 +7,11 @@ using UserInterface.Components;
 using UserInterface.Screen;
 using Utils.Contract;
 
-namespace UserInterface.Windows
+namespace UserInterface.Windows.Settings
 {
-    public class ExitConfirmationWindow : WindowBase, IUIStackable
+    public class RestoreDefaultSettingsWindow : WindowBase, IUIStackable
     {
-        public override NamedWindow Name => NamedWindow.ExitConfirmation;
+        public override NamedWindow Name => NamedWindow.RestoreDefaultSettings;
         public override UIPriority Priority => UIPriority.High;
         
         private Action _outsideClickAction;
@@ -19,18 +19,17 @@ namespace UserInterface.Windows
         [Header("Components")] 
         [SerializeField] private Button confirmButton;
         [SerializeField] private Button cancelButton;
-        [SerializeField] private TMP_Text message;
-        [SerializeField] private OutsideClickDetector outsideClickDetector;
-
+        private OutsideClickDetector outsideClickDetector;
+        
         private void Awake()
         {
-            _outsideClickAction = () => Deactivate(false);
+            _outsideClickAction = () => UIManager.Instance.DeactivateComponent(Name);
             outsideClickDetector = UIManager.Instance.OutsideClickDetectorRef;
-            message.text = "Are you sure you want to exit?";
-            confirmButton.onClick.AddListener(Application.Quit);
-            cancelButton.onClick.AddListener(() => Deactivate(false));
+            var settingsScreen = UIManager.Instance.GetComponent<SettingsScreen>();
+            confirmButton.onClick.AddListener(() => settingsScreen.RestoreDefaults(true));
+            cancelButton.onClick.AddListener(() => UIManager.Instance.DeactivateComponent(Name));
         }
-
+        
         public override void Activate(bool instant, Action onActivate = null)
         {
             outsideClickDetector.Subscribe(_outsideClickAction);
@@ -52,7 +51,7 @@ namespace UserInterface.Windows
         {
             outsideClickDetector.Unsubscribe(_outsideClickAction);
         }
-
+        
         #region UI STACK
 
         public void OnPush(bool instant, Action onActivate = null)

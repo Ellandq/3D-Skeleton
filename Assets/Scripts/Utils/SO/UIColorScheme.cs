@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using Utils.Enum;
+using Utils.Enum.UI;
 
 namespace Utils.SO
 {

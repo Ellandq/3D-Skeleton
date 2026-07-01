@@ -2,10 +2,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Windows;
-using Utils.Enum;
+using UserInterface.Windows.Settings;
+using Utils.Enum.UI;
 using Utils.SO;
 
-namespace UserInterface.Screen.Components.Settings
+namespace UserInterface.Screen.Components.Settings.Common
 {
     public class InputKeyButton : MonoBehaviour
     {

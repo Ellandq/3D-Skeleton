@@ -2,11 +2,10 @@
 using Managers;
 using UnityEngine;
 using UserInterface.Windows;
-using Utils.Enum;
-using Utils.SO;
+using Utils.Enum.UI;
 using Utils.SO.Settings.Screen;
 
-namespace UserInterface.Screen.Components.Settings
+namespace UserInterface.Screen.Components.Settings.Common
 {
     public class InputKeySetting : SettingBase<string>
     {
@@ -35,10 +34,10 @@ namespace UserInterface.Screen.Components.Settings
             UIComponentState defaultState)
         {
             blockInteractions =
-                asset.settingName == "Escape";
+                itemAsset.settingName == "Escape";
 
             base.Initialize(
-                asset,
+                itemAsset,
                 onSelect,
                 onValueChange,
                 onValueReset,

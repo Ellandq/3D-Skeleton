@@ -1,8 +1,8 @@
 ﻿using System;
-using Utils.Enum;
+using Utils.Enum.UI;
 using Utils.SO.Settings.Screen;
 
-namespace UserInterface.Screen.Components.Settings
+namespace UserInterface.Screen.Components.Settings.Common
 {
     public interface ISettingItem
     {
@@ -18,6 +18,7 @@ namespace UserInterface.Screen.Components.Settings
         void ChangeState(UIComponentState newState);
         void SelectItem();
         void DeselectItem();
+        void ResetSetting(bool toDefault = false);
     }
 
     public interface ISettingItem<T> : ISettingItem
