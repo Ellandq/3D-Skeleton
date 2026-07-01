@@ -62,6 +62,7 @@ namespace UserInterface.Windows
         {
             if (!IsClosing)
             {
+                InputManager.Instance.StopWaitingForInput();
                 Deactivate(instant, onDeactivate);
                 return;
             }

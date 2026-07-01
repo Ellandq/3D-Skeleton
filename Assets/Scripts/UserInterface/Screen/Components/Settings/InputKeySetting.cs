@@ -20,11 +20,13 @@ namespace UserInterface.Screen.Components.Settings
 
         [Header("Runtime")]
         private bool blockInteractions;
+        private string defaultBaseValue;
         private string startingBaseValue;
+        private string defaultAltValue;
         private string startingAltValue;
 
         public override void Initialize(
-            SettingsPageItemSO asset,
+            SettingsPageItemSO itemAsset,
             Action<string> onSelect,
             Action<(string key, string value)> onValueChange,
             Action<(string key, string value)> onValueReset,
@@ -50,16 +52,19 @@ namespace UserInterface.Screen.Components.Settings
 
             baseButton = CreateButton();
 
+            defaultBaseValue = SettingsManager.GetDefaultInputSetting(fullName);
             startingBaseValue = SettingsManager.GetStringSetting(fullName, "");
 
-            baseButton.UpdateIcon(SpriteManager.GetInputSprite(startingBaseValue));
-
-            if (!allowSecondaryInput) return;
+            if (!allowSecondaryInput)
+            {
+                ResetSetting();
+                return;
+            }
             alternateButton = CreateButton(true);
 
+            defaultAltValue = SettingsManager.GetDefaultInputSetting(fullName + "_Alt");
             startingAltValue = SettingsManager.GetStringSetting(fullName + "_Alt", "");
-            
-            alternateButton.UpdateIcon(SpriteManager.GetInputSprite(startingAltValue));
+            ResetSetting();
         }
 
         private InputKeyButton CreateButton(bool isAlt = false)
@@ -126,6 +131,13 @@ namespace UserInterface.Screen.Components.Settings
                 else _onValueChange?.Invoke((fullName + "_Alt", newValue));
                 alternateButton.UpdateIcon(sprite);
             }
+        }
+
+        public override void ResetSetting(bool toDefault = false)
+        {
+            baseButton.UpdateIcon(SpriteManager.GetInputSprite(toDefault ? defaultBaseValue : startingBaseValue));
+            if (!alternateButton) return;
+            alternateButton.UpdateIcon(SpriteManager.GetInputSprite(toDefault ? defaultAltValue : startingAltValue));
         }
     }
 }

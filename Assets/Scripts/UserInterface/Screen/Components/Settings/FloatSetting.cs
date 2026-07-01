@@ -26,8 +26,6 @@ namespace UserInterface.Screen.Components.Settings
         [SerializeField] private float startValue;
         [SerializeField] private bool wasChanged;
         [SerializeField] private float value;
-        [SerializeField] private float minValue;
-        [SerializeField] private float maxValue;
         [SerializeField] private float step;
 
         public override void Initialize(
@@ -41,8 +39,8 @@ namespace UserInterface.Screen.Components.Settings
 
             base.Initialize(asset, onSelect, onValueChange, onValueReset, defaultState);
 
-            slider.minValue = minValue = asset.MinValue;
-            slider.maxValue = maxValue = asset.MaxValue;
+            slider.minValue = asset.MinValue;
+            slider.maxValue = asset.MaxValue;
             slider.value = value = SettingsManager.GetFloatSetting(asset.fullName, asset.FloatDefaultValue);
             step = asset.MinIncrement;
 

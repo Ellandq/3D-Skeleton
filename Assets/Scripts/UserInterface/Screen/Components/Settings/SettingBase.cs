@@ -19,6 +19,7 @@ namespace UserInterface.Screen.Components.Settings
 
         [Header("Settings")] 
         protected UIComponentState State;
+        protected SettingsPageItemSO asset;
         [SerializeField] protected string id;
         [SerializeField] protected string fullName;
 
@@ -30,7 +31,7 @@ namespace UserInterface.Screen.Components.Settings
         public string GetId() => id;
         
         public virtual void Initialize(
-            SettingsPageItemSO asset, 
+            SettingsPageItemSO itemAsset, 
             Action<string> onSelect, 
             Action<(string key, T value)> onValueChange,
             Action<(string key, T value)> onValueReset, 
@@ -48,6 +49,8 @@ namespace UserInterface.Screen.Components.Settings
             _onValueReset = onValueReset;
 
             ChangeState(defaultState);
+
+            asset = itemAsset;
         }
         
         void ISettingItem.Initialize(
@@ -89,6 +92,11 @@ namespace UserInterface.Screen.Components.Settings
                 return;
             }
             ChangeState(UIComponentState.Enabled);
+        }
+
+        public virtual void ResetSetting(bool toDefault = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }

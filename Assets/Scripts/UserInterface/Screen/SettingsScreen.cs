@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -32,6 +33,7 @@ namespace UserInterface.Screen
         [SerializeField] private Transform headerPagesButtonsParent;
         [SerializeField] private Button headerLeftButton;
         [SerializeField] private Button headerRightButton;
+        [SerializeField] private ScrollRect headerScrollRect;
 
         [Header("Object References - View")] 
         [SerializeField] private Transform viewParent;
@@ -54,6 +56,16 @@ namespace UserInterface.Screen
         private readonly Dictionary<string, int> cachedIntChanges = new();
         private readonly Dictionary<string, float> cachedFloatChanges = new();
         private readonly Dictionary<string, string> cachedStringChanges = new();
+        
+        private void Awake()
+        {
+            headerScrollRect.onValueChanged.AddListener(_ => UpdateScrollButtons());
+
+            headerLeftButton.onClick.AddListener(ScrollLeft);
+            headerRightButton.onClick.AddListener(ScrollRight);
+
+            UpdateScrollButtons();
+        }
 
         public override void Activate(bool instant, Action onActivate = null)
         {
@@ -344,6 +356,70 @@ namespace UserInterface.Screen
                     break;
             }
         }
+
+        #region HEADER
+
+        private Coroutine _scrollCoroutine;
+
+        private void ScrollLeft()
+        {
+            SmoothScroll(360f);
+        }
+
+        private void ScrollRight()
+        {
+            SmoothScroll(-360f);
+        }
+
+        private void SmoothScroll(float amount)
+        {
+            if (_scrollCoroutine != null)
+                StopCoroutine(_scrollCoroutine);
+
+            _scrollCoroutine = StartCoroutine(SmoothScrollRoutine(amount));
+        }
+        
+        private void UpdateScrollButtons()
+        {
+            headerLeftButton.interactable =
+                headerScrollRect.horizontalNormalizedPosition > 0.01f;
+
+            headerRightButton.interactable =
+                headerScrollRect.horizontalNormalizedPosition < 0.99f;
+        }
+
+        private IEnumerator SmoothScrollRoutine(float amount)
+        {
+            var content = headerScrollRect.content;
+
+            var startPosition = content.anchoredPosition;
+            var targetPosition = startPosition + Vector2.right * amount;
+
+            var maxOffset = content.rect.width - headerScrollRect.viewport.rect.width;
+            targetPosition.x = Mathf.Clamp(targetPosition.x, -maxOffset, 0);
+
+            const float duration = 0.25f;
+            var time = 0f;
+
+            while (time < duration)
+            {
+                time += Time.unscaledDeltaTime;
+
+                var t = Mathf.SmoothStep(0f, 1f, time / duration);
+                content.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, t);
+
+                UpdateScrollButtons();
+
+                yield return null;
+            }
+
+            content.anchoredPosition = targetPosition;
+            UpdateScrollButtons();
+
+            _scrollCoroutine = null;
+        }
+
+        #endregion
         
         #region UI STACK
 

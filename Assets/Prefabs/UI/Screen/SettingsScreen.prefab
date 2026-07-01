@@ -738,6 +738,7 @@ MonoBehaviour:
   headerPagesButtonsParent: {fileID: 6572982594910763145}
   headerLeftButton: {fileID: 9145562031352076272}
   headerRightButton: {fileID: 7988331253754396608}
+  headerScrollRect: {fileID: 7748173071724587956}
   viewParent: {fileID: 5799068510135519421}
   pageAssets:
   - {fileID: 11400000, guid: f190e2d07b3d0fc4cbd04648caedd8b3, type: 2}
@@ -758,6 +759,7 @@ MonoBehaviour:
   - {fileID: 7839650808321191532}
   - {fileID: 2300391334903781970}
   pageToInitializeIndex: 0
+  pagesInitialized: 0
 --- !u!1 &1165382529852671533
 GameObject:
   m_ObjectHideFlags: 0
@@ -1462,12 +1464,16 @@ MonoBehaviour:
   settingName: {fileID: 8009909799435512382}
   highlight: {fileID: 2656296810557747861}
   id: abf1f24ae45e2134db650c1f1df6c9c0
+  fullName: 
   handleBackground: {fileID: 5827045400630615676}
   handleFrame: {fileID: 2425173407794248430}
   handleText: {fileID: 1166518422093432247}
   fill: {fileID: 6497205338663164294}
   sliderBackground: {fileID: 8092907212210978913}
   slider: {fileID: 4395367095545190017}
+  releaseListener: {fileID: 0}
+  startValue: 0
+  wasChanged: 0
   value: 100
   minValue: 0
   maxValue: 100
@@ -5749,12 +5755,16 @@ MonoBehaviour:
   settingName: {fileID: 4171233723813112161}
   highlight: {fileID: 8863870624055505456}
   id: 70d0e304db1889b4ea312a12daa51c5a
+  fullName: 
   handleBackground: {fileID: 3542515822636625303}
   handleFrame: {fileID: 8644209216021093146}
   handleText: {fileID: 1275741778359859867}
   fill: {fileID: 4176383657529443303}
   sliderBackground: {fileID: 2183864497545076067}
   slider: {fileID: 4210476899557962306}
+  releaseListener: {fileID: 0}
+  startValue: 0
+  wasChanged: 0
   value: 100
   minValue: 0
   maxValue: 100
@@ -7386,12 +7396,16 @@ MonoBehaviour:
   settingName: {fileID: 876953943238010225}
   highlight: {fileID: 3266325091364812479}
   id: 3f90856a15661ef41827c86c99667edb
+  fullName: 
   handleBackground: {fileID: 9061243292724601215}
   handleFrame: {fileID: 4818861444412058361}
   handleText: {fileID: 282553031371039392}
   fill: {fileID: 3705303470518111720}
   sliderBackground: {fileID: 6010451488120763437}
   slider: {fileID: 7453655803677013004}
+  releaseListener: {fileID: 0}
+  startValue: 0
+  wasChanged: 0
   value: 100
   minValue: 0
   maxValue: 100
@@ -7532,12 +7546,16 @@ MonoBehaviour:
   settingName: {fileID: 638847832901966688}
   highlight: {fileID: 4719562107305799259}
   id: 5632c906f1802ef43a6d07c919b5812b
+  fullName: 
   handleBackground: {fileID: 8011710702199356535}
   handleFrame: {fileID: 550266994770665156}
   handleText: {fileID: 2160363987800643316}
   fill: {fileID: 1425282973000686415}
   sliderBackground: {fileID: 5751912754900446458}
   slider: {fileID: 5164680231107241718}
+  releaseListener: {fileID: 0}
+  startValue: 0
+  wasChanged: 0
   value: 100
   minValue: 0
   maxValue: 100
@@ -8745,12 +8763,16 @@ MonoBehaviour:
   settingName: {fileID: 4524087266720332681}
   highlight: {fileID: 2484978197856411958}
   id: 8cb913d0a4101c54c8149d7f00bf46a5
+  fullName: 
   handleBackground: {fileID: 4684677004667831807}
   handleFrame: {fileID: 453732780786019514}
   handleText: {fileID: 1358198395516905762}
   fill: {fileID: 6440792465345038762}
   sliderBackground: {fileID: 6888001510228427317}
   slider: {fileID: 2250551933332007638}
+  releaseListener: {fileID: 0}
+  startValue: 0
+  wasChanged: 0
   value: 100
   minValue: 0
   maxValue: 100

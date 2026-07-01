@@ -2,6 +2,7 @@
 using System.Linq;
 using Settings;
 using UnityEngine;
+using Utils.SO.Settings.Utils.SO.Settings;
 
 namespace Managers
 {
@@ -20,10 +21,16 @@ namespace Managers
         public IReadOnlyDictionary<string, float> DebugFloats => cachedFloatChanges;
         public IReadOnlyDictionary<string, string> DebugStrings => cachedStringChanges;
 #endif
+        
+        [Header("Input")]
+        [SerializeField] private InputAssignments defaultInputSettings;
+        private Dictionary<string, string> _defaultInputDict;
 
         protected override void Awake()
         {
             base.Awake();
+
+            _defaultInputDict = defaultInputSettings.AsDictionary();
 
             SettingEnforcerRegistry.Initialize();
 
@@ -101,6 +108,14 @@ namespace Managers
             cachedStringChanges.Add(key, value);
             PlayerPrefs.SetString(key, value);
 
+            return value;
+        }
+        
+        public static string GetDefaultInputSetting(string key) => Instance.GetDefaultInput(key);
+
+        private string GetDefaultInput(string key)
+        {
+            _defaultInputDict.TryGetValue(key, out var value);
             return value;
         }
         

@@ -41,6 +41,7 @@ namespace Managers
                 .Where(c => c.type == InputKeyType.KeyCode)
                 .SelectMany(c => c.keys)
                 .Where(e => e.isAllowed)
+                .Where(e => e.intValue != (int)KeyCode.Escape)
                 .ToDictionary(e => (KeyCode)e.intValue, e => e.value);
 
             LoadSettings();
@@ -48,9 +49,6 @@ namespace Managers
 
         private void Update()
         {
-            foreach (var wrapper in _buttonInfoDict.Values)
-                wrapper.UpdateState();
-            
             if (!isWaitingForInput)
                 return;
 
@@ -73,6 +71,9 @@ namespace Managers
                 _listener?.Invoke(kvp.Value);
                 return;
             }
+            
+            foreach (var wrapper in _buttonInfoDict.Values)
+                wrapper.UpdateState();
         }
 
         public void Subscribe(
@@ -95,6 +96,12 @@ namespace Managers
         {
             isWaitingForInput = true;
             _listener = listener;
+        }
+        
+        public void StopWaitingForInput()
+        {
+            isWaitingForInput = false;
+            _listener = null;
         }
 
 
