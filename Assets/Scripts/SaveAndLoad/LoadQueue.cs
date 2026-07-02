@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Utils.Contract;
 using Utils.SO;
+using Utils.SO.Scene;
 
 namespace SaveAndLoad
 {

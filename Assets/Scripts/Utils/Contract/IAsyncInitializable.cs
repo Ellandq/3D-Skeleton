@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Utils.SO;
+using Utils.SO.Scene;
 
 namespace Utils.Contract
 {

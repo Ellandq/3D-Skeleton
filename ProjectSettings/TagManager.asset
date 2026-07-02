@@ -4,8 +4,10 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - WORLD
-  - ASSETS
+  - World
+  - Props
+  - Dynamic
+  - Static
   layers:
   - Default
   - TransparentFX

@@ -18,10 +18,12 @@ namespace Managers
         private readonly Dictionary<string, AssetEntry> _loadedAssets = new();
         private readonly Dictionary<GameObject, string> _instances = new();
 
-        public async Task<GameObject> InstantiatePrefabAsync<TEnum>(TEnum enumValue, Transform parent, bool enable = true) where TEnum : Enum
+        public async Task<GameObject> InstantiatePrefabAsync<TEnum>(TEnum enumValue, Transform parent,
+            bool enable = true) where TEnum : Enum =>
+            await InstantiatePrefabAsync(enumValue.ToString(), parent, enable);
+        
+        public async Task<GameObject> InstantiatePrefabAsync(string key, Transform parent, bool enable = true)
         {
-            var key = enumValue.ToString();
-
             if (!_loadedAssets.TryGetValue(key, out var entry))
             {
                 var handle = Addressables.LoadAssetAsync<GameObject>(key);

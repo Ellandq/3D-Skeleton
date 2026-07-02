@@ -7,6 +7,7 @@ using UnityEngine;
 using UserInterface.Screen;
 using Utils.Enum;
 using Utils.SO;
+using Utils.SO.Scene;
 
 namespace SaveAndLoad
 {

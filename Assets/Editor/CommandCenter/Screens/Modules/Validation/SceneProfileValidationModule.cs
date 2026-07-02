@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 using UserInterface.Screen;
 using Utils.Enum;
 using Utils.SO;
+using Utils.SO.Scene;
 
 namespace Editor.CommandCenter.Screens.Modules.Validation
 {
