@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Editor.CommandCenter.Screens.Modules.SceneAssets;
+using UnityEditor.SceneManagement;
 
 namespace Editor.CommandCenter.Screens
 {
@@ -36,12 +38,16 @@ namespace Editor.CommandCenter.Screens
         private static readonly Color SavedColor = new(0.35f, 0.65f, 1f);
         private static readonly Color SceneOnlyColor = new(0.65f, 0.65f, 0.65f);
         private static readonly Color ModifiedColor = new(1f, 0.85f, 0.2f);
-        private static readonly Color NormalColor = new(0.75f, 0.75f, 0.75f);
 
         public void Initialize(ICommandCenterLogger logger)
         {
             _logger = logger;
             _service = new SceneAssetManagerService(logger);
+            
+            
+            EditorSceneManager.sceneOpened += OnSceneChanged;
+            EditorSceneManager.sceneClosed += OnSceneClosed;
+            EditorSceneManager.newSceneCreated += OnNewSceneCreated;
         }
 
         public VisualElement CreateContent()
@@ -115,10 +121,15 @@ namespace Editor.CommandCenter.Screens
             {
                 style =
                 {
-                    width = 250,
-                    marginLeft = 8
+                    width = 350,
+                    height = 28,
+                    marginLeft = 8,
+                    marginRight = 8
                 }
             };
+
+            _sceneDropdown.style.fontSize = 14;
+            _sceneDropdown.labelElement.style.fontSize = 14;
             
             _sceneDropdown.RegisterValueChangedCallback(_ =>
             {
@@ -151,7 +162,7 @@ namespace Editor.CommandCenter.Screens
 
             var destroyButton = new Button(OnDestroyPressed)
             {
-                text = "Destroy"
+                text = "Deload"
             };
 
             StyleButton(destroyButton);
@@ -257,7 +268,7 @@ namespace Editor.CommandCenter.Screens
             return panel;
         }
 
-        private VisualElement CreateInspector()
+        private static VisualElement CreateInspector()
         {
             var container = new VisualElement
             {
@@ -326,13 +337,19 @@ namespace Editor.CommandCenter.Screens
 
         private void RefreshSceneList()
         {
+            var previous = _sceneDropdown?.value;
+
             var scenes = GetLoadedSceneNames();
 
             if (scenes.Count == 0)
                 scenes.Add("No Loaded Scenes");
 
+            if (_sceneDropdown == null) return;
             _sceneDropdown.choices = scenes;
-            _sceneDropdown.index = 0;
+
+            var index = scenes.IndexOf(previous);
+
+            _sceneDropdown.index = index >= 0 ? index : 0;
         }
 
         private ListView CreateAssetTypeList()
@@ -344,31 +361,29 @@ namespace Editor.CommandCenter.Screens
                 {
                     flexGrow = 1,
                     backgroundColor = new Color(.15f,.15f,.15f)
+                },
+                makeItem = () =>
+                {
+                    var label = new Label();
+
+                    StyleListLabel(label);
+
+                    return label;
+                },
+                bindItem = (element, index) =>
+                {
+                    var label = element as Label;
+
+                    var item = _filteredTypes[index];
+
+                    if (label == null) return;
+                    label.text = item.displayName;
+
+                    label.style.color =
+                        item.isSaved
+                            ? SavedColor
+                            : SceneOnlyColor;
                 }
-            };
-
-            list.makeItem = () =>
-            {
-                var label = new Label();
-
-                StyleListLabel(label);
-
-                return label;
-            };
-
-            list.bindItem = (element, index) =>
-            {
-                var label = element as Label;
-
-                var item = _filteredTypes[index];
-
-                if (label == null) return;
-                label.text = item.displayName;
-
-                label.style.color =
-                    item.isSaved
-                        ? SavedColor
-                        : SceneOnlyColor;
             };
 
             list.selectionChanged += selection =>
@@ -382,8 +397,7 @@ namespace Editor.CommandCenter.Screens
 
             return list;
         }
-
-
+        
         private ListView CreateAssetList()
         {
             var list = new ListView
@@ -532,12 +546,25 @@ namespace Editor.CommandCenter.Screens
             AddInspectorValue(
                 "Scale",
                 _selectedAsset.scale.ToString());
+            
+            if (!_selectedAsset.isDynamic)
+                return;
 
-            if (!_selectedAsset.isDynamic) return;
+            AddInspectorValue(
+                "Mass",
+                _selectedAsset.mass.ToString(CultureInfo.InvariantCulture));
+
+            AddInspectorValue(
+                "Interpolation",
+                _selectedAsset.interpolation.ToString());
+
+            AddInspectorValue(
+                "Collision Mode",
+                _selectedAsset.collisionDetectionMode.ToString());
+
             AddInspectorValue(
                 "Velocity",
                 _selectedAsset.velocity.ToString());
-
 
             AddInspectorValue(
                 "Angular Velocity",
@@ -546,11 +573,13 @@ namespace Editor.CommandCenter.Screens
             AddInspectorValue(
                 "Gravity",
                 _selectedAsset.usesGravity.ToString());
+
+            AddInspectorValue(
+                "Kinematic",
+                _selectedAsset.isKinematic.ToString());
         }
 
-        private void AddInspectorValue(
-            string name,
-            string value)
+        private void AddInspectorValue(string name, string value)
         {
             var row = new VisualElement
             {
@@ -627,6 +656,21 @@ namespace Editor.CommandCenter.Screens
             _selectedType = updated;
 
             RefreshAssetList();
+        }
+        
+        private void OnSceneChanged(Scene scene, OpenSceneMode mode)
+        {
+            RefreshSceneList();
+        }
+
+        private void OnSceneClosed(Scene scene)
+        {
+            RefreshSceneList();
+        }
+
+        private void OnNewSceneCreated(Scene scene, NewSceneSetup setup, NewSceneMode mode)
+        {
+            RefreshSceneList();
         }
         
         private static void StyleListLabel(Label label)

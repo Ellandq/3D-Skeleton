@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacf295220e74443a87b172550f21908, type: 3}
   m_Name: Gameplay_AssetData
   m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Scene.SceneAssetData
-  sceneName: 1
   collections:
   - assetAddress: Test/Cube - Static
     propsData:
@@ -28,10 +27,14 @@ MonoBehaviour:
   - assetAddress: Test/Cube - Dynamic
     propsData: []
     dynamicProps:
-    - id: 59d7af50-a023-45c6-910a-2afb90e3c905
+    - id: 4e1db665-59cc-457e-9fa5-c25fe4e34612
       position: {x: -35, y: 13, z: 45}
       rotation: {x: -0, y: -0, z: -0, w: 1}
       scale: {x: 5, y: 5, z: 5}
+      mass: 5
+      interpolation: 0
+      collisionDetectionMode: 0
       velocity: {x: 0, y: 0, z: 0}
       angularVelocity: {x: 0, y: 0, z: 0}
       usesGravity: 0
+      isKinematic: 0

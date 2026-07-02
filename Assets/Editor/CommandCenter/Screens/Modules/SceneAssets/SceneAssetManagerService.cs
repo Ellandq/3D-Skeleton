@@ -190,6 +190,15 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
 
                 if (body)
                 {
+                    prop.mass =
+                        body.mass;
+
+                    prop.interpolation =
+                        body.interpolation;
+
+                    prop.collisionDetectionMode =
+                        body.collisionDetectionMode;
+
                     prop.velocity =
                         body.linearVelocity;
 
@@ -198,6 +207,9 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
 
                     prop.usesGravity =
                         body.useGravity;
+
+                    prop.isKinematic =
+                        body.isKinematic;
                 }
             }
 
@@ -263,8 +275,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                     id = prop.id,
                     position = prop.position,
                     rotation = prop.rotation,
-                    scale = prop.scale,
-                    isDynamic = false
+                    scale = prop.scale
                 }));
 
 
@@ -275,10 +286,15 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                     position = prop.position,
                     rotation = prop.rotation,
                     scale = prop.scale,
+
+                    mass = prop.mass,
+                    interpolation = prop.interpolation,
+                    collisionDetectionMode = prop.collisionDetectionMode,
+
                     velocity = prop.velocity,
                     angularVelocity = prop.angularVelocity,
                     usesGravity = prop.usesGravity,
-                    isDynamic = true
+                    isKinematic = prop.isKinematic
                 }));
             }
             
@@ -296,6 +312,13 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
             {
                 foreach (var asset in type.assets)
                 {
+                    foreach (var s in saved.Where(x => x.address == asset.address))
+                    {
+                        Debug.Log($"Saved: {s.id}");
+                    }
+
+                    Debug.Log($"Scene: {asset.id}");
+                    
                     var match =
                         saved.FirstOrDefault(
                             x =>
@@ -304,6 +327,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
 
                     if (match == null)
                     {
+                        Debug.Log($"Missing saved prop: {asset.address} | {asset.id}");
                         asset.isSaved = false;
                         continue;
                     }
@@ -346,7 +370,25 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                 return true;
 
 
-            return scene.usesGravity != saved.usesGravity;
+            if (scene.mass != saved.mass)
+                return true;
+
+            if (scene.interpolation != saved.interpolation)
+                return true;
+
+            if (scene.collisionDetectionMode != saved.collisionDetectionMode)
+                return true;
+
+            if (scene.velocity != saved.velocity)
+                return true;
+
+            if (scene.angularVelocity != saved.angularVelocity)
+                return true;
+
+            if (scene.usesGravity != saved.usesGravity)
+                return true;
+
+            return scene.isKinematic != saved.isKinematic;
         }
         
         public void SpawnMissing(
@@ -411,6 +453,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
             
             _logger.Log(
                 "Missing assets spawned.");
+            
         }
         
         private static bool IsAlreadySpawned(
@@ -454,7 +497,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                 parent.transform);
             
             instance.name =
-                data.id;
+                prefab.name;
 
             var identifier =
                 instance.GetComponent<PropIdentifier>();
@@ -503,7 +546,18 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                 parent.transform);
 
             instance.name =
-                data.id;
+                prefab.name;
+            
+            var identifier =
+                instance.GetComponent<PropIdentifier>();
+
+            if (!identifier)
+            {
+                identifier =
+                    instance.AddComponent<PropIdentifier>();
+            }
+
+            identifier.SetId(data.id);
 
             ApplyTransform(
                 instance,
@@ -517,6 +571,15 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
             if (!body)
                 return;
 
+            body.mass =
+                data.mass;
+
+            body.interpolation =
+                data.interpolation;
+
+            body.collisionDetectionMode =
+                data.collisionDetectionMode;
+
             body.linearVelocity =
                 data.velocity;
 
@@ -525,6 +588,9 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
 
             body.useGravity =
                 data.usesGravity;
+
+            body.isKinematic =
+                data.isKinematic;
         }
 
         private static void ApplyTransform(
@@ -558,9 +624,6 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
             {
                 var data =
                     ScriptableObject.CreateInstance<SceneAssetData>();
-
-                data.sceneName =
-                    _currentProfile.sceneName;
                 
                 var path =
                     AssetDatabase.GetAssetPath(
@@ -645,17 +708,22 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
         private static DynamicPropData CreateDynamicProp(
             ScenePropViewModel source)
         {
-            var prop = new DynamicPropData
+            return new DynamicPropData
             {
                 id = source.id,
                 position = source.position,
                 rotation = source.rotation,
                 scale = source.scale,
+
+                mass = source.mass,
+                interpolation = source.interpolation,
+                collisionDetectionMode = source.collisionDetectionMode,
+
                 velocity = source.velocity,
                 angularVelocity = source.angularVelocity,
-                usesGravity = source.usesGravity
+                usesGravity = source.usesGravity,
+                isKinematic = source.isKinematic
             };
-            return prop;
         }
 
         public void DestroySceneProps()

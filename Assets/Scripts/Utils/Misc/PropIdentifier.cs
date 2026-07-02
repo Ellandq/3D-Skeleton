@@ -20,12 +20,7 @@ namespace Utils.Misc
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                id =
-                    System.Guid.NewGuid()
-                        .ToString();
-            }
+            id ??= "";
         }
 #endif
     }

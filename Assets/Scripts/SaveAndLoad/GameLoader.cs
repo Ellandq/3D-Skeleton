@@ -42,7 +42,8 @@ namespace SaveAndLoad
                 _loadQueue = new LoadQueue(
                     onFinishLoad,
                     uiManager,
-                    SceneManager.Instance
+                    SceneManager.Instance,
+                    AssetManager.Instance
                 );
 
                 if (profile.useLoadScreen)
