@@ -15,10 +15,11 @@ namespace UserInterface
         [Header("Animation Settings")]
         [SerializeField] private string openState = "Open"; 
         [SerializeField] private string closeState = "Close";
+        [SerializeField] protected float animationSpeedMultiplier = 1f;
         protected bool IsOpening { get; set; }
         protected bool IsClosing { get; set; }
             
-        private Action _onAnimationFinish;
+        protected Action onAnimationFinish;
         
         [Header("Parameter hashes")]
         private static readonly int Speed = Animator.StringToHash("Speed");
@@ -28,7 +29,7 @@ namespace UserInterface
             if (instant)
             {
                 ChangeComponentState(true);
-                _onAnimationFinish = onActivate;
+                onAnimationFinish = onActivate;
 
                 IsOpening = true;
                 IsClosing = false;
@@ -41,7 +42,7 @@ namespace UserInterface
                 return;
 
             IsOpening = true;
-            _onAnimationFinish = onActivate;
+            onAnimationFinish = onActivate;
 
             if (IsClosing)
             {
@@ -60,7 +61,7 @@ namespace UserInterface
 
             if (instant)
             {
-                _onAnimationFinish = onDeactivate;
+                onAnimationFinish = onDeactivate;
 
                 IsOpening = false;
                 IsClosing = true;
@@ -73,7 +74,7 @@ namespace UserInterface
                 return;
 
             IsClosing = true;
-            _onAnimationFinish = onDeactivate;
+            onAnimationFinish = onDeactivate;
 
             if (IsOpening)
             {
@@ -94,7 +95,7 @@ namespace UserInterface
         {
             StopAllCoroutines();
 
-            animator.SetFloat(Speed, 1f);
+            animator.SetFloat(Speed, 1f * animationSpeedMultiplier );
 
             animator.Play(stateKey, 0, 1f);
             animator.Update(0f);
@@ -102,8 +103,8 @@ namespace UserInterface
             IsOpening = opening;
             IsClosing = !opening;
 
-            var callback = _onAnimationFinish;
-            _onAnimationFinish = null;
+            var callback = onAnimationFinish;
+            onAnimationFinish = null;
 
             callback?.Invoke();
         }
@@ -124,7 +125,7 @@ namespace UserInterface
                 t *= t;
 
                 var newSpeed = Mathf.Lerp(startSpeed, targetSpeed, t);
-                animator.SetFloat(Speed, newSpeed);
+                animator.SetFloat(Speed, newSpeed * animationSpeedMultiplier );
 
                 yield return null;
             }
@@ -134,7 +135,7 @@ namespace UserInterface
 
         protected virtual IEnumerator RunAnimation(string stateKey)
         {
-            animator.SetFloat(Speed, 1f);
+            animator.SetFloat(Speed, 1f * animationSpeedMultiplier );
             animator.Play(stateKey, 0, 0f);
             animator.Update(0f);
 
@@ -164,10 +165,10 @@ namespace UserInterface
             IsOpening = false;
             IsClosing = false;
 
-            animator.SetFloat(Speed, 1f);
+            animator.SetFloat(Speed, 1f * animationSpeedMultiplier );
 
-            _onAnimationFinish?.Invoke();
-            _onAnimationFinish = null;
+            onAnimationFinish?.Invoke();
+            onAnimationFinish = null;
         }
 
         protected void EnableInteractions()

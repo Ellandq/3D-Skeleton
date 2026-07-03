@@ -449,6 +449,7 @@ MonoBehaviour:
   animator: {fileID: 9186231027171694598}
   openState: Open
   closeState: Close
+  animationSpeedMultiplier: 4
   loadingBar: {fileID: 6262033557523816783}
   loadingIcon: {fileID: 1364509813434484148}
   messageDisplay: {fileID: 3831344984586080164}

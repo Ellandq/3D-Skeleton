@@ -32,6 +32,7 @@ namespace UserInterface.Screen
 
         protected void Awake()
         {
+            animationSpeedMultiplier = 3f;
             if (loadingBar.childCount > 0)
                 maxWidth = ((RectTransform)loadingBar.GetChild(0)).rect.width;
         }
@@ -45,6 +46,7 @@ namespace UserInterface.Screen
 
         public void Bind(IProgressReporter loader)
         {
+            _targetProgress = 0f;
             if (_loader != null)
             {
                 _loader.OnProgress -= UpdateProgress;
@@ -59,7 +61,7 @@ namespace UserInterface.Screen
             if (_loadingCoroutine != null)
                 StopCoroutine(_loadingCoroutine);
 
-            _loadingCoroutine = StartCoroutine(LoadingAction());
+            onAnimationFinish += () => _loadingCoroutine = StartCoroutine(LoadingAction());
         }
 
         private void UpdateProgress(float progress)
@@ -74,6 +76,7 @@ namespace UserInterface.Screen
 
         private void OnEnable()
         {
+            _targetProgress = 0f;
             Initialize();
         }
 

@@ -21,6 +21,7 @@ namespace Managers
         private Dictionary<KeyCode, string> _allowedKeyboardButtons = new();
         private bool isWaitingForInput;
         private Action<string> _listener;
+        [SerializeField] private InputManagerState inputManagerState;
 
         [Header("Metadata info")]
         private const string InputPrefix = "Input/";
@@ -49,18 +50,37 @@ namespace Managers
 
         private void Update()
         {
+            switch (inputManagerState)
+            {
+                case InputManagerState.Default:
+                    DefaultUpdate();
+                    break;
+                case InputManagerState.WaitingForInput:
+                    WaitForInputUpdate();
+                    break;
+                case InputManagerState.WaitingForAnyInput:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void DefaultUpdate()
+        {
             foreach (var wrapper in _buttonInfoDict.Values)
                 wrapper.UpdateState();
-            
-            if (!isWaitingForInput)
-                return;
+        }
 
+        private void WaitForInputUpdate()
+        {
+            _buttonInfoDict[PlayerAction.Escape].UpdateState();
+            
             foreach (var kvp in from kvp in _allowedMouseButtons
                      let state = Input.GetMouseButtonDown((int)kvp.Key)
                      where state
                      select kvp)
             {
-                isWaitingForInput = false;
+                inputManagerState = InputManagerState.Default;
                 _listener?.Invoke(kvp.Value);
                 return;
             }
@@ -70,7 +90,7 @@ namespace Managers
                      where state
                      select kvp)
             {
-                isWaitingForInput = false;
+                inputManagerState = InputManagerState.Default;
                 _listener?.Invoke(kvp.Value);
                 return;
             }
@@ -94,13 +114,13 @@ namespace Managers
 
         public void WaitForInput(Action<string> listener)
         {
-            isWaitingForInput = true;
+            inputManagerState = InputManagerState.WaitingForInput;
             _listener = listener;
         }
         
         public void StopWaitingForInput()
         {
-            isWaitingForInput = false;
+            inputManagerState = InputManagerState.Default;
             _listener = null;
         }
 
@@ -254,5 +274,12 @@ namespace Managers
                 IsValid = true;
             }
         }
+    }
+
+    internal enum InputManagerState
+    {
+        WaitingForInput,
+        WaitingForAnyInput,
+        Default
     }
 }

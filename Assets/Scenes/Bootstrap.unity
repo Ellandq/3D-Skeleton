@@ -2695,6 +2695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Managers.InputManager
   allowedInputKeys: {fileID: 11400000, guid: ebeb4afa6cf7bd6479ae110435504124, type: 2}
   defaultInputAssignments: {fileID: 11400000, guid: 9deda2c6c6d54274dbec2d6dbeeb8ea9, type: 2}
+  inputManagerState: 2
 --- !u!224 &2118883182 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3460309550345352496, guid: 9068604de9b5e33498d9450c926281ec, type: 3}

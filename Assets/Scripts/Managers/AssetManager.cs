@@ -67,6 +67,14 @@ namespace Managers
             bool enable = true)
         {
             var assetCount = collection.dynamicProps.Count + collection.propsData.Count;
+            
+            if (assetCount == 0)
+            {
+                declareStepsCallBack.Invoke(1);
+                declareStep.Invoke($"No assets to load: {collection.assetAddress}");
+                return new List<GameObject>();
+            }
+            
             declareStepsCallBack.Invoke(assetCount);
             
             var key = collection.assetAddress;
@@ -143,7 +151,6 @@ namespace Managers
             Action<string> declareStep)
         {
             var collections = sceneProfile.assetData.collections;
-            
             declareSubprocessesCount.Invoke(collections.Count);
             
             var (dynamicRoot, staticRoot) = ScenePropFinder.GetPropTransforms(sceneProfile.name);
