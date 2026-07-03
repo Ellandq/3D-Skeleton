@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SaveAndLoad;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -183,6 +184,16 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                         obj.transform.localScale
                 };
             
+            var saveable =
+                obj.GetComponents<MonoBehaviour>()
+                    .OfType<ISaveable>()
+                    .FirstOrDefault();
+
+            if (saveable != null)
+            {
+                prop.saveData = saveable.GetSaveData();
+            }
+            
             if (dynamic)
             {
                 var body =
@@ -273,6 +284,8 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                 {
                     address = collection.assetAddress,
                     id = prop.id,
+                    saveData = prop.saveData,
+
                     position = prop.position,
                     rotation = prop.rotation,
                     scale = prop.scale
@@ -283,6 +296,8 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                 {
                     address = collection.assetAddress,
                     id = prop.id,
+                    saveData = prop.saveData,
+
                     position = prop.position,
                     rotation = prop.rotation,
                     scale = prop.scale,
@@ -359,6 +374,9 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
 
 
             if (scene.scale != saved.scale)
+                return true;
+            
+            if (scene.saveData != saved.saveData)
                 return true;
 
             if (!scene.isDynamic) return false;
@@ -695,14 +713,14 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
         private static PropData CreateProp(
             ScenePropViewModel source)
         {
-            var prop = new PropData
+            return new PropData
             {
                 id = source.id,
+                saveData = source.saveData,
                 position = source.position,
                 rotation = source.rotation,
                 scale = source.scale
             };
-            return prop;
         }
 
         private static DynamicPropData CreateDynamicProp(
@@ -711,6 +729,8 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
             return new DynamicPropData
             {
                 id = source.id,
+                saveData = source.saveData,
+
                 position = source.position,
                 rotation = source.rotation,
                 scale = source.scale,

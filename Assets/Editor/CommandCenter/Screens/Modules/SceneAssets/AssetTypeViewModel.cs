@@ -8,6 +8,8 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
 
         public string displayName;
 
+        public string usesSaveData;
+
         public bool isSaved;
 
         public readonly List<ScenePropViewModel> assets = new();

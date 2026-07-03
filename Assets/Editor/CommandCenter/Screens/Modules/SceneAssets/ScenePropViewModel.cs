@@ -9,6 +9,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
         public string displayName;
         public string address;
         public string id;
+        public string saveData;
         public bool isSaved;
         public bool isModified;
         public bool isDynamic;

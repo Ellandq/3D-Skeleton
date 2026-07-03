@@ -16,10 +16,12 @@ MonoBehaviour:
   - assetAddress: Test/Cube - Static
     propsData:
     - id: f2d97202-88c3-44bc-a547-cf9d96bfeb36
+      saveData: 
       position: {x: -16.39, y: 2.75, z: 26.16}
       rotation: {x: -0, y: -0, z: -0, w: 1}
       scale: {x: 5, y: 5, z: 5}
     - id: c5469fe4-6a0e-4c4e-b5f7-a0d2649d6702
+      saveData: 
       position: {x: 0, y: 15.5, z: 45}
       rotation: {x: -0, y: -0, z: -0, w: 1}
       scale: {x: 3, y: 3, z: 3}
@@ -28,12 +30,13 @@ MonoBehaviour:
     propsData: []
     dynamicProps:
     - id: 4e1db665-59cc-457e-9fa5-c25fe4e34612
+      saveData: False
       position: {x: -35, y: 13, z: 45}
       rotation: {x: -0, y: -0, z: -0, w: 1}
       scale: {x: 5, y: 5, z: 5}
       mass: 5
-      interpolation: 0
-      collisionDetectionMode: 0
+      interpolation: 1
+      collisionDetectionMode: 2
       velocity: {x: 0, y: 0, z: 0}
       angularVelocity: {x: 0, y: 0, z: 0}
       usesGravity: 0

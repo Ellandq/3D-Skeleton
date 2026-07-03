@@ -6,6 +6,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
     {
         public string address;
         public string id;
+        public string saveData;
 
         public Vector3 position;
         public Quaternion rotation;

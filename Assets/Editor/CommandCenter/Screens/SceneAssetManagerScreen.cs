@@ -577,6 +577,12 @@ namespace Editor.CommandCenter.Screens
             AddInspectorValue(
                 "Kinematic",
                 _selectedAsset.isKinematic.ToString());
+            
+            AddInspectorValue(
+                "Save Data",
+                string.IsNullOrEmpty(_selectedAsset.saveData)
+                    ? "<None>"
+                    : _selectedAsset.saveData);
         }
 
         private void AddInspectorValue(string name, string value)

@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using SaveAndLoad;
+using UnityEngine;
 
 namespace Test
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class PhysicsPatrol : MonoBehaviour
+    public class PhysicsPatrol : MonoBehaviour, ISaveable
     {
         public Vector3 pointA = new(-35f, 13f, 45f);
         public Vector3 pointB = new(35f, 13f, 45f);
@@ -14,14 +15,16 @@ namespace Test
 
         private Rigidbody rb;
         private Vector3 target;
+        private bool targetInitialized;
+
+        [Header("Save data")] 
+        private bool isTargetA;
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
-            rb.useGravity = false;
-            rb.interpolation = RigidbodyInterpolation.Interpolate;
-
+            if (targetInitialized) return;
             target = pointB;
+            targetInitialized = true;
         }
 
         private void FixedUpdate()
@@ -49,6 +52,17 @@ namespace Test
             {
                 target = (target == pointA) ? pointB : pointA;
             }
+        }
+
+        public string GetSaveData()
+        {
+            return (target == pointA).ToString();
+        }
+
+        public void LoadSaveData(string data)
+        {
+            target = bool.Parse(data) ? pointA : pointB;
+            targetInitialized = true;
         }
     }
 }
