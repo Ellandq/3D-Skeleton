@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Utils.Enum.UI;
 
-namespace Utils.SO
+namespace Utils.Data
 {
     [CreateAssetMenu(menuName = "UI/Color Scheme")]
     public class UIColorScheme : ScriptableObject

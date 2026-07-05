@@ -4,7 +4,7 @@ using System.Linq;
 using GameInput;
 using UnityEngine;
 
-namespace Utils.SO.Settings
+namespace Utils.Data.Settings
 {
     namespace Utils.SO.Settings
     {

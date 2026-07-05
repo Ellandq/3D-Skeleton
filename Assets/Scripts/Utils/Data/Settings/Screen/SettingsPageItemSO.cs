@@ -3,7 +3,7 @@ using System.Globalization;
 using GameInput;
 using UnityEngine;
 
-namespace Utils.SO.Settings.Screen
+namespace Utils.Data.Settings.Screen
 {
     public class SettingsPageItemSO : ScriptableObject
     {
@@ -13,23 +13,19 @@ namespace Utils.SO.Settings.Screen
         public SettingsItemType itemType;
         public string strValue;
 
-        // Float
         public float MinValue { get; set; }
         public float MaxValue { get; set; }
         public float MinIncrement { get; set; }
         public float FloatDefaultValue { get; set; }
 
-        // Enum
         public string EnumTypeName { get; set; }
         public string EnumDefaultValue { get; set; }
 
-        // Boolean
         public bool BoolDefaultValue { get; set; }
         public bool BooleanIsConditional { get; set; }
         [System.NonSerialized]
         public List<SettingsPageItemSO> ConditionalItems = new();
 
-        // InputKey
         public PlayerAction ActionName { get; set; }
         public bool AllowSecondaryInput { get; set; } = true;
 

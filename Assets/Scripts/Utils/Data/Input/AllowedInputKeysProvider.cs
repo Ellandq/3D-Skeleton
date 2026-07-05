@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Utils.SO.Input
+namespace Utils.Data.Input
 {
     public static class AllowedInputKeysProvider
     {

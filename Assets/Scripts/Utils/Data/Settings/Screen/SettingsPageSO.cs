@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utils.SO.Settings.Screen
+namespace Utils.Data.Settings.Screen
 {
     [CreateAssetMenu(menuName = "Settings/Screen/Page")]
     public class SettingsPageSO : ScriptableObject

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Utils.Misc
+namespace Utils.Misc.Props
 {
     public static class ScenePropFinder
     {

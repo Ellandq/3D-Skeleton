@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using Utils.Misc;
 
-namespace Editor.CommandCenter.Screens.Modules.SceneAssets
+namespace Utils.Misc.Props
 {
     public static class PropIdUtility
     {
-        public static string GetOrCreateId(
-            GameObject obj)
+        public static string GetOrCreateId(GameObject obj, string assetPath)
         {
             var identifier =
                 obj.GetComponent<PropIdentifier>();
@@ -22,8 +20,8 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
             if (string.IsNullOrEmpty(identifier.Id))
             {
                 identifier.SetId(
-                    System.Guid.NewGuid()
-                        .ToString());
+                    System.Guid.NewGuid().ToString(),
+                    assetPath);
             }
 
 

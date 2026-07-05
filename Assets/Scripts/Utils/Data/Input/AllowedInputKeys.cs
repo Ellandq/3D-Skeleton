@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utils.SO.Input
+namespace Utils.Data.Input
 {
     [CreateAssetMenu(
         fileName = "AllowedInputKeys",
