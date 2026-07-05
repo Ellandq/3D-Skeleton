@@ -7,6 +7,9 @@ namespace Utils.Enum
     public enum NamedState
     {
         Gameplay,
-        MainMenu
+        LoadGame,
+        MainMenu,
+        NewGame,
+        PauseMenu
     }
 }

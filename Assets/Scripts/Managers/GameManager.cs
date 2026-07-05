@@ -37,7 +37,9 @@ namespace Managers
         
         #region STATE MANAGEMENT
 
-        public void PushState(NamedState newState, bool pause = true)
+        public static void PushState(NamedState newState, bool pause = true) => Instance.PushNewState(newState, pause);
+
+        private void PushNewState(NamedState newState, bool pause = true)
         {
             if (pause && _stateStack.TryPeek(out var state))
             {
@@ -53,7 +55,8 @@ namespace Managers
             _stateStack.Push(stateToEnter);
         }
 
-        public void PopState(bool resume = true)
+        public static void PopState(bool resume = true) => Instance.PopStateStack(resume);
+        private void PopStateStack(bool resume = true)
         {
             if (!_stateStack.TryPop(out var stateToExit)) 
                 return;
@@ -69,7 +72,7 @@ namespace Managers
             }
         }
 
-        public void ChangeState(NamedState newState)
+        public static void ChangeState(NamedState newState)
         {
             PopState(false);
             PushState(newState, false);

@@ -11,9 +11,9 @@ using UserInterface.Screen.Components.Settings.Common;
 using UserInterface.Screen.Components.Settings.Custom;
 using UserInterface.Windows;
 using Utils.Contract;
+using Utils.Data.Settings.Screen;
 using Utils.Enum;
 using Utils.Enum.UI;
-using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen
 {
@@ -418,7 +418,6 @@ namespace UserInterface.Screen
                     break;
 
                 default:
-                    // ignore
                     break;
             }
 

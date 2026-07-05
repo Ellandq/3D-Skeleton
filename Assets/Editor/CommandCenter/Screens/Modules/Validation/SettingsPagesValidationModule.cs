@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UserInterface.Screen;
-using Utils.SO.Settings.Screen;
+using Utils.Data.Settings.Screen;
 using Object = UnityEngine.Object;
 
 namespace Editor.CommandCenter.Screens.Modules.Validation

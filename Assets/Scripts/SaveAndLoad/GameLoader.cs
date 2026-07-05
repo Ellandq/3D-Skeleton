@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using Managers;
 using UnityEngine;
 using UserInterface.Screen;
+using Utils.Data.Save;
+using Utils.Data.Scene;
 using Utils.Enum;
-using Utils.SO;
-using Utils.SO.Scene;
 
 namespace SaveAndLoad
 {
     public class GameLoader : MonoBehaviour
     {
+        private static GameLoader _instance;
+        
         [Header("Scene Profiles")] 
         [SerializeField] private List<SceneProfile> sceneProfiles;
         private Dictionary<NamedScene, SceneProfile> _profiles;
@@ -25,13 +29,19 @@ namespace SaveAndLoad
 
         private void Awake()
         {
+            _instance = this;
+            
             _profiles = sceneProfiles.ToDictionary(
                 profile => profile.sceneName,
                 profile => profile
             );
+            
+            sceneProfiles.ForEach(
+                p => p.subScenes.ForEach(
+                    s => p.AssignSubSceneProfile(s, _profiles[s])));
         }
 
-        public async Task LoadGame(NamedScene sceneName, Action onFinishLoad)
+        public async UniTask LoadGame(NamedScene sceneName, Action onFinishLoad, [CanBeNull] SaveData saveData)
         {
             try
             {
@@ -62,5 +72,7 @@ namespace SaveAndLoad
                 Debug.LogError($"Could not find scene profile for: {sceneName}");
             }
         }
+
+        public static SceneProfile GetSceneProfile(NamedScene name) => _instance._profiles[name];
     }
 }

@@ -13,7 +13,7 @@ namespace Test
         public float arriveDistance = 1f;
         public float acceleration = 5f;
 
-        private Rigidbody rb;
+        [SerializeField] private Rigidbody rb;
         private Vector3 target;
         private bool targetInitialized;
 

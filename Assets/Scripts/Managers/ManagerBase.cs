@@ -5,23 +5,28 @@ namespace Managers
     public abstract class ManagerBase<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T _instance;
+        private static bool _isQuitting;
+        
+        static ManagerBase()
+        {
+            Application.quitting += () => _isQuitting = true;
+        }
 
         public static T Instance
         {
             get
             {
+                if (_isQuitting)
+                    return null;
+
                 if (_instance)
-                {
                     return _instance;
-                }
 
                 _instance = FindAnyObjectByType<T>();
 
-                if (!_instance)
-                {
+                if (!_instance && !_isQuitting)
                     Debug.LogError($"No instance of type: {typeof(T)}");
-                }
-                
+
                 return _instance;
             }
         }
@@ -41,10 +46,8 @@ namespace Managers
 
         private void OnDestroy()
         {
-            if (_instance == this)
-            {
-                _instance = null;
-            }
+            if (_instance != this) return;
+            _instance = null;
         }
     }
 }

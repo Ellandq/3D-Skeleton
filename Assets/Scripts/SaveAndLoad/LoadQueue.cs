@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Utils.Contract;
-using Utils.SO;
-using Utils.SO.Scene;
+using Utils.Data.Save;
+using Utils.Data.Scene;
 
 namespace SaveAndLoad
 {
@@ -17,6 +17,7 @@ namespace SaveAndLoad
         
         private readonly Queue<IAsyncInitializable> _steps = new();
         private SceneProfile _sceneProfile;
+        private SaveData _saveData;
         
         private float _progress;
         

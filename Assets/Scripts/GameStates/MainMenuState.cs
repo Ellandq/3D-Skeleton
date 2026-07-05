@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
 using UserInterface.Screen;
@@ -11,12 +11,12 @@ namespace GameStates
     {
         public NamedState Name => NamedState.MainMenu;
         
-        public void Enter()
+        public void Enter(NamedState? previousState = null)
         {
             _ = LoadMainMenuAsync();
         }
 
-        private async Task LoadMainMenuAsync()
+        private async UniTask LoadMainMenuAsync()
         {
             await GameManager.LoadHandle.LoadGame(
                 NamedScene.MainMenu,
@@ -25,7 +25,8 @@ namespace GameStates
                     UIManager.DeactivateComponent(NamedScreen.Loading, false, Resume);
                     UIManager.ActivateComponent(NamedScreen.MainMenu);
                     UIManager.SetOnEmptyStackExitCallback(() => UIManager.ActivateComponent(NamedWindow.ExitConfirmation));
-                }
+                },
+                null
             );
         }
 

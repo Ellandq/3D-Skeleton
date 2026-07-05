@@ -5,7 +5,7 @@ using GameInput;
 using UnityEditor;
 using UnityEngine;
 using UserInterface.Screen.Components.Settings.UserInterface.Screen.Components.Settings;
-using Utils.SO.Input;
+using Utils.Data.Input;
 
 namespace Editor.Custom
 {

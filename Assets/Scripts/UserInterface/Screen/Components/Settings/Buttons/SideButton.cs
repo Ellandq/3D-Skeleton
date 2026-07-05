@@ -1,11 +1,10 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Components;
 using UserInterface.Screen.Components.Utils;
+using Utils.Data;
 using Utils.Enum.UI;
-using Utils.SO;
 
 namespace UserInterface.Screen.Components.Settings.Buttons
 {

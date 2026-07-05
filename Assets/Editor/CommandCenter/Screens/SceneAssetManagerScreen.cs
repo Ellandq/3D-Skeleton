@@ -184,6 +184,9 @@ namespace Editor.CommandCenter.Screens
             _selectedType = null;
             _selectedAsset = null;
 
+            _assetTypeList.ClearSelection();
+            _assetList.ClearSelection();
+
             _assetTypeList.itemsSource = _filteredTypes;
             _assetTypeList.Rebuild();
 
@@ -344,12 +347,22 @@ namespace Editor.CommandCenter.Screens
             if (scenes.Count == 0)
                 scenes.Add("No Loaded Scenes");
 
-            if (_sceneDropdown == null) return;
+            if (_sceneDropdown == null)
+                return;
+
             _sceneDropdown.choices = scenes;
 
             var index = scenes.IndexOf(previous);
 
-            _sceneDropdown.index = index >= 0 ? index : 0;
+            if (index >= 0)
+            {
+                _sceneDropdown.index = index;
+            }
+            else
+            {
+                _sceneDropdown.index = 0;
+                ClearAssetDisplay();
+            }
         }
 
         private ListView CreateAssetTypeList()
@@ -496,7 +509,11 @@ namespace Editor.CommandCenter.Screens
 
             _assetList.itemsSource = _displayedAssets;
             _assetList.Rebuild();
+            _assetList.ClearSelection();
+
             _selectedAsset = null;
+
+            RefreshInspector();
 
             RefreshInspector();
         }
@@ -633,8 +650,19 @@ namespace Editor.CommandCenter.Screens
             if (_comparison == null)
                 return;
 
-            _service.SpawnMissing(
-                _comparison);
+            _service.SpawnMissing(_comparison);
+
+            _comparison = _service.ScanScene(_sceneDropdown.value);
+
+            ApplySearch();
+
+            if (_selectedType != null)
+            {
+                _selectedType = _comparison.assetTypes
+                    .FirstOrDefault(x => x.address == _selectedType.address);
+            }
+
+            RefreshAssetList();
         }
 
         private void OnSavePressed()
@@ -693,6 +721,8 @@ namespace Editor.CommandCenter.Screens
         private void OnDestroyPressed()
         {
             _service.DestroySceneProps();
+
+            ClearAssetDisplay();
         }
     }
 }

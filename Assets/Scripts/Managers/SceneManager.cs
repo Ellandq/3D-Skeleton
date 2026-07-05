@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using Utils.Collections;
 using Utils.Contract;
+using Utils.Data.Save;
+using Utils.Data.Scene;
 using Utils.Enum;
-using Utils.SO;
-using Utils.SO.Scene;
 
 namespace Managers
 {
@@ -16,32 +17,40 @@ namespace Managers
         private bool _isLoading;
 
         public bool IsLoading => _isLoading;
-
         public IReadOnlyCollection<NamedScene> LoadedScenes => _loadedScenes;
-        
-        public event Action<NamedScene> OnSceneLoaded;
-        public event Action<NamedScene> OnSceneUnloaded;
 
-        public async Task LoadSceneAdditiveAsync(NamedScene sceneName, bool setActive = true)
+        private SceneProfile _activeSceneProfile;
+
+        private readonly List<Func<NamedScene, UniTask>> _preUnloadHooks = new();
+        private readonly List<Func<NamedScene, UniTask>> _postUnloadHooks = new();
+
+        public void RegisterPreUnload(Func<NamedScene, UniTask> hook)
+            => _preUnloadHooks.Add(hook);
+
+        public void RegisterPostUnload(Func<NamedScene, UniTask> hook)
+            => _postUnloadHooks.Add(hook);
+
+        public async UniTask LoadSceneAdditiveAsync(NamedScene sceneName, bool setActive = true)
         {
             if (_isLoading)
                 throw new InvalidOperationException("Scene load already in progress.");
-            
+
             if (_loadedScenes.Contains(sceneName))
                 return;
 
-            
             _isLoading = true;
 
-            var operation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName.ToString(), LoadSceneMode.Additive);
+            var op = UnityEngine.SceneManagement.SceneManager
+                .LoadSceneAsync(sceneName.ToString(), LoadSceneMode.Additive);
 
-            if (operation != null) 
-                operation.allowSceneActivation = true;
-            
-            while (operation is { isDone: false })
-                await Task.Yield();
+            if (op != null)
+                op.allowSceneActivation = true;
 
-            var scene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName.ToString());
+            while (!op.isDone)
+                await UniTask.Yield();
+
+            var scene = UnityEngine.SceneManagement.SceneManager
+                .GetSceneByName(sceneName.ToString());
 
             if (!scene.IsValid())
                 throw new Exception($"Failed to load scene: {sceneName}");
@@ -50,13 +59,11 @@ namespace Managers
 
             if (setActive)
                 UnityEngine.SceneManagement.SceneManager.SetActiveScene(scene);
-            
-            OnSceneLoaded?.Invoke(sceneName);
 
             _isLoading = false;
         }
 
-        public async Task UnloadSceneAsync(NamedScene sceneName)
+        public async UniTask UnloadSceneAsync(NamedScene sceneName)
         {
             if (_isLoading)
                 throw new InvalidOperationException("Scene load/unload already in progress.");
@@ -66,30 +73,34 @@ namespace Managers
 
             _isLoading = true;
 
-            var operation = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneName.ToString());
+            foreach (var hook in _preUnloadHooks)
+                await hook(sceneName);
 
-            while (operation is { isDone: false })
-                await Task.Yield();
+            var op = UnityEngine.SceneManagement.SceneManager
+                .UnloadSceneAsync(sceneName.ToString());
+
+            while (op is { isDone: false })
+                await UniTask.Yield();
 
             _loadedScenes.Remove(sceneName);
-            
-            OnSceneUnloaded?.Invoke(sceneName);
+
+            foreach (var hook in _postUnloadHooks)
+                await hook(sceneName);
 
             _isLoading = false;
         }
 
-        public async Task SwitchToSceneAsync(NamedScene sceneName)
+        public async UniTask SwitchToSceneAsync(NamedScene sceneName)
         {
             if (_isLoading)
                 throw new InvalidOperationException("Scene transition already in progress.");
 
             _isLoading = true;
 
-            var scenesToUnload = new List<NamedScene>(_loadedScenes);
+            var scenesToUnload = _loadedScenes.ToList();
 
-            foreach (var loaded in scenesToUnload)
-                await UnloadSceneAsync(loaded);
-            
+            foreach (var scene in scenesToUnload)
+                await UnloadSceneAsync(scene);
 
             await LoadSceneAdditiveAsync(sceneName);
 
@@ -98,18 +109,19 @@ namespace Managers
 
         public string ProcessName => "Scenes";
 
-        public async Task InitializeForScene(
+        public async UniTask InitializeForScene(
             SceneProfile sceneProfile,
             Action<int> declareSubprocessesCount,
             Action<int> declareStepsCallBack,
-            Action<string> declareStep
-        )
+            Action<string> declareStep)
         {
             if (!sceneProfile)
                 throw new ArgumentNullException(nameof(sceneProfile));
 
-            var targetScenes = new List<NamedScene>(sceneProfile.subScenes);
-            targetScenes.Insert(0, sceneProfile.sceneName);
+            _activeSceneProfile = sceneProfile;
+
+            var targetScenes = new List<NamedScene>(_activeSceneProfile.subScenes);
+            targetScenes.Insert(0, _activeSceneProfile.sceneName);
 
             CollectionUtils.CompareCollections(
                 _loadedScenes,
@@ -118,30 +130,58 @@ namespace Managers
                 out var scenesToLoad
             );
 
-            var totalOperations = scenesToUnload.Count + scenesToLoad.Count;
+            var total = scenesToUnload.Count + scenesToLoad.Count;
 
-            if (totalOperations == 0)
+            if (total == 0)
                 return;
 
-            declareSubprocessesCount(totalOperations);
+            declareSubprocessesCount(total);
 
             foreach (var scene in scenesToUnload)
             {
                 declareStepsCallBack(1);
-
                 await UnloadSceneAsync(scene);
-
                 declareStep($"Unloaded {scene}");
             }
 
             foreach (var scene in scenesToLoad)
             {
                 declareStepsCallBack(1);
-
                 await LoadSceneAdditiveAsync(scene);
-
                 declareStep($"Loaded {scene}");
             }
+        }
+
+        public static SceneProfile GetCurrentProfile()
+            => Instance._activeSceneProfile;
+
+        public static List<NamedScene> GetLoadedScenes()
+        {
+            var count = UnityEngine.SceneManagement.SceneManager.loadedSceneCount;
+            var result = new List<NamedScene>();
+
+            for (var i = 0; i < count; i++)
+            {
+                var name = (NamedScene)Enum.Parse(
+                    typeof(NamedScene),
+                    UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).name
+                );
+
+                if (name == NamedScene.Bootstrap)
+                    continue;
+
+                result.Add(name);
+            }
+
+            return result;
+        }
+
+        public static void ApplyCanLoadWithoutLoadingScreen(SaveData saveData)
+        {
+            saveData.useLoadingScreen =
+                GetLoadedScenes()
+                    .ToHashSet()
+                    .SetEquals(saveData.sceneSaveData.Select(s => s.scene));
         }
     }
 }

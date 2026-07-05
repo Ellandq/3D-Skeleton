@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Utils.SO.Settings.Screen;
+using Utils.Data.Settings.Screen;
 
 namespace Editor.CommandCenter.Screens.SettingsEnforcement
 {

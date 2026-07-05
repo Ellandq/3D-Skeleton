@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using GameInput;
 using UnityEngine;
-using Utils.SO.Input;
-using Utils.SO.Settings.Utils.SO.Settings;
+using Utils.Data.Input;
+using Utils.Data.Settings.Utils.SO.Settings;
 
 namespace Managers
 {

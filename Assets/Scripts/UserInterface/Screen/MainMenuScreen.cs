@@ -22,7 +22,7 @@ namespace UserInterface.Screen
         {
             settingsButton.onClick.AddListener(() => UIManager.ActivateComponent(NamedScreen.Settings));
             quitButton.onClick.AddListener(() => UIManager.ActivateComponent(NamedWindow.ExitConfirmation));
-            newGameButton.onClick.AddListener((() => GameManager.Instance.ChangeState(NamedState.Gameplay)));
+            newGameButton.onClick.AddListener((() => GameManager.ChangeState(NamedState.NewGame)));
         }
     }
 }

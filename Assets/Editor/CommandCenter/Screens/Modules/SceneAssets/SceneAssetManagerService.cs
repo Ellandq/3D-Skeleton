@@ -4,8 +4,9 @@ using SaveAndLoad;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils.Data.Scene;
 using Utils.Misc;
-using Utils.SO.Scene;
+using Utils.Misc.Props;
 
 namespace Editor.CommandCenter.Screens.Modules.SceneAssets
 {
@@ -167,7 +168,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                 new ScenePropViewModel
                 {
                     id =
-                        PropIdUtility.GetOrCreateId(obj),
+                        PropIdUtility.GetOrCreateId(obj, address),
                     
                     displayName = obj.name,
                     address = address,
@@ -388,7 +389,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                 return true;
 
 
-            if (scene.mass != saved.mass)
+            if (!Mathf.Approximately(scene.mass, saved.mass))
                 return true;
 
             if (scene.interpolation != saved.interpolation)
@@ -526,7 +527,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                     instance.AddComponent<PropIdentifier>();
             }
 
-            identifier.SetId(data.id);
+            identifier.SetId(data.id, address);
             
             ApplyTransform(
                 instance,
@@ -575,7 +576,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                     instance.AddComponent<PropIdentifier>();
             }
 
-            identifier.SetId(data.id);
+            identifier.SetId(data.id, address);
 
             ApplyTransform(
                 instance,

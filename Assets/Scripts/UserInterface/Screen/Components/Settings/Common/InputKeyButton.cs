@@ -3,8 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Windows;
 using UserInterface.Windows.Settings;
+using Utils.Data;
 using Utils.Enum.UI;
-using Utils.SO;
 
 namespace UserInterface.Screen.Components.Settings.Common
 {

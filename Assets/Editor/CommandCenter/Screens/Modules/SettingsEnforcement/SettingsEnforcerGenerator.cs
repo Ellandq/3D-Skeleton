@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using UnityEditor;
-using Utils.SO.Settings.Screen;
+using Utils.Data.Settings.Screen;
 
 namespace Editor.CommandCenter.Screens.SettingsEnforcement
 {

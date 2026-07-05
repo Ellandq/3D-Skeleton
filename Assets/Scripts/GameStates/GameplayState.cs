@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Managers;
-using UnityEngine;
-using UserInterface.Screen;
+﻿using UnityEngine;
 using Utils.Enum;
 
 namespace GameStates
@@ -10,25 +7,15 @@ namespace GameStates
     {
         public NamedState Name => NamedState.Gameplay;
         
-        public void Enter()
+        public void Enter(NamedState? previousState = null)
         {
-            _ = LoadGameplayAsync();
-        }
-        
-        private async Task LoadGameplayAsync()
-        {
-            Time.timeScale = 0f;
-            await GameManager.LoadHandle.LoadGame(
-                NamedScene.Gameplay,
-                () =>
-                {
-                    UIManager.DeactivateComponent(NamedScreen.Loading, false, Resume);
-                    UIManager.SetOnEmptyStackExitCallback(() => UIManager.ActivateComponent(NamedScreen.Settings));
-                }
-            );
+            
         }
 
-        public void Pause() { }
+        public void Pause()
+        {
+            Time.timeScale = 0f;
+        }
 
         public void Resume()
         {

@@ -1,6 +1,6 @@
 ﻿using System;
+using Utils.Data.Settings.Screen;
 using Utils.Enum.UI;
-using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings.Common
 {

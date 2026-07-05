@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Utils.SO;
-using Utils.SO.Scene;
+using Cysharp.Threading.Tasks;
+using Utils.Data.Scene;
 
 namespace Utils.Contract
 {
@@ -9,7 +8,7 @@ namespace Utils.Contract
     {
         string ProcessName { get; }
         
-        Task InitializeForScene(
+        UniTask InitializeForScene(
             SceneProfile sceneProfile, 
             Action<int> declareSubprocessesCount,
             Action<int> declareStepsCallBack,

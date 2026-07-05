@@ -6,7 +6,7 @@ namespace GameStates
     {
         NamedState Name { get; }
         
-        void Enter();
+        void Enter(NamedState? previousState = null);
         void Pause();
         void Resume();
         void Exit();

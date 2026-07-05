@@ -7,9 +7,9 @@ using Managers;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Utils.SO.Settings;
-using Utils.SO.Settings.Screen;
-using Utils.SO.Settings.Utils.SO.Settings;
+using Utils.Data.Settings;
+using Utils.Data.Settings.Screen;
+using Utils.Data.Settings.Utils.SO.Settings;
 using Object = UnityEngine.Object;
 
 namespace Editor.CommandCenter.Screens.Modules.Validation

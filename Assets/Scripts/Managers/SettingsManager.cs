@@ -2,7 +2,7 @@
 using System.Linq;
 using Settings;
 using UnityEngine;
-using Utils.SO.Settings.Utils.SO.Settings;
+using Utils.Data.Settings.Utils.SO.Settings;
 
 namespace Managers
 {

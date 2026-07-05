@@ -4,10 +4,10 @@ using System.Linq;
 using GameInput;
 using UnityEditor;
 using UnityEngine;
-using Utils.SO.Input;
-using Utils.SO.Settings;
-using Utils.SO.Settings.Screen;
-using Utils.SO.Settings.Utils.SO.Settings;
+using Utils.Data.Input;
+using Utils.Data.Settings;
+using Utils.Data.Settings.Screen;
+using Utils.Data.Settings.Utils.SO.Settings;
 
 namespace Editor.Custom
 {

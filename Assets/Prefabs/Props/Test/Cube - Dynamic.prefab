@@ -158,3 +158,4 @@ MonoBehaviour:
   speed: 10
   arriveDistance: 1
   acceleration: 4
+  rb: {fileID: 8248044788452343153}
