@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Distant Shadows Resolution
   fullName: Graphics/Advanced/Distant Shadows Resolution
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low
+  strValue: enum/Model.Enum.Settings.LowToHighSetting/Low

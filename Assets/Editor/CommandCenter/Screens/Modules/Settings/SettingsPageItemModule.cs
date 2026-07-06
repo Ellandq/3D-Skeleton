@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameInput;
+using Model.Enum.GameInput;
+using Model.SO.Settings.Screen;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Utils.Data.Settings.Screen;
 
 namespace Editor.CommandCenter.Screens.Modules.Settings
 {
@@ -473,7 +473,7 @@ namespace Editor.CommandCenter.Screens.Modules.Settings
         {
             _cachedEnums = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(a => a.GetTypes())
-                .Where(t => t.IsEnum && t.Namespace == "Utils.Enum.Settings")
+                .Where(t => t.IsEnum && t.Namespace == "Model.Enum.Settings")
                 .ToList();
         }
     }

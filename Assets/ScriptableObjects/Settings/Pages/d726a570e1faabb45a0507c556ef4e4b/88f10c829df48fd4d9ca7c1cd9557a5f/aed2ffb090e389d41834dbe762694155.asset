@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Motion Blur
   fullName: Graphics/Basic/Motion Blur
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.OffToHighSetting/Medium
+  strValue: enum/Model.Enum.Settings.OffToHighSetting/Medium

@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Screen Spce Reflections Quality
   fullName: Graphics/Advanced/Screen Spce Reflections Quality
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low
+  strValue: enum/Model.Enum.Settings.LowToHighSetting/Low

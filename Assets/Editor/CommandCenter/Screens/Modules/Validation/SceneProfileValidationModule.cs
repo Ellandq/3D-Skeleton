@@ -1,12 +1,12 @@
 ﻿using System.IO;
 using System.Linq;
 using Managers;
+using Model.Data.Model;
+using Model.Enum.Named;
 using SaveAndLoad;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UserInterface.Screen;
-using Utils.Data.Scene;
 using Utils.Enum;
 
 namespace Editor.CommandCenter.Screens.Modules.Validation

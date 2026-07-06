@@ -1,5 +1,5 @@
-﻿using GameInput;
-using Managers;
+﻿using Managers;
+using Model.Enum.GameInput;
 
 namespace Player.PlayerActions
 {

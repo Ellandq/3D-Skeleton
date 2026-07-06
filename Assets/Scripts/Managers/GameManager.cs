@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using GameStates;
+using Managers.GameStates;
+using Model.Enum.Named;
 using SaveAndLoad;
 using UnityEngine;
-using Utils.Enum;
 
 namespace Managers
 {

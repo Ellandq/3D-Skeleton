@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Interface
   fullName: Language/Text/Interface
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.TextLanguageSetting/English
+  strValue: enum/Model.Enum.Settings.TextLanguageSetting/English

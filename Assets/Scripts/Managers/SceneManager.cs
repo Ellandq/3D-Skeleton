@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Model.Data.Model;
+using Model.Data.Save;
+using Model.Enum.Named;
 using UnityEngine.SceneManagement;
 using Utils.Collections;
 using Utils.Contract;
-using Utils.Data.Save;
-using Utils.Data.Scene;
 using Utils.Enum;
 
 namespace Managers

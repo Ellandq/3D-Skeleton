@@ -1,8 +1,9 @@
 ﻿using Managers;
+using Model.Enum;
+using Model.Enum.Named;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Windows;
-using Utils.Enum;
 
 namespace UserInterface.Screen
 {

@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Managers;
+using Model.Data.Model;
+using Model.Data.Save;
+using Model.Enum.Named;
 using UnityEngine;
 using UserInterface.Screen;
-using Utils.Data.Save;
-using Utils.Data.Scene;
 using Utils.Enum;
 
 namespace SaveAndLoad
@@ -52,8 +53,9 @@ namespace SaveAndLoad
                 _loadQueue = new LoadQueue(
                     onFinishLoad,
                     uiManager,
+                    AssetManager.Deloader,
                     SceneManager.Instance,
-                    AssetManager.Instance
+                    AssetManager.Loader
                 );
 
                 if (profile.useLoadScreen)
@@ -72,7 +74,5 @@ namespace SaveAndLoad
                 Debug.LogError($"Could not find scene profile for: {sceneName}");
             }
         }
-
-        public static SceneProfile GetSceneProfile(NamedScene name) => _instance._profiles[name];
     }
 }

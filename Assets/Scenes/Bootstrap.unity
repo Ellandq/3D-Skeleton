@@ -1311,7 +1311,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1161877051815815778, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2118883184}
+      addedObject: {fileID: 2118883187}
   m_SourcePrefab: {fileID: 100100000, guid: 9068604de9b5e33498d9450c926281ec, type: 3}
 --- !u!1 &510893346 stripped
 GameObject:
@@ -1495,6 +1495,7 @@ GameObject:
   m_Component:
   - component: {fileID: 927202392}
   - component: {fileID: 927202393}
+  - component: {fileID: 927202394}
   m_Layer: 0
   m_Name: ASSET-MANAGER
   m_TagString: Untagged
@@ -1526,9 +1527,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 927202391}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 942da766443d4b91b5a446be3dd9cb9f, type: 3}
+  m_Script: {fileID: 11500000, guid: c7dd4395892b495baaadbbf40499bf64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.AssetManager
+  factory: {fileID: 927202394}
+--- !u!114 &927202394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927202391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22469cd1ac0347eda3e1c6db689ef505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Services.Assets.AssetFactory
 --- !u!1 &933205843
 GameObject:
   m_ObjectHideFlags: 0
@@ -2404,14 +2418,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5689478382848321421, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1485188087}
+      addedObject: {fileID: 1485188090}
   m_SourcePrefab: {fileID: 100100000, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
 --- !u!1 &1485188086 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5689478382848321421, guid: 1375c88e38fcace48b835928835df1f1, type: 3}
   m_PrefabInstance: {fileID: 1485188085}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1485188087
+--- !u!114 &1485188090
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2420,11 +2434,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1485188086}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca5cc075cf9f4a8ab834ca4603ce1187, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a76b3c7430e4672be4448c6383ffb0d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Utils.Misc.Props.PropIdentifier
+  m_EditorClassIdentifier: Assembly-CSharp::Components.Props.PropIdentifier
   id: 
   assetId: Loading
+  rb: {fileID: 0}
+  saveable: {fileID: 0}
 --- !u!1 &1638362681
 GameObject:
   m_ObjectHideFlags: 0
@@ -2743,7 +2759,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 042cfdd359f04a23b462707ad5002aa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UserInterface.Screen.SettingsScreen
---- !u!114 &2118883184
+--- !u!114 &2118883187
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2752,11 +2768,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 510893346}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca5cc075cf9f4a8ab834ca4603ce1187, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a76b3c7430e4672be4448c6383ffb0d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Utils.Misc.Props.PropIdentifier
+  m_EditorClassIdentifier: Assembly-CSharp::Components.Props.PropIdentifier
   id: 
   assetId: Settings
+  rb: {fileID: 0}
+  saveable: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

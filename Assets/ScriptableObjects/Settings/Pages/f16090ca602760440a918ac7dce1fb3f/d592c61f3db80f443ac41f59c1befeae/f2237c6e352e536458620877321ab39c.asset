@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Audio
   fullName: Language/Audio/Audio
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.VoiceLanguageSetting/English
+  strValue: enum/Model.Enum.Settings.VoiceLanguageSetting/English

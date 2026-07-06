@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Components.Props;
+using Model.Data.Model;
 using SaveAndLoad;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Utils.Data.Scene;
-using Utils.Misc;
-using Utils.Misc.Props;
+using Utils.Props;
 
 namespace Editor.CommandCenter.Screens.Modules.SceneAssets
 {
@@ -168,7 +168,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                 new ScenePropViewModel
                 {
                     id =
-                        PropIdUtility.GetOrCreateId(obj, address),
+                        PropIdUtility.GetOrCreateId(obj, address).Id,
                     
                     displayName = obj.name,
                     address = address,
@@ -281,7 +281,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
             foreach (var collection in
                      profile.assetData.collections)
             {
-                result.AddRange(collection.propsData.Select(prop => new SavedPropData
+                result.AddRange(collection.props.Select(prop => new SavedPropData
                 {
                     address = collection.assetAddress,
                     id = prop.id,
@@ -447,7 +447,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
             foreach(var collection in
                     _currentProfile.assetData.collections)
             {
-                foreach (var prop in collection.propsData.Where(prop => !IsAlreadySpawned(
+                foreach (var prop in collection.props.Where(prop => !IsAlreadySpawned(
                              collection.assetAddress,
                              prop.id,
                              comparison)))
@@ -527,7 +527,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                     instance.AddComponent<PropIdentifier>();
             }
 
-            identifier.SetId(data.id, address);
+            identifier.Initialize(data.id, address);
             
             ApplyTransform(
                 instance,
@@ -576,7 +576,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                     instance.AddComponent<PropIdentifier>();
             }
 
-            identifier.SetId(data.id, address);
+            identifier.Initialize(data.id, address);
 
             ApplyTransform(
                 instance,
@@ -677,7 +677,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                     {
                         assetAddress = type.address,
 
-                        propsData =
+                        props =
                             new List<PropData>(),
 
                         dynamicProps =
@@ -693,7 +693,7 @@ namespace Editor.CommandCenter.Screens.Modules.SceneAssets
                     }
                     else
                     {
-                        collection.propsData.Add(
+                        collection.props.Add(
                             CreateProp(prop));
                     }
                 }

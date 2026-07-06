@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Model.Data.Model;
+using Model.Data.Save;
 using UnityEngine;
 using Utils.Contract;
-using Utils.Data.Save;
-using Utils.Data.Scene;
 
 namespace SaveAndLoad
 {

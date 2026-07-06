@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Enum.Named;
+using Model.Enum.UI;
+using Model.SO;
+using Model.SO.Settings.Screen;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Screen.Components.Settings.Common;
-using Utils.Data;
-using Utils.Data.Settings.Screen;
-using Utils.Enum;
-using Utils.Enum.UI;
 
 namespace UserInterface.Screen.Components.Settings.Custom
 {
