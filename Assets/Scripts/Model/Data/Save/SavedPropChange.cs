@@ -1,5 +1,5 @@
 ﻿using System;
-using Model.Data.Model;
+using Model.Data.Scene;
 
 namespace Model.Data.Save
 {

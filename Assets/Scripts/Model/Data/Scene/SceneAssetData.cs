@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Model.Data.Model
+namespace Model.Data.Scene
 {
     [CreateAssetMenu(menuName = "Scene/AssetDataRe")]
     public class SceneAssetData : ScriptableObject

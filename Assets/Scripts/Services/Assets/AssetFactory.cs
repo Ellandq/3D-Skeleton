@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Components.Props;
 using Cysharp.Threading.Tasks;
-using Model.Data.Model;
+using Model.Data.Scene;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;

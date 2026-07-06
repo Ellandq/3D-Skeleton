@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
-using Model.Data.Model;
 using Model.Data.Save;
+using Model.Data.Scene;
 using Model.Enum.Named;
 using UnityEngine.SceneManagement;
 using Utils.Collections;

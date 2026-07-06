@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Model.Data.Model
+namespace Model.Data.Scene
 {
     [Serializable]
     public class PropData

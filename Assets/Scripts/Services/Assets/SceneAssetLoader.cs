@@ -2,8 +2,8 @@
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Managers;
-using Model.Data.Model;
 using Model.Data.Registry;
+using Model.Data.Scene;
 using UnityEngine;
 using Utils.Contract;
 using SceneManager = UnityEngine.SceneManagement.SceneManager;

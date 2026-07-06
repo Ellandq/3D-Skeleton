@@ -4,8 +4,8 @@ using System.Linq;
 using Components.Props;
 using Cysharp.Threading.Tasks;
 using Managers;
-using Model.Data.Model;
 using Model.Data.Registry;
+using Model.Data.Scene;
 using Utils.Contract;
 
 namespace Services.Assets

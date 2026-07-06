@@ -1,6 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using Model.Data.Model;
+using Model.Data.Scene;
 
 namespace Utils.Contract
 {

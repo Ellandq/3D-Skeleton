@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Model.Enum.Named;
 using UnityEngine;
 using UserInterface.HUD;
 using UserInterface.Overlay;
@@ -8,7 +7,7 @@ using UserInterface.Screen;
 using UserInterface.Windows;
 using Utils.Enum;
 
-namespace Model.Data.Model
+namespace Model.Data.Scene
 {
     [CreateAssetMenu(menuName = "Scenes/Scene Profile Re")]
     public class SceneProfile : ScriptableObject

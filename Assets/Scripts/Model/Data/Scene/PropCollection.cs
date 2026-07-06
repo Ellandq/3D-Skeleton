@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model.Data.Model
+namespace Model.Data.Scene
 {
     [Serializable]
     public class PropCollection

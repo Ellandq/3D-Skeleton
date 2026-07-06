@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using Model.Data.Model;
+using Model.Data.Scene;
 using Model.Enum.GameInput;
 using UnityEngine;
 using UserInterface;
