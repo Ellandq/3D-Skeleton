@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using Editor.CommandCenter.Utils;
+using Model.Enum.Named;
 using UnityEditor;
 using UnityEngine.UIElements;
-using Utils.Enum.Named;
 using Player.PlayerActions;
 
 namespace Editor.CommandCenter.Screens.Modules.Validation
@@ -20,7 +19,7 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
         private ICommandCenterLogger _logger;
 
         private const string EnumPath =
-            "Assets/Scripts/Utils/Enum/Named/NamedPlayerAction.cs";
+            "Assets/Scripts/Model/Enum/Named/NamedPlayerAction.cs";
 
         private const string FactoryPath =
             "Assets/Scripts/Player/PlayerActions/PlayerActionFactory.cs";
@@ -79,7 +78,7 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
 
             EnumSynchronizer.Synchronize(
                 EnumPath,
-                "Utils.Enum.Named",
+                "Model.Enum.Named",
                 "NamedPlayerAction",
                 actionNames,
                 _logger);
@@ -114,7 +113,7 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
             sb.AppendLine("// </auto-generated>");
             sb.AppendLine();
             sb.AppendLine("using System;");
-            sb.AppendLine("using Utils.Enum.Named;");
+            sb.AppendLine("using Model.Enum.Named;");
             sb.AppendLine("using Player.PlayerActions;");
             sb.AppendLine();
             sb.AppendLine("namespace Player.PlayerActions");

@@ -1,67 +1,58 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Model.Data.Registry;
+using Model.Data.Save;
+using Model.Data.Scene;
+using Model.Enum.Misc;
 using UnityEngine;
 using Utils.Contract;
-using Utils.Data.Save;
-using Utils.Data.Scene;
 using Utils.Enum;
-using Utils.Enum.Misc;
-using Utils.Misc.Unity;
 
 namespace Managers
 {
     public class SaveManager : ManagerBase<SaveManager>, IAsyncInitializable
     {
-        [Header("Save Data")]
-        [SerializeField] private SaveData? mostRecentSave;
-        private SaveData? _runtimeSave;
-        private string? selectedSave;
-
         [Header("Location Settings")]
         [SerializeField] private string saveLocation = "";
 
-        protected override void Awake()
+        [Header("Hooks")]
+        private DiffRegistry registry;
+
+        public static DiffRegistry Registry => Instance.registry;
+
+        [Header("Save Data")]
+        [SerializeField] private SaveData runtimeSave;
+
+        private string selectedSave;
+
+
+        private void Start()
         {
-            base.Awake();
+            registry = new DiffRegistry();
 
             saveLocation = Application.isEditor
                 ? Path.Combine(Application.dataPath, "../Saves")
                 : Path.Combine(Application.persistentDataPath, "Saves");
-
-            SceneManager.Instance.RegisterPreUnload(OnPreSceneUnload);
         }
 
-        private async UniTask OnPreSceneUnload(NamedScene scene)
-        {
-            var snapshot = await SceneSnapshotService.CaptureAsync(
-                new List<NamedScene> { scene }
-            );
-
-            _runtimeSave ??= new SaveData();
-
-            _runtimeSave.MergeSceneSaveData(snapshot);
-        }
 
         public async UniTask SaveGameAsync(SaveType type)
         {
-            var loadedScenes = SceneManager.GetLoadedScenes();
+            if (Time.timeScale != 0f)
+                await UniTask.WaitForFixedUpdate();
 
-            var snapshot = await SceneSnapshotService.CaptureAsync(loadedScenes);
+            runtimeSave = registry.BuildSaveData();
 
-            _runtimeSave ??= new SaveData();
-
-            _runtimeSave.timeStamp = DateTimeOffset.Now;
-            _runtimeSave.MergeSceneSaveData(snapshot);
-            mostRecentSave = _runtimeSave;
-
-            await WriteToDiskAsync(_runtimeSave, type);
+            await WriteToDiskAsync(runtimeSave, type);
         }
 
-        private async UniTask WriteToDiskAsync(SaveData saveData, SaveType type)
+
+        private async UniTask WriteToDiskAsync(
+            SaveData saveData,
+            SaveType type)
         {
             var json = JsonUtility.ToJson(saveData);
 
@@ -70,56 +61,112 @@ namespace Managers
 
             var filePath = Path.Combine(
                 saveLocation,
-                $"{type}_{saveData.timeStamp:yyyyMMdd_HHmmss}.txt"
-            );
+                $"{type}_{saveData.timeStamp:yyyyMMdd_HHmmss}.txt");
 
             await File.WriteAllTextAsync(filePath, json);
         }
 
+
         public string ProcessName => "Save Manager";
 
+
         public async UniTask InitializeForScene(
-            SceneProfile sceneProfile, 
-            Action<int> declareSubprocessesCount, 
+            RuntimeSceneProfile sceneProfile,
+            Action<int> declareSubprocessesCount,
             Action<int> declareStepsCallBack,
             Action<string> declareStep)
         {
-            declareSubprocessesCount.Invoke(2);
-            declareStepsCallBack.Invoke(1);
-            
-            declareStep.Invoke("Loading save");
-            await LoadSave(selectedSave);
+            await LoadSave(
+                sceneProfile.sceneName,
+                declareSubprocessesCount,
+                declareStepsCallBack,
+                declareStep);
+        }
 
-            if (mostRecentSave == null)
+
+        private async UniTask LoadSave(
+            NamedScene scene,
+            Action<int> declareSubprocessesCount,
+            Action<int> declareStepsCallBack,
+            Action<string> declareStep)
+        {
+            if (string.IsNullOrWhiteSpace(selectedSave))
             {
+                declareSubprocessesCount.Invoke(1);
                 declareStepsCallBack.Invoke(1);
-                declareStep.Invoke("Couldn't load save file - Skipping...");
+                declareStep.Invoke("No save file to load - Skipping...");
                 return;
             }
 
-            declareStepsCallBack.Invoke(2);
-            declareStep.Invoke("Applying save data");
-            sceneProfile.ApplySaveData(mostRecentSave);
-            declareStep.Invoke("Save data applied");
-        }
-        
-        private static async UniTask LoadSave(string? fileName = null)
-        {
-            var path = fileName ?? GetMostRecentSaveFile();
+            var path = Path.Combine(
+                saveLocation,
+                $"{selectedSave}.txt");
+
+            if (!File.Exists(path))
+                return;
+
             var json = await File.ReadAllTextAsync(path);
-            Instance.mostRecentSave = JsonUtility.FromJson<SaveData>(json);
+
+            runtimeSave = JsonUtility.FromJson<SaveData>(json);
+
+            registry.Initialize(
+                runtimeSave,
+                declareSubprocessesCount,
+                declareStepsCallBack,
+                declareStep);
         }
-        
-        private static string? GetMostRecentSaveFile()
+
+
+        public async UniTask FetchSaveNamesAsync(
+            int batchSize,
+            Func<IReadOnlyList<string>, bool> onBatch)
+        {
+            if (!Directory.Exists(saveLocation))
+                return;
+
+            var files = await UniTask.RunOnThreadPool(() =>
+                Directory.GetFiles(saveLocation, "*.txt")
+                    .Select(Path.GetFileNameWithoutExtension)
+                    .OrderByDescending(x => x)
+                    .ToList());
+
+            for (var i = 0; i < files.Count; i += batchSize)
+            {
+                var batch = files
+                    .Skip(i)
+                    .Take(batchSize)
+                    .ToList();
+
+                if (!onBatch(batch))
+                    return;
+
+                await UniTask.Yield();
+            }
+        }
+
+
+        public static string GetMostRecentSaveName()
         {
             if (!Directory.Exists(Instance.saveLocation))
                 return null;
 
-            return new DirectoryInfo(Instance.saveLocation)
-                .GetFiles("*.txt")
-                .OrderByDescending(f => f.LastWriteTimeUtc)
-                .FirstOrDefault()
-                ?.FullName;
+            return Directory
+                .GetFiles(Instance.saveLocation, "*.txt")
+                .Select(Path.GetFileNameWithoutExtension)
+                .OrderByDescending(x => x)
+                .FirstOrDefault();
+        }
+
+
+        public static void SetSelectedSave(string saveName)
+        {
+            Instance.selectedSave = saveName;
+        }
+
+
+        public static string GetSelectedSave()
+        {
+            return Instance.selectedSave;
         }
     }
 }

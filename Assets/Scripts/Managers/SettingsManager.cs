@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Settings;
+using Managers.Settings;
+using Model.SO.Settings.Utils.SO.Settings;
 using UnityEngine;
-using Utils.Data.Settings.Utils.SO.Settings;
 
 namespace Managers
 {

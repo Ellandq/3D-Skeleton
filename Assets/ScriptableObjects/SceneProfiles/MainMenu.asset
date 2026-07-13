@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7514ced35940414da64b803c1e40f1e3, type: 3}
+  m_Script: {fileID: 11500000, guid: 2743a74771f84d29822a042bd824d1ef, type: 3}
   m_Name: MainMenu
-  m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.SceneProfile
+  m_EditorClassIdentifier: Assembly-CSharp::Model.Data.Model.SceneProfile
   sceneName: 2
   subScenes: 
   useLoadScreen: 1
+  saveChanges: 0
   hudKeys: 
   overlayKeys: 
-  screenKeys: 000000000100000002000000
+  screenKeys: 000000000200000001000000
   windowKeys: 0000000001000000020000000300000004000000
   assetData: {fileID: 11400000, guid: f9a79de7c8d6526488001c4dedab025f, type: 2}

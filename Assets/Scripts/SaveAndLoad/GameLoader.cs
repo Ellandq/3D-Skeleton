@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Managers;
+using Model.Data.Save;
+using Model.Data.Scene;
+using Model.SO.Scene;
 using UnityEngine;
 using UserInterface.Screen;
-using Utils.Data.Save;
-using Utils.Data.Scene;
 using Utils.Enum;
 
 namespace SaveAndLoad
@@ -35,35 +36,43 @@ namespace SaveAndLoad
                 profile => profile.sceneName,
                 profile => profile
             );
-            
-            sceneProfiles.ForEach(
-                p => p.subScenes.ForEach(
-                    s => p.AssignSubSceneProfile(s, _profiles[s])));
         }
 
-        public async UniTask LoadGame(NamedScene sceneName, Action onFinishLoad, [CanBeNull] SaveData saveData)
+        public async UniTask LoadGame(
+            NamedScene sceneName,
+            Action onFinishLoad)
         {
             try
             {
-                var profile = _profiles[sceneName];
-                var uiManager = UIManager.Instance;
+                var profile = Construct(sceneName);
+
                 readyToLoad = !profile.useLoadScreen;
 
                 _loadQueue = new LoadQueue(
                     onFinishLoad,
-                    uiManager,
+                    UIManager.Instance,
+                    SaveManager.Instance,
+                    AssetManager.Deloader,
                     SceneManager.Instance,
-                    AssetManager.Instance
+                    AssetManager.Loader
                 );
 
-                if (profile.useLoadScreen)
+                if (profile.useLoadScreen) // && SceneManager.CanLoadWithoutLoadingScreen(profile.GetAllScenes())
                 {
-                    var loadingScreen = UIManager.GetUIComponent<NamedScreen, LoadingScreen>(NamedScreen.Loading);
-                    UIManager.ActivateComponent(NamedScreen.Loading, false, () => readyToLoad = true);
+                    var loadingScreen =
+                        UIManager.GetUIComponent<NamedScreen, LoadingScreen>(
+                            NamedScreen.Loading);
+
+                    UIManager.ActivateComponent(
+                        NamedScreen.Loading,
+                        false,
+                        () => readyToLoad = true);
+
                     loadingScreen.Bind(_loadQueue);
                 }
 
-                while (!readyToLoad) await Task.Yield();
+                while (!readyToLoad)
+                    await Task.Yield();
 
                 await _loadQueue.StartLoad(profile);
             }
@@ -73,6 +82,22 @@ namespace SaveAndLoad
             }
         }
 
-        public static SceneProfile GetSceneProfile(NamedScene name) => _instance._profiles[name];
+
+        private RuntimeSceneProfile Construct(NamedScene scene)
+        {
+            var profile = RuntimeSceneProfile.BuildRuntimeProfile(
+                _profiles[scene],
+                SaveManager.Registry);
+
+            profile.InitializeSubSceneProfiles(
+                _profiles[scene]
+                    .subScenes
+                    .Select(Construct));
+
+            return profile;
+        }
+
+        public static SceneProfile GetOriginalProfile(NamedScene scene)
+            => _instance._profiles[scene];
     }
 }

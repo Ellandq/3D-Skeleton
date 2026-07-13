@@ -1,6 +1,6 @@
 ﻿using System;
+using Model.Enum.UI;
 using UnityEngine;
-using Utils.Enum.UI;
 
 namespace UserInterface.Screen.Components.Utils
 {

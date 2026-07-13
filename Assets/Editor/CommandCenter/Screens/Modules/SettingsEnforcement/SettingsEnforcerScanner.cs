@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Settings;
+using Managers.Settings;
 
-namespace Editor.CommandCenter.Screens.SettingsEnforcement
+namespace Editor.CommandCenter.Screens.Modules.SettingsEnforcement
 {
     public class SettingsEnforcerInfo
     {

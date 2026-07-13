@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
+using Model.SO.Settings.Screen;
 using UnityEditor;
-using Utils.Data.Settings.Screen;
 
-namespace Editor.CommandCenter.Screens.SettingsEnforcement
+namespace Editor.CommandCenter.Screens.Modules.SettingsEnforcement
 {
     public static class SettingsEnforcerGenerator
     {

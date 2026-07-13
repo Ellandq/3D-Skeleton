@@ -1,9 +1,9 @@
 ﻿using System;
 using Managers;
+using Model.Enum.UI;
+using Model.SO.Settings.Screen;
 using UnityEngine;
 using UserInterface.Windows;
-using Utils.Data.Settings.Screen;
-using Utils.Enum.UI;
 
 namespace UserInterface.Screen.Components.Settings.Common
 {

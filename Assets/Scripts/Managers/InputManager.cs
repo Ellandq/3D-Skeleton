@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameInput;
+using Model.Enum.GameInput;
+using Model.SO.Input;
+using Model.SO.Settings.Utils.SO.Settings;
 using UnityEngine;
-using Utils.Data.Input;
-using Utils.Data.Settings.Utils.SO.Settings;
 
 namespace Managers
 {

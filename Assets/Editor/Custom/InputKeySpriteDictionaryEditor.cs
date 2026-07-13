@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GameInput;
+﻿using Model.SO.Input;
 using UnityEditor;
 using UnityEngine;
 using UserInterface.Screen.Components.Settings.UserInterface.Screen.Components.Settings;
-using Utils.Data.Input;
 
 namespace Editor.Custom
 {

@@ -3,7 +3,7 @@
 // </auto-generated>
 
 using System;
-using Utils.Enum.Named;
+using Model.Enum.Named;
 using Player.PlayerActions;
 
 namespace Player.PlayerActions

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Model.Data.Save;
+using Model.Data.Scene;
 using UnityEngine.SceneManagement;
 using Utils.Collections;
 using Utils.Contract;
-using Utils.Data.Save;
-using Utils.Data.Scene;
 using Utils.Enum;
 
 namespace Managers
@@ -19,18 +19,21 @@ namespace Managers
         public bool IsLoading => _isLoading;
         public IReadOnlyCollection<NamedScene> LoadedScenes => _loadedScenes;
 
-        private SceneProfile _activeSceneProfile;
+        private RuntimeSceneProfile _activeSceneProfile;
+
+        public static event Action<NamedScene> OnSceneLoaded;
+        public static event Action<NamedScene> OnSceneDeloaded;
 
         private readonly List<Func<NamedScene, UniTask>> _preUnloadHooks = new();
         private readonly List<Func<NamedScene, UniTask>> _postUnloadHooks = new();
 
-        public void RegisterPreUnload(Func<NamedScene, UniTask> hook)
-            => _preUnloadHooks.Add(hook);
+        public static void RegisterPreUnload(Func<NamedScene, UniTask> hook)
+            => Instance._preUnloadHooks.Add(hook);
 
-        public void RegisterPostUnload(Func<NamedScene, UniTask> hook)
-            => _postUnloadHooks.Add(hook);
+        public static void RegisterPostUnload(Func<NamedScene, UniTask> hook)
+            => Instance._postUnloadHooks.Add(hook);
 
-        public async UniTask LoadSceneAdditiveAsync(NamedScene sceneName, bool setActive = true)
+        private async UniTask LoadSceneAdditiveAsync(NamedScene sceneName, bool setActive = true)
         {
             if (_isLoading)
                 throw new InvalidOperationException("Scene load already in progress.");
@@ -61,9 +64,11 @@ namespace Managers
                 UnityEngine.SceneManagement.SceneManager.SetActiveScene(scene);
 
             _isLoading = false;
+            
+            OnSceneLoaded?.Invoke(sceneName);
         }
 
-        public async UniTask UnloadSceneAsync(NamedScene sceneName)
+        private async UniTask UnloadSceneAsync(NamedScene sceneName)
         {
             if (_isLoading)
                 throw new InvalidOperationException("Scene load/unload already in progress.");
@@ -88,6 +93,8 @@ namespace Managers
                 await hook(sceneName);
 
             _isLoading = false;
+            
+            OnSceneDeloaded?.Invoke(sceneName);
         }
 
         public async UniTask SwitchToSceneAsync(NamedScene sceneName)
@@ -110,17 +117,14 @@ namespace Managers
         public string ProcessName => "Scenes";
 
         public async UniTask InitializeForScene(
-            SceneProfile sceneProfile,
+            RuntimeSceneProfile sceneProfile,
             Action<int> declareSubprocessesCount,
             Action<int> declareStepsCallBack,
             Action<string> declareStep)
         {
-            if (!sceneProfile)
-                throw new ArgumentNullException(nameof(sceneProfile));
-
             _activeSceneProfile = sceneProfile;
 
-            var targetScenes = new List<NamedScene>(_activeSceneProfile.subScenes);
+            var targetScenes = new List<NamedScene>(_activeSceneProfile.SubScenes);
             targetScenes.Insert(0, _activeSceneProfile.sceneName);
 
             CollectionUtils.CompareCollections(
@@ -152,7 +156,7 @@ namespace Managers
             }
         }
 
-        public static SceneProfile GetCurrentProfile()
+        public static RuntimeSceneProfile GetCurrentProfile()
             => Instance._activeSceneProfile;
 
         public static List<NamedScene> GetLoadedScenes()
@@ -176,12 +180,11 @@ namespace Managers
             return result;
         }
 
-        public static void ApplyCanLoadWithoutLoadingScreen(SaveData saveData)
+        public static bool CanLoadWithoutLoadingScreen(List<NamedScene> scenesToLoad)
         {
-            saveData.useLoadingScreen =
-                GetLoadedScenes()
+            return GetLoadedScenes()
                     .ToHashSet()
-                    .SetEquals(saveData.sceneSaveData.Select(s => s.scene));
+                    .SetEquals(scenesToLoad);
         }
     }
 }

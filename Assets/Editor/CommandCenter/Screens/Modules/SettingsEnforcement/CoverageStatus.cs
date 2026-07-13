@@ -1,4 +1,4 @@
-﻿namespace Editor.CommandCenter.Screens.SettingsEnforcement
+﻿namespace Editor.CommandCenter.Screens.Modules.SettingsEnforcement
 {
     public enum CoverageStatus
     {

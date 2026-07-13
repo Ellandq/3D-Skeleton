@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Volumetric Fog Resolution
   fullName: Graphics/Advanced/Volumetric Fog Resolution
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low
+  strValue: enum/Model.Enum.Settings.LowToHighSetting/Low

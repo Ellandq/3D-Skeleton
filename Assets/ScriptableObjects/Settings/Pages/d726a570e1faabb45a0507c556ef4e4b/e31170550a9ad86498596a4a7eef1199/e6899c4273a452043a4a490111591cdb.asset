@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Level of Detail (LOD)
   fullName: Graphics/Advanced/Level of Detail (LOD)
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low
+  strValue: enum/Model.Enum.Settings.LowToHighSetting/Low

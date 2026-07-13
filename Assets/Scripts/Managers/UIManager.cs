@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using GameInput;
+using Model.Data.Scene;
+using Model.Enum.GameInput;
 using UnityEngine;
 using UserInterface;
 using UserInterface.Components;
@@ -13,8 +14,6 @@ using UserInterface.Screen;
 using UserInterface.Windows;
 using Utils.Collections;
 using Utils.Contract;
-using Utils.Data.Scene;
-using Utils.Enum;
 
 namespace Managers
 {
@@ -259,7 +258,8 @@ namespace Managers
 
         public string ProcessName => "UI";
 
-        public async UniTask InitializeForScene(SceneProfile sceneProfile,
+        public async UniTask InitializeForScene(
+            RuntimeSceneProfile sceneProfile,
             Action<int> declareSubprocessesCount,
             Action<int> declareStepsCallBack,
             Action<string> declareStep) 
@@ -278,7 +278,7 @@ namespace Managers
         }
 
         private async Task AddComponents(
-            SceneProfile profile, 
+            RuntimeSceneProfile profile, 
             Action<int> declareStepsCallBack,
             Action<string> declareStep
         )
@@ -308,19 +308,21 @@ namespace Managers
 
             declareStepsCallBack.Invoke(onlyInDict.Count + onlyInList.Count);
 
+            var factory = AssetManager.Factory;
+
             foreach (var key in onlyInDict)
             {
                 declareStep.Invoke($"Removing {typeof(TComp).Name}: {key}");
                 var obj = currentDict[key].gameObject;
-                AssetManager.ReleaseInstance(obj, true);
+                factory.Release(obj);
                 currentDict.Remove(key);
             }
 
             foreach (var key in onlyInList)
             {
                 declareStep.Invoke($"Adding {typeof(TComp).Name}: {key}");
-                var obj = await AssetManager.InstantiatePrefabAsync(key, parent, false);
-                currentDict.Add(key, obj.GetComponent<TComp>());
+                var obj = await factory.InstantiateAsync<TComp>(key.ToString(), parent, false);
+                currentDict.Add(key, obj);
             }
         }
 

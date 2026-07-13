@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using GameInput;
 using System.Linq;
-using Utils.Data.Input;
+using Model.Enum.GameInput;
+using Model.SO.Input;
 
 namespace Editor.Custom
 {

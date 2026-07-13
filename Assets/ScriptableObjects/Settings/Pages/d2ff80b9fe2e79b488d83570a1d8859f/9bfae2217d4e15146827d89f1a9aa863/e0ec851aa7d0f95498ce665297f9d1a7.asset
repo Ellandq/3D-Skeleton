@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Colorblind Modes
   fullName: Accessibility/Interface/Colorblind Modes
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.ColorblindModesSetting/Off
+  strValue: enum/Model.Enum.Settings.ColorblindModesSetting/Off
