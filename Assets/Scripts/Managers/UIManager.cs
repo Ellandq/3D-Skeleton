@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GameInput;
+using Cysharp.Threading.Tasks;
+using Model.Data.Scene;
+using Model.Enum.GameInput;
 using UnityEngine;
 using UserInterface;
 using UserInterface.Components;
@@ -12,7 +14,6 @@ using UserInterface.Screen;
 using UserInterface.Windows;
 using Utils.Collections;
 using Utils.Contract;
-using Utils.SO;
 
 namespace Managers
 {
@@ -257,12 +258,12 @@ namespace Managers
 
         public string ProcessName => "UI";
 
-        public async Task InitializeForScene(
-            SceneProfile sceneProfile, 
+        public async UniTask InitializeForScene(
+            RuntimeSceneProfile sceneProfile,
             Action<int> declareSubprocessesCount,
             Action<int> declareStepsCallBack,
-            Action<string> declareStep
-        ) {
+            Action<string> declareStep) 
+        {
             declareSubprocessesCount.Invoke(4);
             await AddComponents(
                 sceneProfile,
@@ -277,15 +278,16 @@ namespace Managers
         }
 
         private async Task AddComponents(
-            SceneProfile profile, 
+            RuntimeSceneProfile profile, 
             Action<int> declareStepsCallBack,
             Action<string> declareStep
         )
         {
-            await AddComponents(profile.hudKeys, _huds, hudParent, declareStepsCallBack, declareStep);
-            await AddComponents(profile.overlayKeys, _overlays, overlayParent, declareStepsCallBack, declareStep);
-            await AddComponents(profile.screenKeys, _screens, screenParent, declareStepsCallBack, declareStep);
-            await AddComponents(profile.windowKeys, _windows, windowParent, declareStepsCallBack, declareStep);
+            await AddComponents(profile.HudKeys, _huds, hudParent, declareStepsCallBack, declareStep);
+            await AddComponents(profile.OverlayKeys, _overlays, overlayParent, declareStepsCallBack, declareStep);
+            await AddComponents(profile.ScreenKeys, _screens, screenParent, declareStepsCallBack, declareStep);
+            await AddComponents(profile.WindowKeys, _windows, windowParent, declareStepsCallBack, declareStep);
+            
             SortScreensByPriority();
         }
         
@@ -306,21 +308,21 @@ namespace Managers
 
             declareStepsCallBack.Invoke(onlyInDict.Count + onlyInList.Count);
 
-            var assetManager = AssetManager.Instance;
+            var factory = AssetManager.Factory;
 
             foreach (var key in onlyInDict)
             {
                 declareStep.Invoke($"Removing {typeof(TComp).Name}: {key}");
                 var obj = currentDict[key].gameObject;
-                assetManager.ReleaseInstance(obj);
+                factory.Release(obj);
                 currentDict.Remove(key);
             }
 
             foreach (var key in onlyInList)
             {
                 declareStep.Invoke($"Adding {typeof(TComp).Name}: {key}");
-                var obj = await assetManager.InstantiatePrefabAsync(key, parent, false);
-                currentDict.Add(key, obj.GetComponent<TComp>());
+                var obj = await factory.InstantiateAsync<TComp>(key.ToString(), parent, false);
+                currentDict.Add(key, obj);
             }
         }
 

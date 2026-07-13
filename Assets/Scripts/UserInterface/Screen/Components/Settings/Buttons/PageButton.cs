@@ -1,9 +1,9 @@
 ﻿using System;
+using Model.Enum.UI;
+using Model.SO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.Enum.UI;
-using Utils.SO;
 
 namespace UserInterface.Screen.Components.Settings.Buttons
 {

@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Ambient Occlusion
   fullName: Graphics/Advanced/Ambient Occlusion
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low
+  strValue: enum/Model.Enum.Settings.LowToHighSetting/Low

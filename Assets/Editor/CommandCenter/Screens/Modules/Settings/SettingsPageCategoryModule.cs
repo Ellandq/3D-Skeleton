@@ -1,7 +1,7 @@
 ﻿using System.Linq;
+using Model.SO.Settings.Screen;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Utils.SO.Settings.Screen;
 
 namespace Editor.CommandCenter.Screens.Modules.Settings
 {

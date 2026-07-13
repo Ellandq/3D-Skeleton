@@ -4,10 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Editor.CommandCenter.Utils;
-using GameStates;
+using Managers.GameStates;
+using Model.Enum;
+using Model.Enum.Named;
 using UnityEditor;
 using UnityEngine.UIElements;
-using Utils.Enum;
 
 namespace Editor.CommandCenter.Screens.Modules.Validation
 {
@@ -20,10 +21,10 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
         private ICommandCenterLogger _logger;
 
         private const string EnumPath =
-            "Assets/Scripts/Utils/Enum/Named/NamedState.cs";
+            "Assets/Scripts/Model/Enum/Named/NamedState.cs";
 
         private const string FactoryPath =
-            "Assets/Scripts/GameStates/GameStateFactory.cs";
+            "Assets/Scripts/Managers/GameStates/GameStateFactory.cs";
 
         public void Initialize(ICommandCenterLogger logger)
         {
@@ -78,7 +79,7 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
 
             EnumSynchronizer.Synchronize(
                 EnumPath,
-                "Utils.Enum",
+                "Model.Enum.Named",
                 "NamedState",
                 stateNames,
                 _logger);
@@ -109,9 +110,9 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
             builder.AppendLine("// </auto-generated>");
             builder.AppendLine();
             builder.AppendLine("using System;");
-            builder.AppendLine("using Utils.Enum;");
+            builder.AppendLine("using Model.Enum.Named;");
             builder.AppendLine();
-            builder.AppendLine("namespace GameStates");
+            builder.AppendLine("namespace Managers.GameStates");
             builder.AppendLine("{");
             builder.AppendLine("    public static class GameStateFactory");
             builder.AppendLine("    {");

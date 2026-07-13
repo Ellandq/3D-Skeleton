@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Managers;
+using Model.Enum.Named;
+using Model.Enum.UI;
+using Model.SO.Settings.Screen;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Screen.Components.Settings;
@@ -11,9 +14,6 @@ using UserInterface.Screen.Components.Settings.Common;
 using UserInterface.Screen.Components.Settings.Custom;
 using UserInterface.Windows;
 using Utils.Contract;
-using Utils.Enum;
-using Utils.Enum.UI;
-using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen
 {
@@ -418,7 +418,6 @@ namespace UserInterface.Screen
                     break;
 
                 default:
-                    // ignore
                     break;
             }
 

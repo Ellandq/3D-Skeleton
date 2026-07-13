@@ -1,78 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Model.Data.Registry;
+using Services.Assets;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+using Utils.Enum;
 
 namespace Managers
 {
+    [RequireComponent(typeof(AssetFactory))]
     public class AssetManager : ManagerBase<AssetManager>
     {
-        private class AssetEntry
+        [Header("Hooks")]
+        [SerializeField] private AssetFactory factory;
+        private SceneAssetLoader loader;
+        private SceneAssetDeloader deloader;
+        private AssetRegistry registry;
+        
+        public static SceneAssetLoader Loader => Instance.loader;
+        public static SceneAssetDeloader Deloader => Instance.deloader;
+        public static AssetRegistry Registry => Instance.registry;
+        public static AssetFactory Factory => Instance.factory;
+
+        protected override void Awake()
         {
-            public AsyncOperationHandle<GameObject> Handle;
-            public int ReferenceCount;
+            base.Awake();
+            
+            registry = new AssetRegistry();
+            
+            loader = new SceneAssetLoader(this, registry, factory);
+            deloader = new SceneAssetDeloader(this, registry, factory);
         }
 
-        private readonly Dictionary<string, AssetEntry> _loadedAssets = new();
-        private readonly Dictionary<GameObject, string> _instances = new();
+        #region Scene Load State
 
-        public async Task<GameObject> InstantiatePrefabAsync<TEnum>(TEnum enumValue, Transform parent, bool enable = true) where TEnum : Enum
-        {
-            var key = enumValue.ToString();
+        private readonly Dictionary<NamedScene, bool> sceneLoadStateDict = new();
 
-            if (!_loadedAssets.TryGetValue(key, out var entry))
-            {
-                var handle = Addressables.LoadAssetAsync<GameObject>(key);
-                await handle.Task;
+        public void RegisterSceneLoad(NamedScene scene)
+            => sceneLoadStateDict[scene] = true;
 
-                if (handle.Status != AsyncOperationStatus.Succeeded)
-                    throw new Exception($"Failed to load asset: {key}");
+        public void RegisterSceneDeload(NamedScene scene)
+            => sceneLoadStateDict[scene] = false;
+        
 
-                entry = new AssetEntry
-                {
-                    Handle = handle,
-                    ReferenceCount = 0
-                };
-                _loadedAssets[key] = entry;
-            }
+        public bool IsSceneLoaded(NamedScene scene) 
+            => sceneLoadStateDict.GetValueOrDefault(scene, false);
 
-            entry.ReferenceCount++;
+        public List<NamedScene> GetLoadedScenes()
+            => sceneLoadStateDict
+                .Where(s => s.Value)
+                .Select(s => s.Key)
+                .ToList();
+        
+        public List<NamedScene> GetDeloadedScenes()
+            => sceneLoadStateDict
+                .Where(s => !s.Value)
+                .Select(s => s.Key)
+                .ToList();
 
-            var prefab = entry.Handle.Result;
-            var instance = Instantiate(prefab, parent);
-            instance.SetActive(enable);
-            _instances[instance] = key;
-
-            return instance;
-        }
-
-        public void ReleaseInstance(GameObject instance)
-        {
-            if (!_instances.TryGetValue(instance, out var key))
-                return;
-
-            if (!_loadedAssets.TryGetValue(key, out var entry))
-            {
-                _instances.Remove(instance);
-                Destroy(instance);
-                return;
-            }
-
-            Destroy(instance);
-            _instances.Remove(instance);
-
-            entry.ReferenceCount--;
-
-            if (entry.ReferenceCount > 0) return;
-            Addressables.Release(entry.Handle);
-            _loadedAssets.Remove(key);
-        }
-
-        public bool IsLoaded<TEnum>(TEnum enumValue) where TEnum : Enum
-        {
-            return _loadedAssets.ContainsKey(enumValue.ToString());
-        }
+        #endregion
     }
 }

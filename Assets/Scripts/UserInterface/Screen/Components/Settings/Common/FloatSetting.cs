@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Globalization;
 using Managers;
+using Model.Enum.UI;
+using Model.SO;
+using Model.SO.Settings.Screen;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Components;
-using Utils.Enum.UI;
-using Utils.SO;
-using Utils.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings.Common
 {

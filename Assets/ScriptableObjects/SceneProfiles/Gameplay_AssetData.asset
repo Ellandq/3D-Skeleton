@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 101d68aa65e54f63994a2add70bf57ff, type: 3}
+  m_Name: Gameplay_AssetData
+  m_EditorClassIdentifier: Assembly-CSharp::Utils.SO.Scene.SceneAssetData
+  collections:
+  - assetAddress: Test/Cube - Static
+    props:
+    - id: 33834a73-b1b6-4def-bec1-e8f16ffc3960
+      saveData: 
+      position: {x: -18.50896, y: 5.9, z: 22.9}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 8, y: 8, z: 8}
+    - id: e02d5299-dd86-4b95-9784-f02001b1f4b9
+      saveData: 
+      position: {x: 2.06, y: 16.39, z: 46.07}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 3, y: 3, z: 3}
+    dynamicProps: []
+  - assetAddress: Test/Cube - Dynamic
+    props: []
+    dynamicProps:
+    - id: 4869498a-c3fd-4efe-a139-0b36befbf839
+      saveData: False
+      position: {x: -35, y: 13, z: 45}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 5, y: 5, z: 5}
+      mass: 5
+      interpolation: 0
+      collisionDetectionMode: 0
+      velocity: {x: 0, y: 0, z: 0}
+      angularVelocity: {x: 0, y: 0, z: 0}
+      usesGravity: 0
+      isKinematic: 0

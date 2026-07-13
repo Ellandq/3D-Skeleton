@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Editor.CommandCenter.Screens.SettingsEnforcement
+namespace Editor.CommandCenter.Screens.Modules.SettingsEnforcement
 {
     public static class EnforceMethodScanner
     {

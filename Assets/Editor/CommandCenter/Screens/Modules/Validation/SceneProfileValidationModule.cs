@@ -1,13 +1,14 @@
 ﻿using System.IO;
 using System.Linq;
 using Managers;
+using Model.Data.Scene;
+using Model.Enum.Named;
+using Model.SO.Scene;
 using SaveAndLoad;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UserInterface.Screen;
 using Utils.Enum;
-using Utils.SO;
 
 namespace Editor.CommandCenter.Screens.Modules.Validation
 {
@@ -239,13 +240,6 @@ namespace Editor.CommandCenter.Screens.Modules.Validation
             else
             {
                 _logger.LogWarning($"No NamedScene enum value found for {sceneName}");
-            }
-
-            if (!profile.screenKeys.Contains(NamedScreen.Loading))
-            {
-                profile.screenKeys.Add(NamedScreen.Loading);
-                changed = true;
-                _logger.Log($"Added Loading screen to {sceneName}");
             }
 
             if (changed)

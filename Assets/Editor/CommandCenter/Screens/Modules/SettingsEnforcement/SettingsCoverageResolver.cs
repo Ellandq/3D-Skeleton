@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using Utils.SO.Settings.Screen;
+using Model.SO.Settings.Screen;
 
-namespace Editor.CommandCenter.Screens.SettingsEnforcement
+namespace Editor.CommandCenter.Screens.Modules.SettingsEnforcement
 {
     public class SettingsCoverageResolver
     {

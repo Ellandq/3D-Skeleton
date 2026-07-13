@@ -1,4 +1,6 @@
-﻿using Managers;
+﻿using System;
+using Managers;
+using Model.Enum.Named;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Windows;
@@ -21,6 +23,23 @@ namespace UserInterface.Screen
         {
             settingsButton.onClick.AddListener(() => UIManager.ActivateComponent(NamedScreen.Settings));
             quitButton.onClick.AddListener(() => UIManager.ActivateComponent(NamedWindow.ExitConfirmation));
+            newGameButton.onClick.AddListener((() =>
+            {
+                GameManager.ChangeState(NamedState.Gameplay);
+                SaveManager.SetSelectedSave("");
+                GameManager.PushState(NamedState.GameLoad);
+            }));
+            continueButton.onClick.AddListener((() =>
+            {
+                GameManager.ChangeState(NamedState.Gameplay);
+                SaveManager.SetSelectedSave(SaveManager.GetMostRecentSaveName());
+                GameManager.PushState(NamedState.GameLoad);
+            }));
+        }
+
+        private void OnEnable()
+        {
+            continueButton.enabled = !string.IsNullOrEmpty(SaveManager.GetMostRecentSaveName());
         }
     }
 }

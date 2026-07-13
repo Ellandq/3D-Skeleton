@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Subsurface Scattering Quality
   fullName: Graphics/Advanced/Subsurface Scattering Quality
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low
+  strValue: enum/Model.Enum.Settings.LowToHighSetting/Low

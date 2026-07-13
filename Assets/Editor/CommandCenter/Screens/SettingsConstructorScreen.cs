@@ -2,10 +2,10 @@
 using System.Linq;
 using Editor.CommandCenter.Screens.Modules.Settings;
 using Editor.CommandCenter.Utils;
+using Model.SO.Settings.Screen;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Utils.SO.Settings.Screen;
 
 namespace Editor.CommandCenter.Screens
 {
@@ -525,8 +525,8 @@ namespace Editor.CommandCenter.Screens
                 .ToArray();
 
             EnumSynchronizer.Synchronize(
-                enumPath: "Assets/Scripts/Utils/Enum/Named/NamedCustomSetting.cs",
-                enumNamespace: "Utils.Enum",
+                enumPath: "Assets/Scripts/Model/Enum/Named/NamedCustomSetting.cs",
+                enumNamespace: "Model.Enum",
                 enumName: "NamedCustomSetting",
                 values: sanitized,
                 logger: _logger

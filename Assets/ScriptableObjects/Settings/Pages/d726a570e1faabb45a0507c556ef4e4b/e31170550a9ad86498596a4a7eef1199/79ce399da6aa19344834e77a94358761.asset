@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Local Shadow Quality
   fullName: Graphics/Advanced/Local Shadow Quality
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low
+  strValue: enum/Model.Enum.Settings.LowToHighSetting/Low

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Editor.CommandCenter.Screens.SettingsEnforcement;
+using Editor.CommandCenter.Screens.Modules.SettingsEnforcement;
+using Model.SO.Settings.Screen;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Utils.SO.Settings.Screen;
 
 namespace Editor.CommandCenter.Screens
 {

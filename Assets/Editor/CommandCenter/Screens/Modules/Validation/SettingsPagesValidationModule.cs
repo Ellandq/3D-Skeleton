@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Model.SO.Settings.Screen;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UserInterface.Screen;
-using Utils.SO.Settings.Screen;
 using Object = UnityEngine.Object;
 
 namespace Editor.CommandCenter.Screens.Modules.Validation

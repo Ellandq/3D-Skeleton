@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Volumetric Cloud Quality
   fullName: Graphics/Advanced/Volumetric Cloud Quality
   itemType: 1
-  strValue: enum/Utils.Enum.Settings.LowToHighSetting/Low
+  strValue: enum/Model.Enum.Settings.LowToHighSetting/Low

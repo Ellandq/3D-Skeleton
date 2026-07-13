@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameInput;
+using Model.Enum.GameInput;
+using Model.SO.Input;
+using Model.SO.Settings;
+using Model.SO.Settings.Screen;
+using Model.SO.Settings.Utils.SO.Settings;
 using UnityEditor;
 using UnityEngine;
-using Utils.SO.Input;
-using Utils.SO.Settings;
-using Utils.SO.Settings.Screen;
-using Utils.SO.Settings.Utils.SO.Settings;
 
 namespace Editor.Custom
 {

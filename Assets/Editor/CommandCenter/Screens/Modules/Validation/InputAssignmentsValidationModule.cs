@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GameInput;
 using Managers;
+using Model.SO.Settings;
+using Model.SO.Settings.Screen;
+using Model.SO.Settings.Utils.SO.Settings;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Utils.SO.Settings;
-using Utils.SO.Settings.Screen;
-using Utils.SO.Settings.Utils.SO.Settings;
 using Object = UnityEngine.Object;
 
 namespace Editor.CommandCenter.Screens.Modules.Validation

@@ -1,10 +1,10 @@
 ﻿using Managers;
+using Model.Enum.UI;
+using Model.SO;
 using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Windows;
 using UserInterface.Windows.Settings;
-using Utils.Enum.UI;
-using Utils.SO;
 
 namespace UserInterface.Screen.Components.Settings.Common
 {

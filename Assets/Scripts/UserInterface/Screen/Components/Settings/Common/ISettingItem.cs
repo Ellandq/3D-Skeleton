@@ -1,6 +1,6 @@
 ﻿using System;
-using Utils.Enum.UI;
-using Utils.SO.Settings.Screen;
+using Model.Enum.UI;
+using Model.SO.Settings.Screen;
 
 namespace UserInterface.Screen.Components.Settings.Common
 {

@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using Model.Enum.UI;
+using Model.SO;
+using UnityEngine;
 using UnityEngine.UI;
 using UserInterface.Components;
 using UserInterface.Screen.Components.Utils;
-using Utils.Enum.UI;
-using Utils.SO;
 
 namespace UserInterface.Screen.Components.MainMenu
 {

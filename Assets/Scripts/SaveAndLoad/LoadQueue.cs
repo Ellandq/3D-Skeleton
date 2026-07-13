@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Model.Data.Save;
+using Model.Data.Scene;
 using UnityEngine;
 using Utils.Contract;
-using Utils.SO;
 
 namespace SaveAndLoad
 {
@@ -15,7 +16,8 @@ namespace SaveAndLoad
         private readonly Action _onFinishLoad;
         
         private readonly Queue<IAsyncInitializable> _steps = new();
-        private SceneProfile _sceneProfile;
+        private RuntimeSceneProfile _sceneProfile;
+        private SaveData _saveData;
         
         private float _progress;
         
@@ -40,7 +42,7 @@ namespace SaveAndLoad
             _stepCount = _steps.Count;
         }
         
-        public async Task StartLoad(SceneProfile profile)
+        public async Task StartLoad(RuntimeSceneProfile profile)
         {
             if (_steps.Count == 0)
             {
@@ -67,7 +69,8 @@ namespace SaveAndLoad
 
                 try
                 {
-                    await loadAction.InitializeForScene(_sceneProfile,
+                    await loadAction.InitializeForScene(
+                        _sceneProfile,
                         DeclareSubProcesses,
                         DeclareSubProcessSteps,
                         DeclareStep
