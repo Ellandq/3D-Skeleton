@@ -6,10 +6,9 @@ namespace Model.Enum.Named
 {
     public enum NamedState
     {
+        GameLoad,
         Gameplay,
-        LoadGame,
         MainMenu,
-        NewGame,
         PauseMenu
     }
 }

@@ -1,7 +1,9 @@
-﻿using SaveAndLoad;
+﻿using Model.Data.Scene;
+using SaveAndLoad;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEngine;
+using Utils.Enum;
 
 namespace Components.Props
 {
@@ -56,5 +58,65 @@ namespace Components.Props
             EditorUtility.SetDirty(this);
         } 
 #endif
+        
+        public NamedScene FindScene()
+        {
+            return (NamedScene)System.Enum.Parse(typeof(NamedScene), gameObject.scene.name);
+        }
+        
+        public void ApplyData(DynamicPropData data)
+        {
+            transform.SetPositionAndRotation(
+                data.position,
+                data.rotation);
+
+            transform.localScale = data.scale;
+
+            Savable?.LoadSaveData(data.saveData);
+
+            if (!rb)
+                return;
+
+            rb.linearVelocity = data.velocity;
+            rb.angularVelocity = data.angularVelocity;
+
+            rb.interpolation = data.interpolation;
+            rb.collisionDetectionMode = data.collisionDetectionMode;
+
+            rb.useGravity = data.usesGravity;
+            rb.isKinematic = data.isKinematic;
+            rb.mass = data.mass;
+        }
+        
+        public bool TryGetDynamicPropData(out DynamicPropData prop)
+        {
+            prop = null;
+
+            if (!Rigidbody)
+                return false;
+
+
+            prop = new DynamicPropData
+            {
+                id = Id,
+
+                position = transform.position,
+                rotation = transform.rotation,
+                scale = transform.localScale,
+
+                saveData = Savable?.GetSaveData(),
+
+                velocity = rb.linearVelocity,
+                angularVelocity = rb.angularVelocity,
+
+                interpolation = rb.interpolation,
+                collisionDetectionMode = rb.collisionDetectionMode,
+                usesGravity = rb.useGravity,
+                isKinematic = rb.isKinematic,
+                mass = rb.mass
+            };
+
+            return true;
+        }
     }
 }

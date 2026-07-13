@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using Model.Data.Registry;
 using Model.Data.Scene;
+using UnityEngine;
 using Utils.Contract;
 
 namespace Services.Assets
@@ -18,14 +19,14 @@ namespace Services.Assets
         public string ProcessName => "Asset Deloader";
 
         public async UniTask InitializeForScene(
-            SceneProfile sceneProfile,
+            RuntimeSceneProfile sceneProfile,
             Action<int> declareSubprocessesCount,
             Action<int> declareStepsCallBack,
             Action<string> declareStep)
         {
             var loaded = assetManager.GetLoadedScenes();
             
-            var toLoad = sceneProfile.GetAllScenes()
+            var toLoad = sceneProfile.SubScenes
                 .Except(loaded)
                 .ToList();
             
@@ -41,6 +42,17 @@ namespace Services.Assets
                 return;
             }
 
+            foreach (var scene in loadedToDeload)
+            {
+                assetManager.RegisterSceneDeload(scene);
+            }
+                
+            
+            if (Time.timeScale != 0f)
+            {
+                await UniTask.WaitForFixedUpdate();
+            }
+
             if (toLoad.Count == 0)
             {
                 declareSubprocessesCount.Invoke(loadedToDeload.Count);
@@ -52,6 +64,8 @@ namespace Services.Assets
                 
                 return;
             }
+            
+            declareSubprocessesCount.Invoke(1);
 
             var deloadSceneAssetRefs = loadedToDeload
                 .SelectMany(scene => registry.GetCollectionByScene(scene))
@@ -60,6 +74,7 @@ namespace Services.Assets
                     g => g.Key,
                     g => g
                         .SelectMany(x => x.Value)
+                        
                         .Select(k => k.Value)
                         .ToList()
                 );
@@ -71,16 +86,20 @@ namespace Services.Assets
                     kv => kv.Value.assetData.collections.ToList()
                 );
 
-            var availableCounts = deloadSceneAssetRefs
+            var availablePool = deloadSceneAssetRefs
                 .ToDictionary(
                     kv => kv.Key,
                     kv => new Queue<PropIdentifier>(kv.Value)
                 );
             
-            foreach (var kvp in loadSceneAssets)
+            var assetsToManage = availablePool.Count;
+            var completed = 0;
+            
+            declareStepsCallBack.Invoke(assetsToManage);
+            
+            
+            foreach (var (key, collections) in loadSceneAssets)
             {
-                var collections = kvp.Value;
-
                 foreach (var collection in collections)
                 {
                     var address = collection.assetAddress;
@@ -89,7 +108,7 @@ namespace Services.Assets
                         collection.props.Count +
                         collection.dynamicProps.Count;
 
-                    if (!availableCounts.TryGetValue(address, out var queue))
+                    if (!availablePool.TryGetValue(address, out var queue))
                         continue;
 
                     for (var i = 0; i < requiredCount; i++)
@@ -101,7 +120,25 @@ namespace Services.Assets
 
                         factory.PushToPool(reusable);
                         registry.Unregister(reusable.Id);
+
+                        completed++;
+                        declareStep.Invoke($"Preserving asset - ({completed}/{assetsToManage})");
                     }
+                }
+            }
+            
+            foreach (var queue in availablePool.Values)
+            {
+                while (queue.Count > 0)
+                {
+                    var identifier = queue.Dequeue();
+
+                    registry.Unregister(identifier.Id);
+
+                    factory.Release(identifier.gameObject);
+                    
+                    completed++;
+                    declareStep.Invoke($"Deloading asset - ({completed}/{assetsToManage})");
                 }
             }
         }
@@ -123,7 +160,9 @@ namespace Services.Assets
 
             var step = 0;
 
-            foreach (var (assetAddress, propDict) in sceneProps)
+            var assets = sceneProps.ToList();
+
+            foreach (var (assetAddress, propDict) in assets)
             {
                 if (propDict == null || propDict.Count == 0)
                     continue;
@@ -140,9 +179,9 @@ namespace Services.Assets
                     if (!prop)
                         continue;
 
-                    factory.PushToPool(prop);
-
                     registry.Unregister(prop.Id);
+
+                    factory.PushToPool(prop);
 
                     if (step % 25 == 0)
                         await UniTask.Yield();

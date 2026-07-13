@@ -18,7 +18,7 @@ namespace Services.Assets
         public string ProcessName => "Asset Loader";
 
         public async UniTask InitializeForScene(
-            SceneProfile sceneProfile, 
+            RuntimeSceneProfile sceneProfile, 
             Action<int> declareSubprocessesCount, 
             Action<int> declareStepsCallBack,
             Action<string> declareStep)
@@ -52,6 +52,9 @@ namespace Services.Assets
                         foreach (var prop in collection.dynamicProps)
                         {
                             var dy = await factory.InstantiateAsync(address, prop, dynamicRoot);
+                            
+                            registry.Register(dy);
+                            
                             var rb = dy.Rigidbody;
                             if (rb)
                             {
@@ -75,6 +78,7 @@ namespace Services.Assets
                             declareStep.Invoke($"Loading assets for scene: {scene} - ({completed}/{stepCount})");
                         }
                     }
+                    assetManager.RegisterSceneLoad(scene);
                 }
                 catch (Exception e)
                 {

@@ -13,10 +13,9 @@ namespace Managers.GameStates
         {
             return state switch
             {
+                NamedState.GameLoad => new GameLoadState(),
                 NamedState.Gameplay => new GameplayState(),
-                NamedState.LoadGame => new LoadGameState(),
                 NamedState.MainMenu => new MainMenuState(),
-                NamedState.NewGame => new NewGameState(),
                 NamedState.PauseMenu => new PauseMenuState(),
                 _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
             };

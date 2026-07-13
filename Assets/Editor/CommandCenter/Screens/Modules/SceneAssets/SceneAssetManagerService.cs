@@ -2,6 +2,7 @@
 using System.Linq;
 using Components.Props;
 using Model.Data.Scene;
+using Model.SO.Scene;
 using SaveAndLoad;
 using UnityEditor;
 using UnityEngine;

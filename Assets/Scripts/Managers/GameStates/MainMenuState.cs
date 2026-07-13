@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using Model.Enum;
 using Model.Enum.Named;
 using UnityEngine;
 using UserInterface.Screen;
@@ -26,8 +25,7 @@ namespace Managers.GameStates
                     UIManager.DeactivateComponent(NamedScreen.Loading, false, Resume);
                     UIManager.ActivateComponent(NamedScreen.MainMenu);
                     UIManager.SetOnEmptyStackExitCallback(() => UIManager.ActivateComponent(NamedWindow.ExitConfirmation));
-                },
-                null
+                }
             );
         }
 

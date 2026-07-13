@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿    using System;
+    using System.Collections.Generic;
 
-namespace Model.Data.Scene
-{
-    [Serializable]
-    public class PropCollection
+    namespace Model.Data.Scene
     {
-        public string assetAddress;
-        public List<PropData> props = new();
-        public List<DynamicPropData> dynamicProps = new();
+        [Serializable]
+        public class PropCollection
+        {
+            public string assetAddress;
+            public List<PropData> props = new();
+            public List<DynamicPropData> dynamicProps = new();
+        }
     }
-}

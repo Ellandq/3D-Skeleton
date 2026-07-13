@@ -1,14 +1,15 @@
 ﻿using Cysharp.Threading.Tasks;
-using Model.Enum;
 using Model.Enum.Named;
+using UnityEngine;
 using UserInterface.Screen;
 using Utils.Enum;
 
 namespace Managers.GameStates
 {
-    public class NewGameState : IGameState
+    public class GameLoadState : IGameState
     {
-        public NamedState Name => NamedState.NewGame;
+        public NamedState Name => NamedState.GameLoad;
+
         public void Enter(NamedState? previousState = null)
         {
             _ = LoadNewGameAsync();
@@ -16,19 +17,19 @@ namespace Managers.GameStates
         
         private static async UniTask LoadNewGameAsync()
         {
+            Time.timeScale = 0f;
             await GameManager.LoadHandle.LoadGame(
                 NamedScene.Gameplay,
                 () =>
                 {
                     UIManager.DeactivateComponent(NamedScreen.Loading, false,
-                        () => GameManager.ChangeState(NamedState.Gameplay));
+                        () => GameManager.PopState());
                     UIManager.SetOnEmptyStackExitCallback(() =>
                     {
                         UIManager.ActivateComponent(NamedScreen.Settings);
                         GameManager.PushState(NamedState.PauseMenu);
                     });
-                },
-                null
+                }
             );
         }
 

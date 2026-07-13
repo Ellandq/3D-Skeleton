@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Model.Data.Registry;
-using Model.Enum.Named;
 using Services.Assets;
 using UnityEngine;
 using Utils.Enum;
@@ -37,10 +36,11 @@ namespace Managers
         private readonly Dictionary<NamedScene, bool> sceneLoadStateDict = new();
 
         public void RegisterSceneLoad(NamedScene scene)
-            => sceneLoadStateDict.Add(scene, true);
+            => sceneLoadStateDict[scene] = true;
 
         public void RegisterSceneDeload(NamedScene scene)
-            => sceneLoadStateDict.Add(scene, false);
+            => sceneLoadStateDict[scene] = false;
+        
 
         public bool IsSceneLoaded(NamedScene scene) 
             => sceneLoadStateDict.GetValueOrDefault(scene, false);

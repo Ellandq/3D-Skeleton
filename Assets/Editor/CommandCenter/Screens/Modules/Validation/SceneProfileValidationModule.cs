@@ -3,6 +3,7 @@ using System.Linq;
 using Managers;
 using Model.Data.Scene;
 using Model.Enum.Named;
+using Model.SO.Scene;
 using SaveAndLoad;
 using UnityEditor;
 using UnityEngine;

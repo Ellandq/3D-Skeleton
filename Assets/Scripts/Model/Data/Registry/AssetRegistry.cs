@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Components.Props;
 using JetBrains.Annotations;
-using Model.Enum.Named;
 using Utils.Enum;
 
 namespace Model.Data.Registry
@@ -20,9 +20,6 @@ namespace Model.Data.Registry
         public event Action<PropIdentifier> Registered;
         public event Action<PropIdentifier> Unregistered;
 
-        // -------------------------
-        // REGISTER
-        // -------------------------
         public void Register(PropIdentifier identifier)
         {
             if (!identifier)
@@ -58,9 +55,6 @@ namespace Model.Data.Registry
             Registered?.Invoke(identifier);
         }
 
-        // -------------------------
-        // UNREGISTER
-        // -------------------------
         public void Unregister(string id)
         {
             if (!_byId.Remove(id, out var identifier))
@@ -104,9 +98,6 @@ namespace Model.Data.Registry
             return true;
         }
 
-        // -------------------------
-        // SCENE HELPERS
-        // -------------------------
         private static NamedScene GetScene(PropIdentifier identifier)
         {
             var sceneName = identifier.gameObject.scene.name;
@@ -124,9 +115,6 @@ namespace Model.Data.Registry
             return true;
         }
 
-        // -------------------------
-        // SCENE QUERIES
-        // -------------------------
         public IReadOnlyDictionary<string, Dictionary<string, PropIdentifier>> GetCollectionByScene(NamedScene scene)
         {
             return _fromScene.TryGetValue(scene, out var dict)
@@ -154,9 +142,6 @@ namespace Model.Data.Registry
                    assetDict.TryGetValue(id, out identifier);
         }
 
-        // -------------------------
-        // BASIC QUERIES
-        // -------------------------
         public bool IsRegistered(PropIdentifier identifier)
         {
             return identifier &&
@@ -187,15 +172,51 @@ namespace Model.Data.Registry
         {
             return _byId.Values;
         }
+        
+        public IEnumerable<PropIdentifier> GetByScene(NamedScene scene)
+        {
+            if (!_fromScene.TryGetValue(scene, out var sceneDict))
+                yield break;
+
+            foreach (var identifier in sceneDict.Values.SelectMany(assetDict => assetDict.Values))
+            {
+                yield return identifier;
+            }
+        }
+
+        public IEnumerable<PropIdentifier> GetByScenes(IEnumerable<NamedScene> scenes)
+        {
+            return scenes.SelectMany(GetByScene);
+        }
+        
+        public IEnumerable<KeyValuePair<string, Dictionary<string, PropIdentifier>>> GetAssetsInScene(
+            NamedScene scene)
+        {
+            if (!_fromScene.TryGetValue(scene, out var sceneDict))
+                yield break;
+
+            foreach (var pair in sceneDict)
+                yield return pair;
+        }
+        
+        public bool TryGetScene(
+            string id,
+            out NamedScene scene)
+        {
+            scene = default;
+
+            if (!_byId.TryGetValue(id, out var identifier))
+                return false;
+
+            scene = GetScene(identifier);
+            return true;
+        }
 
         public bool Contains(string id)
         {
             return _byId.ContainsKey(id);
         }
 
-        // -------------------------
-        // CLEAR
-        // -------------------------
         public void Clear()
         {
             _byId.Clear();

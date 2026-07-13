@@ -1,15 +1,15 @@
-﻿using System;
-using UnityEngine;
+﻿    using System;
+    using UnityEngine;
 
-namespace Model.Data.Scene
-{
-    [Serializable]
-    public class PropData
+    namespace Model.Data.Scene
     {
-        public string id;
-        public string saveData;
-        public Vector3 position;
-        public Quaternion rotation;
-        public Vector3 scale;
+        [Serializable]
+        public class PropData
+        {
+            public string id;
+            public string saveData;
+            public Vector3 position;
+            public Quaternion rotation;
+            public Vector3 scale;
+        }
     }
-}

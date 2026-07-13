@@ -258,7 +258,8 @@ namespace Managers
 
         public string ProcessName => "UI";
 
-        public async UniTask InitializeForScene(SceneProfile sceneProfile,
+        public async UniTask InitializeForScene(
+            RuntimeSceneProfile sceneProfile,
             Action<int> declareSubprocessesCount,
             Action<int> declareStepsCallBack,
             Action<string> declareStep) 
@@ -277,7 +278,7 @@ namespace Managers
         }
 
         private async Task AddComponents(
-            SceneProfile profile, 
+            RuntimeSceneProfile profile, 
             Action<int> declareStepsCallBack,
             Action<string> declareStep
         )

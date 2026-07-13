@@ -1,5 +1,4 @@
-﻿using Model.Enum;
-using Model.Enum.Named;
+﻿using Model.Enum.Named;
 
 namespace Managers.GameStates
 {

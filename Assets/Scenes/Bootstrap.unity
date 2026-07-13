@@ -180,6 +180,53 @@ MonoBehaviour:
   sceneProfiles:
   - {fileID: 11400000, guid: 6ddd0169e619aaf4b9e11bad5903d835, type: 2}
   - {fileID: 11400000, guid: 320e29131604ec74c8e14a902bde6c49, type: 2}
+--- !u!1 &125887469
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 125887470}
+  - component: {fileID: 125887471}
+  m_Layer: 0
+  m_Name: SAVE-MANAGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &125887470
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125887469}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1815864725}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &125887471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125887469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e0a894d7a5f490f879335ab8446f613, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.SaveManager
+  saveLocation: 
+  runtimeSave:
+    sceneSaveData: []
 --- !u!1 &427961305
 GameObject:
   m_ObjectHideFlags: 0
@@ -2652,6 +2699,7 @@ Transform:
   - {fileID: 927202392}
   - {fileID: 602441965}
   - {fileID: 2111537316}
+  - {fileID: 125887470}
   - {fileID: 502676258}
   - {fileID: 427961306}
   - {fileID: 1167241864}

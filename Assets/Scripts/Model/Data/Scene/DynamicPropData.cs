@@ -13,5 +13,6 @@ namespace Model.Data.Scene
         public Vector3 angularVelocity;
         public bool usesGravity;
         public bool isKinematic;
+
     }
 }
