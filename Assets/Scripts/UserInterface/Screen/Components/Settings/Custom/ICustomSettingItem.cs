@@ -1,4 +1,5 @@
-﻿using Model.Enum.Named;
+﻿using Model.Enum;
+using Model.Enum.Named;
 
 namespace UserInterface.Screen.Components.Settings.Custom
 {

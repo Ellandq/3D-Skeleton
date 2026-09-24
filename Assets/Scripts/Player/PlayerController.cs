@@ -11,6 +11,13 @@ namespace Player
     {
         private List<IPlayerAction> actions;
         
+        [Header("Object References")]
+        [SerializeField] private Rigidbody rb;
+        
+        [Header("Movement Flags")]
+        [SerializeField] private bool enablePlayerMovement;
+        [SerializeField] private bool enableCameraMovement;
+        
         private void Awake()
         {
             actions = Enum.GetValues(typeof(NamedPlayerAction))
@@ -24,5 +31,7 @@ namespace Player
                 action.Initialize(this);
             }
         }
+        
+        
     }
 }

@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Subtitles
   fullName: Language/Text/Subtitles
   itemType: 1
-  strValue: enum/Model.Enum.Settings.TextLanguageSetting/English
+  strValue: enum//

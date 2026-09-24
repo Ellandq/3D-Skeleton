@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Quick Save
   fullName: Input/Quick Save
   itemType: 3
-  strValue: inputKey/QuickSave/True
+  strValue: inputKey/Action1/True

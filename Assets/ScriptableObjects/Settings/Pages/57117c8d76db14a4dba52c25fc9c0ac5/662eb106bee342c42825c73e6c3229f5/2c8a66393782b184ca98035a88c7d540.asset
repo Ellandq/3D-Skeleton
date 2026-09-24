@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Move Backward
   fullName: Input/Move Backward
   itemType: 3
-  strValue: inputKey/MoveBackwards/True
+  strValue: inputKey/Action1/True

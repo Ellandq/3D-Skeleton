@@ -8,7 +8,7 @@ namespace Editor.CommandCenter.Screens.Modules.SettingsEnforcement
     public static class SettingsEnforcerGenerator
     {
         private const string Folder =
-            "Assets/Scripts/Settings/Enforcers";
+            "Assets/Scripts/Managers/Settings/Enforcers";
 
 
         public static void Create(
@@ -43,9 +43,9 @@ namespace Editor.CommandCenter.Screens.Modules.SettingsEnforcement
 
 
             var code =
-$@"using Settings;
+$@"using Managers.Settings;
 
-namespace Settings.Enforcers
+namespace Managers.Settings.Enforcers
 {{
     public class {className} :
         ISettingEnforcer<{valueType}>

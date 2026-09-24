@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Move Right
   fullName: Input/Move Right
   itemType: 3
-  strValue: inputKey/MoveRight/True
+  strValue: inputKey/Action1/True

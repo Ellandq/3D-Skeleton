@@ -14,6 +14,7 @@ namespace Player.PlayerActions
         {
             return action switch
             {
+                NamedPlayerAction.PlayerMovement => new PlayerMovementAction(),
                 NamedPlayerAction.QuickSaveAndLoad => new QuickSaveAndLoadAction(),
                 _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
             };

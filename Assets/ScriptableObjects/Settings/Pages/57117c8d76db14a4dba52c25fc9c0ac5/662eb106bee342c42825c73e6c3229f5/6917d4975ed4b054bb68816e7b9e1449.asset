@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Crouch / Dive
   fullName: Input/Crouch / Dive
   itemType: 3
-  strValue: inputKey/Crouch/True
+  strValue: inputKey/Action1/True

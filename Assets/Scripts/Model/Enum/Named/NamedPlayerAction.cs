@@ -6,6 +6,7 @@ namespace Model.Enum.Named
 {
     public enum NamedPlayerAction
     {
+        PlayerMovement,
         QuickSaveAndLoad
     }
 }

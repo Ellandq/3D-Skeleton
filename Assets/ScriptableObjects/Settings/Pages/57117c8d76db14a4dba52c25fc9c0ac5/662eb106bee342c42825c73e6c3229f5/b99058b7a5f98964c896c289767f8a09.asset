@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Jump / Surface
   fullName: Input/Jump / Surface
   itemType: 3
-  strValue: inputKey/Jump/True
+  strValue: inputKey/Action1/True

@@ -57,7 +57,7 @@ namespace SaveAndLoad
                     AssetManager.Loader
                 );
 
-                if (profile.useLoadScreen) // && SceneManager.CanLoadWithoutLoadingScreen(profile.GetAllScenes())
+                if (profile.useLoadScreen)
                 {
                     var loadingScreen =
                         UIManager.GetUIComponent<NamedScreen, LoadingScreen>(

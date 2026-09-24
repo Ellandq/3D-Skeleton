@@ -16,4 +16,4 @@ MonoBehaviour:
   settingName: Escape
   fullName: Input/Escape
   itemType: 3
-  strValue: inputKey/Escape/False
+  strValue: inputKey/Action1/True

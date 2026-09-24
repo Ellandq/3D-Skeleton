@@ -526,7 +526,7 @@ namespace Editor.CommandCenter.Screens
 
             EnumSynchronizer.Synchronize(
                 enumPath: "Assets/Scripts/Model/Enum/Named/NamedCustomSetting.cs",
-                enumNamespace: "Model.Enum",
+                enumNamespace: "Model.Enum.Named",
                 enumName: "NamedCustomSetting",
                 values: sanitized,
                 logger: _logger
