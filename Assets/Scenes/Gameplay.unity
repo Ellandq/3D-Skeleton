@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3254a0c3cec546ffaee651646ac483d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerController
-  rigidbody: {fileID: 0}
+  rb: {fileID: 0}
   enablePlayerMovement: 0
   enableCameraMovement: 0
 --- !u!1 &57059470

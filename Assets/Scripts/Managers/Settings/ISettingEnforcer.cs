@@ -7,7 +7,7 @@
         void Enforce(string fullName, object value);
     }
 
-    public interface ISettingEnforcer<T> : ISettingEnforcer
+    public interface ISettingEnforcer<in T> : ISettingEnforcer
     {
         void Enforce(string fullName, T value);
     }
